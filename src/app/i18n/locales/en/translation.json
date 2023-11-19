@@ -1,0 +1,8 @@
+{
+  "N_1": "{{field}} không được để trống",
+  "N_2": "{{field}} phải lớn hơn hoặc bằng {{value}}",
+  "N_3": "{{field}} phải nhỏ hơn hoặc bằng {{value}}",
+  "N_4": "{{field}} phải lớn hơn {{value}}",
+  "N_5": "{{field}} phải nhỏ hơn {{value}}",
+  "title": "Hi there!"
+}
