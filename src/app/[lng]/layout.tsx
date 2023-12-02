@@ -8,6 +8,7 @@ import { Lexend } from 'next/font/google';
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globals.css';
 import 'styles/index.scss';
+import { NextAuthProvider } from './provider';
 
 const lexend = Lexend({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -50,6 +51,8 @@ export default function RootLayout({
 
 
   return (
-    <Layout lng={lng}>{children}</Layout>
+    <NextAuthProvider>
+      <Layout lng={lng}>{children}</Layout>
+    </NextAuthProvider>
   )
 }

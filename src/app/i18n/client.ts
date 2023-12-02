@@ -27,7 +27,8 @@ i18next
 
 export function useTranslation(ns?: string | string[], options: ReactOptions = {}) {
   const { lng } = useParams();
-  const ret = useTranslationOrg(ns, options)
+  const ret = useTranslationOrg<string | string[], string>(ns, options)
+
   const { i18n } = ret
   if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
     i18n.changeLanguage(lng as string | undefined)
