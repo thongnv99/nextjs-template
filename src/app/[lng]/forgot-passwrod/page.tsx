@@ -1,76 +1,34 @@
 'use client';
-import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import * as yup from 'yup';
-import { Formik } from 'formik';
-import { ROUTES } from 'global';
-import { isBlank } from 'utils/common';
 import TextInput from 'elements/TextInput';
-import Checkbox from 'elements/CheckBox';
-import Loader from 'components/Loader';
+import { Formik } from 'formik';
+import { signIn } from 'next-auth/react';
 import Mail from 'assets/svg/mail.svg';
 import Lock from 'assets/svg/lock.svg';
+import React from 'react';
+import Checkbox from 'elements/CheckBox';
 import GoogleIcon from 'assets/svg/google.svg';
+import Link from 'next/link';
+import { ROUTES } from 'global';
+import { useParams } from 'next/navigation';
 
 interface LoginForm {
-  email: string;
+  username: string;
   password: string;
   savePassword?: boolean;
 }
 
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .label('Email')
-    .required()
-    .email(() => 'Email không hợp lệ'),
-  password: yup.string().label('Mật khẩu').required(),
-});
-
 const Login = () => {
   const { lng } = useParams();
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>();
-  const handleLogin = async (values: LoginForm) => {
-    setErrorMessage(null);
-    setLoading(true);
-    try {
-      const res = await signIn('credentials', {
-        email: values?.email,
-        password: values?.password,
-        redirect: false,
-        callbackUrl: `${window.location.origin}/${lng}/home`,
-      });
-      if (res?.ok) {
-        window.location.reload();
-      } else {
-        setErrorMessage(res?.error);
-      }
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+  const handleLogin = (values: LoginForm) => {
+    console.log('handle login', values);
   };
   return (
-    <Loader
-      loading={loading}
-      className="w-full h-full flex items-center justify-center"
-    >
+    <div className="w-full h-full flex items-center justify-center">
       <div className=" flex-1 px-[3.2rem]">
         <div className="mb-[4.8rem] text-[4.8rem] text-center">Đăng nhập</div>
-        {!isBlank(errorMessage!) && (
-          <div className="mb-[4.8rem] text-[1.6rem] text-center text-red-600">
-            {errorMessage}
-          </div>
-        )}
         <Formik
           onSubmit={handleLogin}
-          validationSchema={schema}
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ username: '', password: '' }}
         >
           {({
             values,
@@ -78,8 +36,6 @@ const Login = () => {
             handleBlur,
             handleSubmit,
             setFieldValue,
-            touched,
-            errors,
           }) => (
             <form
               onSubmit={handleSubmit}
@@ -87,11 +43,9 @@ const Login = () => {
             >
               <TextInput
                 label="Email"
-                name="email"
+                name="username"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={touched.email && !isBlank(errors.email)}
-                errorMessage={errors.email}
                 leadingIcon={<Mail />}
                 placeholder="example@gmail.com"
               />
@@ -101,8 +55,6 @@ const Login = () => {
                 type="password"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                hasError={touched.password && !isBlank(errors.password)}
-                errorMessage={errors.password}
                 leadingIcon={<Lock />}
                 placeholder="example@gmail.com"
               />
@@ -114,7 +66,7 @@ const Login = () => {
                   name="savePassword"
                 />
                 <Link
-                  href={`/${lng}/${ROUTES.FORGOT_PASSWORD}`}
+                  href={`${lng}/${ROUTES.FORGOT_PASSWORD}`}
                   className="text-[1.6rem] text-[var(--color-1)] cursor-pointer"
                 >
                   Quên mật khẩu?
@@ -135,7 +87,7 @@ const Login = () => {
                 <GoogleIcon className="w-[2.4rem] h-[2.4rem] mr-[1.2rem]" />{' '}
                 Đăng nhập với google
               </button>
-              <div className="text-center">
+              <div>
                 Bạn chưa có tài khoản{' '}
                 <Link
                   href={`/${lng}/${ROUTES.REGISTER}`}
@@ -149,7 +101,7 @@ const Login = () => {
         </Formik>
       </div>
       <div className="flex-[2] h-full bg-primary-500"></div>
-    </Loader>
+    </div>
   );
 };
 

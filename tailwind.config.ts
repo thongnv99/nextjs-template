@@ -1,5 +1,5 @@
-import type { Config } from 'tailwindcss'
-
+import type { Config } from 'tailwindcss';
+const colors = require('tailwindcss/colors');
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -16,7 +16,7 @@ const config: Config = {
       },
     },
     colors: {
-      'primary': {
+      primary: {
         DEFAULT: 'var(--primary-500)',
         '50': 'var(--primary-50)',
         '100': 'var(--primary-100)',
@@ -30,8 +30,11 @@ const config: Config = {
         '900': 'var(--primary-900)',
         '950': 'var(--primary-950)',
       },
-    }
+      transparent: 'transparent',
+      current: 'currentColor',
+      ...colors,
+    },
   },
   plugins: [],
-}
-export default config
+};
+export default config;
