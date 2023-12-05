@@ -1,31 +1,109 @@
 'use client';
 import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
+import * as yup from 'yup';
 import Mail from 'assets/svg/mail.svg';
 import Lock from 'assets/svg/lock.svg';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
-import { ROUTES } from 'global';
-import { useParams } from 'next/navigation';
+import { GENDER, METHOD, ROUTES } from 'global';
+import { useParams, useRouter } from 'next/navigation';
+import RadioGroup from 'elements/RadioGroup';
+import Loader from 'components/Loader';
+import { useMutation } from 'hooks/swr';
+import { ACCOUNT_REGISTER } from 'store/key';
+import { isBlank, uuid } from 'utils/common';
+import { formatDateToString } from 'utils/datetime';
+import { useSWRConfig } from 'swr';
+import ModalProvider from 'components/ModalProvider';
+import NoticeModal from 'components/NoticeModal';
 
-interface LoginForm {
-  username: string;
-  password: string;
-  savePassword?: boolean;
+interface RegisterForm {
+  name?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  phoneNumber?: string;
+  address?: string;
+  dob?: Date;
+  gender?: string;
 }
 
-const Login = () => {
+const schema = yup.object().shape({
+  name: yup.string().label('Họ và tên').required(),
+  email: yup.string().label('Email').required().email(),
+  password: yup.string().label('Mật khẩu').required(),
+  confirmPassword: yup
+    .string()
+    .label('Xác nhận mật khẩu')
+    .required()
+    .oneOf([yup.ref('password')], 'Mật khẩu không khớp'),
+  phoneNumber: yup.string().label('Số điện thoại').required(),
+});
+
+const Register = () => {
   const { lng } = useParams();
-  const handleLogin = (values: LoginForm) => {
-    console.log('handle login', values);
+  const componentId = useRef(uuid());
+  const loading = useRef(false);
+  const [successModal, setSuccessModal] = useState(false);
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>();
+
+  const { trigger: requestRegister } = useMutation(ACCOUNT_REGISTER, {
+    method: METHOD.POST,
+    url: '/api/v1/register',
+    loading: true,
+    componentId: componentId.current,
+    onSuccess() {
+      handleShowSuccess();
+    },
+    onError(error) {
+      setErrorMessage(error.message);
+    },
+  });
+
+  const handleRegister = (values: RegisterForm) => {
+    const payload = {
+      ...values,
+      dob: values.dob
+        ? formatDateToString(new Date(values.dob), 'dd/MM/yyyy')
+        : null,
+    };
+    loading.current = !loading.current;
+    setErrorMessage(null);
+
+    requestRegister(payload);
   };
+
+  const handleShowSuccess = () => {
+    setSuccessModal(true);
+  };
+
+  const handleHiddenSuccess = () => {
+    setSuccessModal(false);
+    router.push(`/${lng}/${ROUTES.LOGIN}`);
+  };
+
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className=" flex-1 px-[3.2rem]">
+    <Loader
+      id={componentId.current}
+      className="w-full h-full flex items-center justify-center p-8 overflow-y-auto bg-primary-50"
+    >
+      <div className=" flex-1 px-[3.2rem] max-w-[50rem] shadow-sm rounded-lg bg-white border-gray-400 p-7">
         <div className="mb-[4.8rem] text-[4.8rem] text-center">Đăng ký</div>
+        {!isBlank(errorMessage!) && (
+          <div className="mb-[4.8rem] text-[1.6rem] text-center text-red-600">
+            {errorMessage}
+          </div>
+        )}
         <Formik
-          onSubmit={handleLogin}
-          initialValues={{ username: '', password: '' }}
+          onSubmit={handleRegister}
+          validationSchema={schema}
+          initialValues={{
+            gender: GENDER.MALE,
+          }}
+          validateOnChange
+          validateOnBlur
         >
           {({
             values,
@@ -33,30 +111,106 @@ const Login = () => {
             handleBlur,
             handleSubmit,
             setFieldValue,
+            touched,
+            errors,
+            isValid,
           }) => (
             <form
               onSubmit={handleSubmit}
               className="flex flex-col gap-[3.2rem]"
+              autoComplete="off"
             >
-              <TextInput
-                label="Email"
-                name="username"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                leadingIcon={<Mail />}
-                placeholder="example@gmail.com"
-              />
-              <TextInput
-                label="Mật khẩu"
-                name="password"
-                type="password"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                leadingIcon={<Lock />}
-                placeholder="example@gmail.com"
-              />
-              <button type="submit" className="btn-primary ">
-                Đăng nhập
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-[3.2rem]">
+                <TextInput
+                  label="Họ và Tên"
+                  name="name"
+                  className="col-span-2"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  placeholder="Tên của bạn là..."
+                  hasError={touched.name && !isBlank(errors.name)}
+                  errorMessage={errors.name}
+                />
+                <TextInput
+                  label="Ngày sinh"
+                  name="dob"
+                  type="date"
+                  className="col-span-1"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                />
+                <div className="input-container">
+                  <label className="input-label" htmlFor="">
+                    Giới tính
+                  </label>
+                  <div className="flex-1 items-center flex">
+                    <RadioGroup
+                      value={values.gender}
+                      onChange={value => setFieldValue('gender', value)}
+                      options={[
+                        { label: 'Nam', value: GENDER.MALE },
+                        { label: 'Nữ', value: GENDER.FEMALE },
+                      ]}
+                    />
+                  </div>
+                </div>
+                <TextInput
+                  label="Số điện thoại"
+                  name="phoneNumber"
+                  type="text"
+                  className="col-span-2"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  hasError={touched.phoneNumber && !isBlank(errors.phoneNumber)}
+                  errorMessage={errors.phoneNumber}
+                />
+                <TextInput
+                  label="Email"
+                  name="email"
+                  className="col-span-2"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  leadingIcon={<Mail />}
+                  hasError={touched.email && !isBlank(errors.email)}
+                  errorMessage={errors.email}
+                />
+                <TextInput
+                  label="Mật khẩu"
+                  className="col-span-2"
+                  name="password"
+                  type="password"
+                  autoComplete="off"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  leadingIcon={<Lock />}
+                  hasError={touched.password && !isBlank(errors.password)}
+                  errorMessage={errors.password}
+                />
+                <TextInput
+                  label="Xác nhận mật khẩu"
+                  className="col-span-2"
+                  name="confirmPassword"
+                  type="password"
+                  autoComplete="off"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  leadingIcon={<Lock />}
+                  hasError={
+                    touched.confirmPassword && !isBlank(errors.confirmPassword)
+                  }
+                  errorMessage={errors.confirmPassword}
+                />
+              </div>
+
+              <button
+                disabled={!isValid}
+                type="submit"
+                className="btn-primary "
+              >
+                Đăng ký
               </button>
 
               <div className="text-center">
@@ -72,9 +226,16 @@ const Login = () => {
           )}
         </Formik>
       </div>
-      <div className="flex-[2] h-full bg-primary-500"></div>
-    </div>
+      <ModalProvider show={successModal} onClose={handleHiddenSuccess}>
+        <NoticeModal
+          onConfirm={handleHiddenSuccess}
+          title="Thành công"
+          content="Bạn đã đăng ký thành công tài khoản. <br/> Vui lòng quay lại trang đăng nhập để truy cập vào hệ thống"
+          type="success"
+        />
+      </ModalProvider>
+    </Loader>
   );
 };
 
-export default Login;
+export default Register;

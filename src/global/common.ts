@@ -17,3 +17,8 @@ export enum ROUTES {
   REGISTER = 'register',
   FORGOT_PASSWORD = 'forgot-password',
 }
+
+export enum GENDER {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}

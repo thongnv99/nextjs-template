@@ -35,6 +35,10 @@
       font-weight: 400;
       line-height: 150%;
       color: var(--gray-900, #101828);
+      min-width: 0;
+      &:autofill {
+        -webkit-box-shadow: 0 0 0 30px white inset;
+      }
     }
     svg {
       color: var(--icon-color);

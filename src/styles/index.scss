@@ -72,5 +72,6 @@ body {
   &:disabled,
   .disabled {
     background-color: var(--primary-200);
+    border: 1px solid var(--primary-200);
   }
 }

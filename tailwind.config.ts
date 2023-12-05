@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 const colors = require('tailwindcss/colors');
+console.log({ colors });
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -14,7 +15,52 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      spacing: {
+        '0.5': '0.2rem',
+        '1': '0.4rem',
+        '1.5': '0.6rem',
+        '2': '0.8rem',
+        '2.5': '10rem',
+        '3': '1.2rem',
+        '3.5': '1.4rem',
+        '4': '1.6rem',
+        '5': '2rem',
+        '6': '2.4rem',
+        '7': '2.8rem',
+        '8': '3.2rem',
+        '9': '2.6rem',
+        '10': '4rem',
+        '11': '4.4rem',
+        '12': '4.8rem',
+        '14': '5.6rem',
+      },
+      borderRadius: {
+        sm: '0.2rem',
+        md: '0.4rem',
+        lg: '0.8rem',
+      },
+      fontSize: {
+        sm: [
+          '1.4rem',
+          {
+            lineHeight: '2rem',
+          },
+        ],
+        base: [
+          '1.6rem',
+          {
+            lineHeight: '2.4rem',
+          },
+        ],
+        lg: [
+          '1.8rem',
+          {
+            lineHeight: '2.8rem',
+          },
+        ],
+      },
     },
+
     colors: {
       primary: {
         DEFAULT: 'var(--primary-500)',
