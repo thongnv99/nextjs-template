@@ -10,4 +10,6 @@ export interface RestSuccess<T = Record<string, unknown>> {
   result?: T;
 }
 
-type RestResponse<T = Record<string, unknown>> = RestError | RestSuccess<T>;
+export type RestResponse<T = Record<string, unknown>> =
+  | RestError
+  | RestSuccess<T>;

@@ -13,6 +13,8 @@ import Loader from 'components/Loader';
 import Mail from 'assets/svg/mail.svg';
 import Lock from 'assets/svg/lock.svg';
 import GoogleIcon from 'assets/svg/google.svg';
+import Image from 'next/image';
+import bg from 'assets/png/bg.jpg';
 
 interface LoginForm {
   email: string;
@@ -58,9 +60,13 @@ const Login = () => {
   return (
     <Loader
       loading={loading}
-      className="w-full h-full flex items-center justify-center"
+      className="w-full h-full flex items-center justify-center relative"
     >
-      <div className=" flex-1 px-[3.2rem]">
+      <div
+        className="flex-[2] z-0 h-full bg-primary-50 absolute top-0
+       left-0 right-0 bottom-0"
+      ></div>
+      <div className=" z-[1] flex-1 px-[3.2rem] max-w-[50rem] shadow-sm rounded-lg bg-white border-gray-400 p-7">
         <div className="mb-[4.8rem] text-[4.8rem] text-center">Đăng nhập</div>
         {!isBlank(errorMessage!) && (
           <div className="mb-[4.8rem] text-[1.6rem] text-center text-red-600">
@@ -148,7 +154,6 @@ const Login = () => {
           )}
         </Formik>
       </div>
-      <div className="flex-[2] h-full bg-primary-500"></div>
     </Loader>
   );
 };
