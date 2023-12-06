@@ -18,9 +18,6 @@ export async function generateStaticParams() {
 
 const Layout = ({ children, lng }: { children: ReactNode; lng: string }) => {
   // const { i18n } = useTranslation();
-  // useEffect(() => {
-  //   setYupLocale(i18n.t);
-  // }, [lng, i18n])
 
   return (
     <html className={lexend.className} lang={lng} dir={dir(lng)}>

@@ -52,6 +52,12 @@ const config: Config = {
             lineHeight: '2.8rem',
           },
         ],
+        xl: [
+          '2rem',
+          {
+            lineHeight: '3rem',
+          },
+        ],
       },
     },
 

@@ -1,5 +1,4 @@
 'use client';
-
 import { useTranslation } from 'app/i18n/client';
 import Preload from 'components/Preload';
 import { useSession } from 'next-auth/react';
@@ -14,6 +13,7 @@ type Props = {
 export const ClientProvider = ({ children, lng }: Props) => {
   const { data, status } = useSession();
   const { i18n } = useTranslation();
+
   useEffect(() => {
     setYupLocale(i18n.t);
   }, [lng, i18n]);

@@ -6,11 +6,19 @@ import LogOut from 'assets/svg/log-out.svg';
 import avatar from 'assets/png/example-avatar.png';
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
+import ModalProvider from 'components/ModalProvider';
+import ChangePassword from 'components/ChangePassword';
 
 export default function Example() {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showProfileForm, setShowProfileForm] = useState(false);
 
+  const handleShowPassword = () => {
+    setShowPasswordForm(true);
+  };
+  const handleClosePassword = () => {
+    setShowPasswordForm(false);
+  };
   return (
     <div className="">
       <Menu as="div" className="relative inline-block text-left">
@@ -46,6 +54,7 @@ export default function Example() {
             <div className="px-1 py-1 ">
               <Menu.Item>
                 <button
+                  onClick={handleShowPassword}
                   className={`${'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <LockIcon className="mr-2 h-5 w-5" />
@@ -67,6 +76,10 @@ export default function Example() {
           </Menu.Items>
         </Transition>
       </Menu>
+
+      <ModalProvider show={showPasswordForm} onClose={handleClosePassword}>
+        <ChangePassword onClose={handleClosePassword} />
+      </ModalProvider>
     </div>
   );
 }

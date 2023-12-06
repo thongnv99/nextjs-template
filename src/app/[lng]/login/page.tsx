@@ -126,6 +126,7 @@ const Login = () => {
                 onBlur={handleBlur}
                 hasError={touched.email && !isBlank(errors.email)}
                 errorMessage={errors.email}
+                value={values.email}
                 leadingIcon={<Mail />}
                 placeholder="example@gmail.com"
               />
@@ -133,6 +134,7 @@ const Login = () => {
                 label="Mật khẩu"
                 name="password"
                 type="password"
+                value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 hasError={touched.password && !isBlank(errors.password)}

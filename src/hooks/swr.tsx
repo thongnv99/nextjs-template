@@ -2,11 +2,13 @@ import { METHOD } from 'global';
 import { useSession } from 'next-auth/react';
 import useSWRMutation, { SWRMutationConfiguration } from 'swr/mutation';
 import useSWR, { useSWRConfig } from 'swr';
-import { isBlank } from 'utils/common';
+import { isBlank, uuid } from 'utils/common';
 import { fetcher, replacePlaceholder } from 'utils/restApi';
 import { NotificationConfig, RestError } from 'interfaces';
 import { PublicConfiguration } from 'swr/_internal';
 import { COMMON_LOADING } from 'store/key';
+import { toast } from 'react-toastify';
+import ToastNotification from 'components/ToastNotification';
 
 export function useSWRWrapper<T = any>(
   key: string | null | (() => string | null),
@@ -62,7 +64,7 @@ export function useSWRWrapper<T = any>(
   );
 }
 
-export const useMutation = <T = Record<string, unknown>>(
+export const useMutation = <T = Record<string, unknown>,>(
   key: string,
   {
     url,
@@ -119,13 +121,19 @@ export const useMutation = <T = Record<string, unknown>>(
         console.log('error');
         options.onError?.(err, key, config as any);
         if (notification && !notification.ignoreError) {
-          // toast(<ToastNotification type="error" content={err.message || err.code} />, {
-          //   toastId: uuid(),
-          //   position: "top-center",
-          //   hideProgressBar: true,
-          //   theme: "light",
-          //   closeButton: false
-          // })
+          toast(
+            <ToastNotification
+              type="error"
+              title={notification.title}
+              content={err.message || err.code}
+            />,
+            {
+              toastId: uuid(),
+              position: 'top-right',
+              hideProgressBar: true,
+              theme: 'light',
+            },
+          );
         }
       },
       onSuccess(data, key, config) {
@@ -133,13 +141,19 @@ export const useMutation = <T = Record<string, unknown>>(
 
         options.onSuccess?.(data as T, key, config as any);
         if (notification && !notification.ignoreSuccess) {
-          // toast(<ToastNotification type="success" content={notification.content} />, {
-          //   toastId: uuid(),
-          //   position: "top-center",
-          //   hideProgressBar: true,
-          //   theme: "light",
-          //   closeButton: false
-          // })
+          toast(
+            <ToastNotification
+              type="success"
+              title={notification.title}
+              content={notification.content}
+            />,
+            {
+              toastId: uuid(),
+              position: 'top-right',
+              hideProgressBar: true,
+              theme: 'light',
+            },
+          );
         }
       },
     },
