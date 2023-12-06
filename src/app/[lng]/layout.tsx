@@ -3,9 +3,6 @@ import { dir } from 'i18next';
 import { ToastContainer } from 'react-toastify';
 import { languages } from 'app/i18n/settings';
 import { Lexend } from 'next/font/google';
-import 'react-toastify/dist/ReactToastify.css';
-import 'styles/globals.css';
-import 'styles/index.scss';
 import { NextAuthProvider } from './provider';
 import { ClientProvider } from './ClientProvider';
 

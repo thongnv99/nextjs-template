@@ -43,29 +43,6 @@ export default withAuth(
       return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
     }
 
-    // if (req.headers.has('referer')) {
-    //   const refererUrl = req.headers.get('referer')
-    //     ? new URL(req.headers.get('referer')!)
-    //     : null;
-    //   const lngInReferer = languages.find(l =>
-    //     refererUrl?.pathname.startsWith(`/${l}`),
-    //   );
-
-    //   let response: NextResponse;
-    //   if (req.nextUrl.pathname.startsWith(PRIVATE_ROUTE)) {
-    //     if (req.nextauth.token) {
-    //       response = NextResponse.next();
-    //     } else {
-    //       response = NextResponse.redirect(new URL(`/${lng}/login`, req.url));
-    //     }
-    //   } else {
-    //     response = NextResponse.next();
-    //   }
-
-    //   if (lngInReferer) response.cookies.set(cookieName, lngInReferer);
-    //   return response ;
-    // }
-
     if (req.nextauth.token == null) {
       if (PUBLIC_ROUTE.some(route => req.nextUrl.pathname.startsWith(route))) {
         return NextResponse.next();

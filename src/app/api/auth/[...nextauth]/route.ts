@@ -74,7 +74,7 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials) {
-        console.log(`${process.env.BASE_API_URL}`, { credentials });
+        console.log('credentials ', credentials);
         try {
           const response = await fetch(
             `${process.env.BASE_API_URL}/api/v1/login`,
@@ -95,14 +95,41 @@ const handler = NextAuth({
           }
           return Promise.reject(data);
         } catch (error) {
-          console.log({ error });
           return Promise.reject(error);
         }
       },
     }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+    CredentialsProvider({
+      name: 'token',
+      id: 'token',
+      credentials: {
+        accessToken: {},
+      },
+      async authorize(credentials) {
+        try {
+          console.log('credentials token', credentials?.accessToken);
+          const response = await fetch(
+            `${process.env.BASE_API_URL}/api/v1/verifyAccessToken`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${credentials?.accessToken}`,
+              },
+            },
+          );
+          const data: any = await response.json();
+          if (data.status) {
+            return {
+              accessToken: credentials?.accessToken,
+              ...data.result,
+            };
+          }
+          return Promise.reject(data);
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      },
     }),
   ],
   session: {
@@ -110,10 +137,7 @@ const handler = NextAuth({
   },
   cookies: cookies,
   callbacks: {
-    async signIn({ account, profile }) {
-      if (account?.provider === 'google') {
-        return true;
-      }
+    async signIn() {
       return true; // Do different verification for other providers that don't have `email_verified`
     },
     async jwt({ token, user, ...rest }) {

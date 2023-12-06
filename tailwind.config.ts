@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
 const colors = require('tailwindcss/colors');
-console.log({ colors });
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,11 +9,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
       spacing: {
         '0.5': '0.2rem',
         '1': '0.4rem',

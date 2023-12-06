@@ -1,11 +1,16 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import {
+  redirect,
+  useParams,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import { ROUTES } from 'global';
+import { METHOD, ROUTES } from 'global';
 import { isBlank } from 'utils/common';
 import TextInput from 'elements/TextInput';
 import Checkbox from 'elements/CheckBox';
@@ -13,8 +18,9 @@ import Loader from 'components/Loader';
 import Mail from 'assets/svg/mail.svg';
 import Lock from 'assets/svg/lock.svg';
 import GoogleIcon from 'assets/svg/google.svg';
-import Image from 'next/image';
-import bg from 'assets/png/bg.jpg';
+import { useMutation } from 'hooks/swr';
+import { LOGIN_BY_GOOGLE } from 'store/key';
+import { RestSuccess } from 'interfaces';
 
 interface LoginForm {
   email: string;
@@ -35,6 +41,19 @@ const Login = () => {
   const { lng } = useParams();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>();
+
+  const { trigger: loginBuyGoogle } = useMutation<
+    RestSuccess<{ googleLoginUrl: string }>
+  >(LOGIN_BY_GOOGLE, {
+    url: '/api/v1/loginByGoogle',
+    method: METHOD.POST,
+    onSuccess(data) {
+      if (data.result?.googleLoginUrl) {
+        window.open(data.result.googleLoginUrl, 'blank');
+      }
+    },
+  });
+
   const handleLogin = async (values: LoginForm) => {
     setErrorMessage(null);
     setLoading(true);
@@ -57,6 +76,15 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const handleLoginByGoogle = async () => {
+    setLoading(true);
+
+    await loginBuyGoogle();
+
+    setLoading(false);
+  };
+
   return (
     <Loader
       loading={loading}
@@ -135,8 +163,9 @@ const Login = () => {
                 <div className="flex-1 h-[0.1rem] bg-gray-600"></div>
               </div>
               <button
-                type="submit"
+                type="button"
                 className="btn flex items-center justify-center"
+                onClick={handleLoginByGoogle}
               >
                 <GoogleIcon className="w-[2.4rem] h-[2.4rem] mr-[1.2rem]" />{' '}
                 Đăng nhập với google
