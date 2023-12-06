@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import ModalProvider from 'components/ModalProvider';
 import ChangePassword from 'components/ChangePassword';
+import ProfileModal from 'components/ProfileModal';
 
 export default function Example() {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -18,6 +19,12 @@ export default function Example() {
   };
   const handleClosePassword = () => {
     setShowPasswordForm(false);
+  };
+  const handleShowProfileForm = () => {
+    setShowProfileForm(true);
+  };
+  const handleCloseProfileForm = () => {
+    setShowProfileForm(false);
   };
   return (
     <div className="">
@@ -44,6 +51,7 @@ export default function Example() {
             <div className="px-1 py-1 ">
               <Menu.Item>
                 <button
+                  onClick={handleShowProfileForm}
                   className={`${'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <UserIcon className="mr-2 h-5 w-5" />
@@ -76,7 +84,9 @@ export default function Example() {
           </Menu.Items>
         </Transition>
       </Menu>
-
+      <ModalProvider show={showProfileForm} onClose={handleCloseProfileForm}>
+        <ProfileModal onClose={handleCloseProfileForm} />
+      </ModalProvider>
       <ModalProvider show={showPasswordForm} onClose={handleClosePassword}>
         <ChangePassword onClose={handleClosePassword} />
       </ModalProvider>
