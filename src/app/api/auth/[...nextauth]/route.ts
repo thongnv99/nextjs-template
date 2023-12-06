@@ -74,7 +74,6 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials) {
-        console.log('credentials ', credentials);
         try {
           const response = await fetch(
             `${process.env.BASE_API_URL}/api/v1/login`,
@@ -107,7 +106,6 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          console.log('credentials token', credentials?.accessToken);
           const response = await fetch(
             `${process.env.BASE_API_URL}/api/v1/verifyAccessToken`,
             {
@@ -141,7 +139,6 @@ const handler = NextAuth({
       return true; // Do different verification for other providers that don't have `email_verified`
     },
     async jwt({ token, user, ...rest }) {
-      console.log({ token, user, rest });
       if (user && (user as unknown as OutgoingResponse).user) {
         const decodedToken = jwtDecode<{
           exp: number;

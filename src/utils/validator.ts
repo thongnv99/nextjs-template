@@ -4,10 +4,11 @@ import * as yup from 'yup';
 import { formatNumber } from './common';
 
 export const setYupLocale = (t: TFunction) => {
-  console.log('setYupLocale');
   yup.setLocale({
     mixed: {
-      required: ({ label }: { label: string }) => t('N_1', { field: t(label) }),
+      required: ({ label }: { label: string }) => {
+        return t('N_1', { field: t(label) });
+      },
     },
     number: {
       min: ({ label, min }: { label: string; min: number }) =>

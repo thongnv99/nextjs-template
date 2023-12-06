@@ -7,6 +7,8 @@ import Loader from 'components/Loader';
 import { useMutation } from 'hooks/swr';
 import { ACCOUNT_CHANGE_PASSWORD } from 'store/key';
 import { METHOD } from 'global';
+import * as yup from 'yup';
+import { passwordRegex } from 'global/regex';
 
 interface ChangePasswordForm {
   password?: string;
@@ -32,13 +34,36 @@ const ChangePassword = (props: { onClose?: () => void }) => {
   const handleChangePassword = (values: ChangePasswordForm) => {
     trigger({ oldPassword: values.password, newPassword: values.newPassword });
   };
+
+  const schema = yup.object().shape({
+    password: yup
+      .string()
+      .label('Mật khẩu cũ')
+      .required()
+      .matches(passwordRegex, 'Mật khẩu yếu'),
+    newPassword: yup
+      .string()
+      .label('Mật khẩu mới')
+      .required()
+      .matches(passwordRegex, 'Mật khẩu yếu'),
+    confirmNewPassword: yup
+      .string()
+      .label('Xác nhận mật khẩu')
+      .required()
+      .oneOf([yup.ref('newPassword')], 'Xác nhận mật khẩu không khớp'),
+  });
+
   return (
     <Loader
       id={componentId.current}
-      className="flex flex-col w-[30rem] px-4 py-8 items-center"
+      className="flex flex-col w-[35rem] p-4 pt-5 items-center"
     >
       <div className="text-lg font-bold mb-8">Đổi mật khẩu</div>
-      <Formik initialValues={{}} onSubmit={handleChangePassword}>
+      <Formik
+        validationSchema={schema}
+        initialValues={{}}
+        onSubmit={handleChangePassword}
+      >
         {({
           values,
           handleChange,
@@ -48,17 +73,24 @@ const ChangePassword = (props: { onClose?: () => void }) => {
           errors,
         }) => (
           <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
-            <TextInput
-              label="Mật khẩu cũ"
-              name="password"
-              type="password"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-              hasError={touched.password && !isBlank(errors.password)}
-              errorMessage={errors.password}
-              leadingIcon={<Lock />}
-            />
+            <div>
+              <TextInput
+                label="Mật khẩu cũ"
+                className="mb-1"
+                name="password"
+                type="password"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.password}
+                hasError={touched.password && !isBlank(errors.password)}
+                errorMessage={errors.password}
+                leadingIcon={<Lock />}
+              />
+              <div className="text-sm font-normal text-gray-500">
+                Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 3 thành phần
+                là chữ hoa, chữ thường, số và ký hiệu đặc biệt.
+              </div>
+            </div>
             <TextInput
               label="Mật khẩu mới"
               name="newPassword"
@@ -84,12 +116,14 @@ const ChangePassword = (props: { onClose?: () => void }) => {
               errorMessage={errors.confirmNewPassword}
               leadingIcon={<Lock />}
             />
-            <button type="submit" className="btn-primary ">
-              Xác nhận
-            </button>
-            <button type="button" className="btn " onClick={props.onClose}>
-              Hủy bỏ
-            </button>
+            <div className="flex flex-col gap-3 w-full">
+              <button type="submit" className="btn-primary ">
+                Xác nhận
+              </button>
+              <button type="button" className="btn " onClick={props.onClose}>
+                Hủy bỏ
+              </button>
+            </div>
           </form>
         )}
       </Formik>

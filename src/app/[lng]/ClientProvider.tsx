@@ -15,6 +15,8 @@ export const ClientProvider = ({ children, lng }: Props) => {
   const { i18n } = useTranslation();
 
   useEffect(() => {
+    console.log('setLocale');
+
     setYupLocale(i18n.t);
   }, [lng, i18n]);
   return status === 'loading' ? <Preload /> : children;

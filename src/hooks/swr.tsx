@@ -118,7 +118,6 @@ export const useMutation = <T = Record<string, unknown>,>(
     },
     {
       onError(err, key, config) {
-        console.log('error');
         options.onError?.(err, key, config as any);
         if (notification && !notification.ignoreError) {
           toast(
@@ -137,8 +136,6 @@ export const useMutation = <T = Record<string, unknown>,>(
         }
       },
       onSuccess(data, key, config) {
-        console.log('success');
-
         options.onSuccess?.(data as T, key, config as any);
         if (notification && !notification.ignoreSuccess) {
           toast(

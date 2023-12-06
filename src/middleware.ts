@@ -23,7 +23,6 @@ export default withAuth(
       lng = acceptLanguage.get(req.cookies.get(cookieName)?.value)!;
     if (!lng) lng = acceptLanguage.get(req.headers.get('Accept-Language'))!;
     if (!lng) lng = fallbackLng;
-    console.log({ nextauth: req.headers.has('referer') });
 
     const PRIVATE_ROUTE = `/${lng}`;
     const PUBLIC_ROUTE = [
