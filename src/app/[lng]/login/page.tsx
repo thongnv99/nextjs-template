@@ -139,15 +139,8 @@ const Login = () => {
                 hasError={touched.password && !isBlank(errors.password)}
                 errorMessage={errors.password}
                 leadingIcon={<Lock />}
-                placeholder="example@gmail.com"
               />
-              <div className="flex justify-between">
-                <Checkbox
-                  label="Lưu đăng nhập"
-                  selected={values.savePassword}
-                  onChange={setFieldValue}
-                  name="savePassword"
-                />
+              <div className="flex justify-end">
                 <Link
                   href={`/${lng}/${ROUTES.FORGOT_PASSWORD}`}
                   className="text-[1.6rem] text-[var(--color-1)] cursor-pointer"
