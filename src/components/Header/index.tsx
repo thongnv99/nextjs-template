@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import LanguagePicker from 'components/LanguagePicker';
 import UserDropdown from 'components/UserDropdown';
+import { useParams, usePathname } from 'next/navigation';
 
 const NavConfig = [
   {
@@ -12,23 +13,25 @@ const NavConfig = [
   },
   {
     label: 'Lịch sử thi',
-    route: '/',
+    route: 'exam-history',
   },
   {
     label: 'Flash card',
-    route: '/',
+    route: 'flash-card',
   },
   {
     label: 'Blog',
-    route: '/',
+    route: 'blog',
   },
   {
     label: 'Thanh toán',
-    route: '/',
+    route: 'payment',
   },
 ];
 const Header = () => {
   const { data } = useSession();
+  const { lng } = useParams();
+  const pathName = usePathname();
 
   return (
     <header className="h-[9.4rem] w-full  px-4 flex justify-between items-center shadow-sm">
@@ -37,9 +40,11 @@ const Header = () => {
         {NavConfig.map((item, idx) => (
           <Link
             className={`px-8 mx-2 h-full flex border-b-[4px] border-transparent  items-center text-base font-medium text-gray-500 hover:text-primary ${
-              idx === 0 ? 'text-primary  !border-primary-500' : ''
+              pathName.startsWith(`/${lng}/customer/${item.route}`)
+                ? 'text-primary  !border-primary-500'
+                : ''
             }`}
-            href={item.route}
+            href={`/${lng}/customer/${item.route}`}
             key={idx}
           >
             {item.label}

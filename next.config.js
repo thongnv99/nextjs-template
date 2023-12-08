@@ -10,7 +10,7 @@ const nextConfig = {
     },
     {
       source: '/vi',// ^(?!.*(?:vi|en)).*$
-      destination: '/vi/home',
+      destination: '/vi/customer',
     }];
   },
   reactStrictMode: false,
