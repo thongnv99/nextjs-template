@@ -4,13 +4,13 @@ import useSWRMutation, { SWRMutationConfiguration } from 'swr/mutation';
 import useSWR, { useSWRConfig } from 'swr';
 import { isBlank, uuid } from 'utils/common';
 import { fetcher, replacePlaceholder } from 'utils/restApi';
-import { NotificationConfig, RestError } from 'interfaces';
-import { PublicConfiguration } from 'swr/_internal';
+import { NotificationConfig, RestError, RestResponse } from 'interfaces';
+import { FetcherResponse, PublicConfiguration } from 'swr/_internal';
 import { COMMON_LOADING } from 'store/key';
 import { toast } from 'react-toastify';
 import ToastNotification from 'components/ToastNotification';
 
-export function useSWRWrapper<T = any>(
+export function useSWRWrapper<T = RestResponse<Record<string, unknown>>>(
   key: string | null | (() => string | null),
   {
     url,
@@ -41,24 +41,16 @@ export function useSWRWrapper<T = any>(
     );
   }
   return useSWR<T>(
-    isBlank(keyParse!) ? null : keyParse,
-    (...rest) => {
-      if (auth) {
-        return fetcher(
-          url ?? (typeof key === 'string' ? key : key?.()) ?? '',
-          method ?? METHOD.GET,
-          body,
-          {
-            Authorization: `Bearer ${session?.token}`,
-          },
-        );
-      } else {
-        return fetcher(
-          url ?? (typeof key === 'string' ? key : key?.()) ?? '',
-          method ?? METHOD.GET,
-          body,
-        );
-      }
+    isBlank(keyParse!) ? null : (keyParse as any),
+    () => {
+      return fetcher(
+        url ?? (typeof key === 'string' ? key : key?.()) ?? '',
+        method ?? METHOD.GET,
+        body,
+        {
+          Authorization: `Bearer ${session?.token}`,
+        },
+      ) as FetcherResponse<T>;
     },
     config,
   );
