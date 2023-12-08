@@ -1,4 +1,5 @@
 import { METHOD } from 'global';
+import { RestResponse } from 'interfaces';
 
 export const replacePlaceholder = (
   s: string,
@@ -15,7 +16,7 @@ export const replacePlaceholder = (
   return parts.join('');
 };
 
-export const fetcher = async (
+export const fetcher = async <T = Record<string, unknown>>(
   url: string,
   method: METHOD,
   body?: Record<string, unknown> | FormData,
@@ -49,5 +50,5 @@ export const fetcher = async (
     throw error;
   }
 
-  return res.json();
+  return res.json() as Promise<RestResponse<T>>;
 };

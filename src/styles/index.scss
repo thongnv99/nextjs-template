@@ -66,6 +66,9 @@ body {
   font-weight: 600;
   color: var(--white);
   transition: background-color 0.2s;
+  &.md {
+    height: 4.8rem;
+  }
   &:hover {
     background-color: var(--primary-700);
   }
