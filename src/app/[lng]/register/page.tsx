@@ -17,6 +17,7 @@ import { formatDateToString } from 'utils/datetime';
 import { useSWRConfig } from 'swr';
 import ModalProvider from 'components/ModalProvider';
 import NoticeModal from 'components/NoticeModal';
+import { passwordRegex } from 'global/regex';
 
 interface RegisterForm {
   name?: string;
@@ -28,18 +29,6 @@ interface RegisterForm {
   dob?: Date;
   gender?: string;
 }
-
-const schema = yup.object().shape({
-  name: yup.string().label('Họ và tên').required(),
-  email: yup.string().label('Email').required().email(),
-  password: yup.string().label('Mật khẩu').required(),
-  confirmPassword: yup
-    .string()
-    .label('Xác nhận mật khẩu')
-    .required()
-    .oneOf([yup.ref('password')], 'Mật khẩu không khớp'),
-  phoneNumber: yup.string().label('Số điện thoại').required(),
-});
 
 const Register = () => {
   const { lng } = useParams();
@@ -61,13 +50,28 @@ const Register = () => {
       setErrorMessage(error.message);
     },
   });
-
+  const schema = yup.object().shape({
+    name: yup.string().label('Họ và tên').required(),
+    email: yup.string().label('Email').required().email(),
+    password: yup
+      .string()
+      .label('Mật khẩu')
+      .required()
+      .matches(passwordRegex, 'Mật khẩu yếu'),
+    confirmPassword: yup
+      .string()
+      .label('Xác nhận mật khẩu')
+      .required()
+      .oneOf([yup.ref('password')], 'Mật khẩu không khớp'),
+    phoneNumber: yup.string().label('Số điện thoại').required(),
+  });
   const handleRegister = (values: RegisterForm) => {
     const payload = {
       ...values,
       dob: values.dob
         ? formatDateToString(new Date(values.dob), 'dd/MM/yyyy')
         : null,
+      confirmPassword: undefined,
     };
     loading.current = !loading.current;
     setErrorMessage(null);
@@ -177,18 +181,23 @@ const Register = () => {
                   hasError={touched.email && !isBlank(errors.email)}
                   errorMessage={errors.email}
                 />
-                <TextInput
-                  label="Mật khẩu"
-                  className="col-span-2"
-                  name="password"
-                  type="password"
-                  autoComplete="off"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  leadingIcon={<Lock />}
-                  hasError={touched.password && !isBlank(errors.password)}
-                  errorMessage={errors.password}
-                />
+                <div className="col-span-2">
+                  <TextInput
+                    label="Mật khẩu"
+                    name="password"
+                    type="password"
+                    autoComplete="off"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    leadingIcon={<Lock />}
+                    hasError={touched.password && !isBlank(errors.password)}
+                    errorMessage={errors.password}
+                  />
+                  <div className="text-sm font-normal text-gray-500">
+                    Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 3 thành
+                    phần là chữ hoa, chữ thường, số và ký hiệu đặc biệt.
+                  </div>
+                </div>
                 <TextInput
                   label="Xác nhận mật khẩu"
                   className="col-span-2"
