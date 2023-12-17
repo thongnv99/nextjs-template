@@ -1,26 +1,19 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import {
-  redirect,
-  useParams,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation';
+import { useParams } from 'next/navigation';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { METHOD, ROUTES } from 'global';
 import { isBlank } from 'utils/common';
 import TextInput from 'elements/TextInput';
-import Checkbox from 'elements/CheckBox';
 import Loader from 'components/Loader';
 import Mail from 'assets/svg/mail.svg';
 import Lock from 'assets/svg/lock.svg';
 import GoogleIcon from 'assets/svg/google.svg';
 import { useMutation } from 'hooks/swr';
 import { LOGIN_BY_GOOGLE } from 'store/key';
-import { RestSuccess } from 'interfaces';
 
 interface LoginForm {
   email: string;
@@ -42,17 +35,18 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>();
 
-  const { trigger: loginBuyGoogle } = useMutation<
-    RestSuccess<{ googleLoginUrl: string }>
-  >(LOGIN_BY_GOOGLE, {
-    url: '/api/v1/loginByGoogle',
-    method: METHOD.POST,
-    onSuccess(data) {
-      if (data.result?.googleLoginUrl) {
-        window.open(data.result.googleLoginUrl, 'blank');
-      }
+  const { trigger: loginBuyGoogle } = useMutation<{ googleLoginUrl: string }>(
+    LOGIN_BY_GOOGLE,
+    {
+      url: '/api/v1/loginByGoogle',
+      method: METHOD.POST,
+      onSuccess(data) {
+        if (data.result?.googleLoginUrl) {
+          window.open(data.result.googleLoginUrl, 'blank');
+        }
+      },
     },
-  });
+  );
 
   const handleLogin = async (values: LoginForm) => {
     setErrorMessage(null);
