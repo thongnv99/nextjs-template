@@ -1,7 +1,7 @@
 .data-grid {
   &.ag-theme-quartz {
     --ag-border-color: var(--gray-200);
-    --ag-odd-row-background-color: var(--gray-50);
+    --ag-odd-row-background-color: transparent;
     --ag-header-background-color: var(--gray-50);
     .ag-root-wrapper {
       border: none;

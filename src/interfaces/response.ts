@@ -20,3 +20,18 @@ export interface PaymentPackageRes {
   price: number;
   discount: number;
 }
+
+export interface PaymentMethodRes {
+  items: {
+    id: number;
+    name: string;
+    params: {
+      banks?: {
+        accountName: string;
+        accountNumber: string;
+        bankCode: string;
+        bankName: string;
+      }[];
+    };
+  }[];
+}
