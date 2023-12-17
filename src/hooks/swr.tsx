@@ -10,7 +10,7 @@ import { COMMON_LOADING } from 'store/key';
 import { toast } from 'react-toastify';
 import ToastNotification from 'components/ToastNotification';
 
-export function useSWRWrapper<T = RestResponse<Record<string, unknown>>>(
+export function useSWRWrapper<T = Record<string, unknown>>(
   key: string | null | (() => string | null),
   {
     url,
@@ -25,7 +25,7 @@ export function useSWRWrapper<T = RestResponse<Record<string, unknown>>>(
     body?: Record<string, unknown>;
     auth?: boolean;
     ignoreKeyParse?: boolean;
-  } & Partial<PublicConfiguration<T, any, (arg: string) => any>>,
+  } & Partial<PublicConfiguration<T, RestError, (arg: string) => any>>,
 ) {
   const { data: session } = useSession();
   let keyParse = typeof key === 'string' ? key : key?.();
@@ -43,14 +43,26 @@ export function useSWRWrapper<T = RestResponse<Record<string, unknown>>>(
   return useSWR<T>(
     isBlank(keyParse!) ? null : (keyParse as any),
     () => {
-      return fetcher(
-        url ?? (typeof key === 'string' ? key : key?.()) ?? '',
-        method ?? METHOD.GET,
-        body,
-        {
-          Authorization: `Bearer ${session?.token}`,
-        },
-      ) as FetcherResponse<T>;
+      return new Promise((resolve, reject) => {
+        fetcher<T>(
+          url ?? (typeof key === 'string' ? key : key?.()) ?? '',
+          method ?? METHOD.GET,
+          body,
+          {
+            Authorization: `Bearer ${session?.token}`,
+          },
+        )
+          .then(data => {
+            if (data.status) {
+              resolve(data.result!);
+            } else {
+              reject(data);
+            }
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     },
     config,
   );
@@ -69,7 +81,10 @@ export const useMutation = <T = Record<string, unknown>,>(
     notification?: NotificationConfig;
     componentId?: string;
     loading?: boolean;
-  } & SWRMutationConfiguration<T, RestError & Record<string, unknown>>,
+  } & SWRMutationConfiguration<
+    RestResponse<T>,
+    RestError & Record<string, unknown>
+  >,
 ) => {
   const { data: session } = useSession();
   const { mutate } = useSWRConfig();
@@ -79,14 +94,14 @@ export const useMutation = <T = Record<string, unknown>,>(
       key: string,
       { arg: body }: { arg?: Record<string, unknown> | FormData },
     ) => {
-      return new Promise((resolve, reject) => {
+      return new Promise<RestResponse<T>>((resolve, reject) => {
         if (options.loading) {
           mutate(COMMON_LOADING, {
             componentId: options.componentId,
             loading: true,
           });
         }
-        fetcher(
+        fetcher<T>(
           url ?? key,
           method ?? METHOD.POST,
           body as Record<string, unknown>,
@@ -128,7 +143,7 @@ export const useMutation = <T = Record<string, unknown>,>(
         }
       },
       onSuccess(data, key, config) {
-        options.onSuccess?.(data as T, key, config as any);
+        options.onSuccess?.(data as RestResponse<T>, key, config as any);
         if (notification && !notification.ignoreSuccess) {
           toast(
             <ToastNotification

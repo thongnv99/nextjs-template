@@ -12,6 +12,8 @@
     "@headlessui/react": "^1.7.15",
     "@types/http-proxy": "^1.17.14",
     "accept-language": "^3.0.18",
+    "ag-grid-community": "^31.0.0",
+    "ag-grid-react": "^31.0.0",
     "date-fns": "^2.30.0",
     "focus-formik-error": "^1.1.0",
     "formik": "^2.4.1",

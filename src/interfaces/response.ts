@@ -12,3 +12,11 @@ export interface RestSuccess<T = Record<string, unknown>> {
 
 export type RestResponse<T = Record<string, unknown>> = RestError &
   RestSuccess<T>;
+
+export interface PaymentPackageRes {
+  id: string;
+  name: string;
+  type: string;
+  price: number;
+  discount: number;
+}

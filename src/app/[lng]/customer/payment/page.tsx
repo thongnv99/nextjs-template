@@ -5,31 +5,18 @@ import CheckIcon from 'assets/svg/check-icon.svg';
 import PremiumIcon from 'assets/svg/premium-icon.svg';
 import { formatNumber } from 'utils/common';
 import ButtonPayment from 'components/ButtonPayment';
-
-interface PaymentPackage {
-  id: string;
-  name: string;
-  type: string;
-  price: number;
-  discount: number;
-}
+import { PaymentPackageRes } from 'interfaces';
+import { getPaymentPackages } from 'services/common';
 
 const features = ['Làm bài thi', 'flash card', 'Viết blog'];
 
 const PaymentPage = async () => {
-  const res = await fetcher<{ items: PaymentPackage[] }>(
-    '/api/v1/packages',
-    METHOD.GET,
-  );
-  console.log(res);
-  if (!res.status) {
-    return <div>{res.message}</div>;
-  }
+  const packages = await getPaymentPackages();
   return (
     <div className="w-full h-full flex flex-col items-center justify-center m-auto max-w-screen-lg">
       <div className="text-lg text-primary-500 mb-12">Thanh toán</div>
       <div className="flex">
-        {res.result?.items.map(item => (
+        {packages.map(item => (
           <div
             key={item.id}
             className=" rounded-3xl border border-gray-200 p-8 flex flex-col items-center"

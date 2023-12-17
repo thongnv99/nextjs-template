@@ -5,3 +5,5 @@ export interface NotificationConfig {
   type?: 'TOAST' | 'MODAL';
   content?: string;
 }
+
+export interface IGlobalClient {}

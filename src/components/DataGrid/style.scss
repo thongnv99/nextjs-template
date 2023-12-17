@@ -1,0 +1,44 @@
+.data-grid {
+  &.ag-theme-quartz {
+    --ag-border-color: var(--gray-200);
+    --ag-odd-row-background-color: var(--gray-50);
+    --ag-header-background-color: var(--gray-50);
+    .ag-root-wrapper {
+      border: none;
+      border-radius: 0;
+    }
+  }
+  .ag-header {
+    .ag-header-viewport {
+      .ag-header-container {
+        .ag-header-row {
+          .ag-header-cell {
+            .ag-cell-label-container {
+              .ag-header-cell-label {
+                .ag-header-cell-text {
+                  color: var(--gray-500);
+                  font-size: 1.2rem;
+                  font-weight: 500;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .ag-row {
+    .ag-cell {
+      color: var(--gray-500);
+      font-size: 1.4rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      &.bold {
+        color: var(--gray-900);
+        font-weight: 500;
+      }
+    }
+  }
+}
