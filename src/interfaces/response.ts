@@ -1,3 +1,5 @@
+import { IBlog } from './model';
+
 export interface RestError {
   status: boolean;
   code?: string;
@@ -12,6 +14,10 @@ export interface RestSuccess<T = Record<string, unknown>> {
 
 export type RestResponse<T = Record<string, unknown>> = RestError &
   RestSuccess<T>;
+
+export interface ArrayResponse<T> {
+  items: T[];
+}
 
 export interface PaymentPackageRes {
   id: string;
@@ -35,3 +41,5 @@ export interface PaymentMethodRes {
     };
   }[];
 }
+
+export type BlogListRes = ArrayResponse<IBlog>;

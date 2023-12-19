@@ -1,3 +1,6 @@
+import { LANG } from 'global';
+import { IBlog } from 'interfaces';
+
 export const isBlank = (str?: string): boolean => {
   return str == null || /^\s*$/.test(str);
 };
@@ -19,7 +22,7 @@ export const formatNumber = (
   toFixed?: boolean,
   failoverValue = '0',
   isSkipRound?: boolean,
-  floor?: boolean
+  floor?: boolean,
 ) => {
   if (value == null || isNaN(value)) {
     return failoverValue;
@@ -46,8 +49,16 @@ export const formatNumber = (
       fractionDigit = digit;
     }
     if (fractionDigit > 0) {
-      const mainNum = Number(`${Number(tempValue.toString())}e+${fractionDigit}`);
-      const temp = +`${isSkipRound ? mainNum : floor ? Math.floor(mainNum) : Math.round(mainNum)}e-${fractionDigit}`;
+      const mainNum = Number(
+        `${Number(tempValue.toString())}e+${fractionDigit}`,
+      );
+      const temp = +`${
+        isSkipRound
+          ? mainNum
+          : floor
+          ? Math.floor(mainNum)
+          : Math.round(mainNum)
+      }e-${fractionDigit}`;
       let fractionString = '';
       let i = '';
       if (toFixed === true) {
@@ -57,14 +68,24 @@ export const formatNumber = (
       } else {
         i = temp.toString();
         if (temp.toString().indexOf('.') >= 1) {
-          fractionString = temp.toString().substring(temp.toString().indexOf('.'), temp.toString().length);
+          fractionString = temp
+            .toString()
+            .substring(temp.toString().indexOf('.'), temp.toString().length);
           i = temp.toString().substring(0, temp.toString().indexOf('.'));
         }
       }
       return prefix + i.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + fractionString;
     } else {
-      const mainNum = Number(`${Number(tempValue.toString())}e+${fractionDigit}`);
-      const temp = +`${isSkipRound ? mainNum : floor ? Math.floor(mainNum) : Math.round(mainNum)}e-${fractionDigit}`;
+      const mainNum = Number(
+        `${Number(tempValue.toString())}e+${fractionDigit}`,
+      );
+      const temp = +`${
+        isSkipRound
+          ? mainNum
+          : floor
+          ? Math.floor(mainNum)
+          : Math.round(mainNum)
+      }e-${fractionDigit}`;
       const i = temp.toString();
       return prefix + i.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
@@ -72,7 +93,6 @@ export const formatNumber = (
     return '';
   }
 };
-
 
 export const dataURLtoFile = (data: string, filename: string) => {
   const arr = data.split(','),
@@ -85,7 +105,7 @@ export const dataURLtoFile = (data: string, filename: string) => {
     u8arr[n] = bstr.charCodeAt(n);
   }
   return new File([u8arr], filename, { type: mime });
-}
+};
 
 export const vietnameseWithoutAccent = (alias: string) => {
   let str = alias;
@@ -116,4 +136,19 @@ export const vietnameseWithoutAccent = (alias: string) => {
     }
   }
   return result;
+};
+
+// encode decode
+export const encodeUrl = (blog?: IBlog, lng?: LANG) => {
+  const title =
+    lng == LANG.EN && !isBlank(blog?.title) ? blog?.title : blog?.title;
+
+  return `${vietnameseWithoutAccent(title ?? '')
+    .toLowerCase()
+    .replaceAll('"', '')
+    .replaceAll(' ', '-')}-${blog?.id}`;
+};
+
+export const decodeUrl = (url: string) => {
+  return url.split('-').pop();
 };

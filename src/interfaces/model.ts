@@ -7,3 +7,17 @@ export interface NotificationConfig {
 }
 
 export interface IGlobalClient {}
+
+export interface IBlog {
+  id: string;
+  content: string;
+  title: string;
+  status: 'PUBLISH' | 'DRAFT';
+  createdAt: number;
+  createdBy: {
+    email: string;
+    id: string;
+    name?: string;
+    phoneNumber?: string;
+  };
+}

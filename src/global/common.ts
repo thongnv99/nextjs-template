@@ -23,3 +23,8 @@ export enum GENDER {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
 }
+
+export enum LANG {
+  VI = 'vi',
+  EN = 'en',
+}
