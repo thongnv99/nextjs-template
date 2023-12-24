@@ -51,6 +51,7 @@ export default withAuth(
     } else if (req.nextUrl.pathname.startsWith(`/${lng}/login`)) {
       return NextResponse.redirect(new URL(`/${lng}/customer`, req.url));
     }
+    console.log(req.nextUrl.pathname);
 
     return NextResponse.next();
   },

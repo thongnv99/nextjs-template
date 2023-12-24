@@ -5,12 +5,14 @@ import Eye from 'assets/svg/eye.svg';
 import EyeOff from 'assets/svg/eye-off.svg';
 import './style.scss';
 
-interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TextInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string;
   hasError?: boolean;
   errorMessage?: string;
   leadingIcon?: React.ReactNode;
   helpIcon?: React.ReactNode;
+  type?: string;
 }
 
 const TextInput = (props: TextInputProps) => {
@@ -38,11 +40,16 @@ const TextInput = (props: TextInputProps) => {
       )}
       <div className="input-section">
         {props.leadingIcon && <div className="leading-icon">{leadingIcon}</div>}
-        <input
-          {...rest}
-          value={rest.value ?? ''}
-          type={props.type === 'password' && show ? 'text' : props.type}
-        />
+        {props.type === 'textarea' ? (
+          <textarea {...rest} value={rest.value ?? ''} />
+        ) : (
+          <input
+            {...rest}
+            value={rest.value ?? ''}
+            type={props.type === 'password' && show ? 'text' : props.type}
+          />
+        )}
+
         {props.helpIcon && <div className="help-icon">{helpIcon}</div>}
         {props.type === 'password' && (
           <div

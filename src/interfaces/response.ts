@@ -1,4 +1,4 @@
-import { IBlog } from './model';
+import { IBlog, IFlashCard } from './model';
 
 export interface RestError {
   status: number;
@@ -43,3 +43,5 @@ export interface PaymentMethodRes {
 }
 
 export type BlogListRes = ArrayResponse<IBlog>;
+
+export type FlashCardRes = ArrayResponse<IFlashCard>;

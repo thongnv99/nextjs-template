@@ -28,3 +28,9 @@ export enum LANG {
   VI = 'vi',
   EN = 'en',
 }
+
+export enum FLASH_CARD_STATUS {
+  UNREVIEW = 'UNREVIEW',
+  REVIEWED = 'REVIEWED',
+  REVIEW_AGAIN = 'REVIEW_AGAIN',
+}

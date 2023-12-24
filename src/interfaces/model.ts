@@ -1,3 +1,5 @@
+import { FLASH_CARD_STATUS } from 'global';
+
 export interface NotificationConfig {
   title?: string;
   ignoreSuccess?: boolean;
@@ -21,4 +23,11 @@ export interface IBlog {
     name?: string;
     phoneNumber?: string;
   };
+}
+
+export interface IFlashCard {
+  id: string;
+  question: string;
+  answer: string;
+  status: FLASH_CARD_STATUS;
 }
