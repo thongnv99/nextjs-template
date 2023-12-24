@@ -9,7 +9,9 @@ interface NoticeModalProps {
   type: 'error' | 'warning' | 'success';
   title?: string;
   content?: string;
+  labelConfirm?: string;
   onConfirm?: () => void;
+  onCancel?: () => void;
 }
 
 const MapIcon = {
@@ -31,13 +33,16 @@ const ConfirmModal = (props: NoticeModalProps) => {
         className="w-full text-center text-sm font-normal text-gray-500 mb-6"
         dangerouslySetInnerHTML={{ __html: t(props.content ?? '')! }}
       ></div>
-      <div className="w-full">
+      <div className="w-full flex gap-2">
+        <button className="btn  !w-full" type="button" onClick={props.onCancel}>
+          {t('Đóng')}
+        </button>
         <button
           className="btn btn-primary !w-full"
           type="button"
           onClick={props.onConfirm}
         >
-          {t('Đồng ý')}
+          {t(props.labelConfirm ?? 'Đồng ý')}
         </button>
       </div>
     </div>

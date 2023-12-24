@@ -40,6 +40,7 @@ const TextInput = (props: TextInputProps) => {
         {props.leadingIcon && <div className="leading-icon">{leadingIcon}</div>}
         <input
           {...rest}
+          value={rest.value ?? ''}
           type={props.type === 'password' && show ? 'text' : props.type}
         />
         {props.helpIcon && <div className="help-icon">{helpIcon}</div>}

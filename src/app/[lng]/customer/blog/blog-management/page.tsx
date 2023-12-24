@@ -1,7 +1,8 @@
+import BlogManagement from 'components/BlogManagement';
 import React from 'react';
 
 const MyBlogPage = () => {
-  return <div>MyBlogPage</div>;
+  return <BlogManagement />;
 };
 
 export default MyBlogPage;

@@ -1,0 +1,13 @@
+.editor {
+  .ck-editor {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    .ck-editor__main {
+      flex: 1;
+      > .ck-content {
+        height: 100%;
+      }
+    }
+  }
+}

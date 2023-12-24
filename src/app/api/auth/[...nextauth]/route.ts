@@ -1,4 +1,4 @@
-import { OutgoingResponse, Session, User } from 'next-auth';
+import { AuthOptions, OutgoingResponse, Session, User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -34,37 +34,7 @@ const cookies = {
   },
 };
 
-const refreshAccessToken = async (token: string) => {
-  const response = await fetch(
-    `${process.env.BASE_API_URL}/api/v1/refreshToken`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        refreshToken: token,
-      }),
-    },
-  );
-  const data = await response.json();
-
-  if (response.ok) {
-    const decodedToken = jwtDecode<{
-      exp: number;
-    }>(data.accessToken);
-
-    return {
-      accessToken: data.accessToken,
-      expiredAt: decodedToken.exp,
-    };
-  }
-
-  //TODO: Prompt session timeout to logout
-  return Promise.reject(data);
-};
-
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -171,6 +141,8 @@ const handler = NextAuth({
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

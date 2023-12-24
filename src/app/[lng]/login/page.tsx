@@ -21,20 +21,18 @@ interface LoginForm {
   savePassword?: boolean;
 }
 
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .label('Email')
-    .required()
-    .email(() => 'Email không hợp lệ'),
-  password: yup.string().label('Mật khẩu').required(),
-});
-
 const Login = () => {
   const { lng } = useParams();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>();
-
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .label('Email')
+      .required()
+      .email(() => 'Email không hợp lệ'),
+    password: yup.string().label('Mật khẩu').required(),
+  });
   const { trigger: loginBuyGoogle } = useMutation<{ googleLoginUrl: string }>(
     LOGIN_BY_GOOGLE,
     {

@@ -1,6 +1,6 @@
 import { METHOD } from 'global';
 import { useSWRWrapper } from './swr';
-import { PaymentMethodRes, PaymentPackageRes } from 'interfaces';
+import { IBlog, PaymentMethodRes, PaymentPackageRes } from 'interfaces';
 
 export const usePaymentMethod = () => {
   return useSWRWrapper<PaymentMethodRes>('/api/v1/paymentMethods', {
@@ -17,5 +17,13 @@ export const usePaymentPackages = () => {
     revalidateOnFocus: false,
     revalidateOnMount: true,
     refreshInterval: 86400000, // 1 day
+  });
+};
+
+export const useBlog = (postId: string) => {
+  return useSWRWrapper<IBlog>(`/api/v1/posts/${postId}`, {
+    url: `/api/v1/posts/${postId}`,
+    revalidateOnFocus: false,
+    revalidateOnMount: true,
   });
 };

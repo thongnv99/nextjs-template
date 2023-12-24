@@ -1,9 +1,9 @@
-import { LANG } from 'global';
-import { IBlog } from 'interfaces';
+'use client';
+import BlogDetail from 'components/BlogDetail';
+import Preload from 'components/Preload';
+import { useBlog } from 'hooks/common';
 import React from 'react';
-import { getBlogDetail, getBlogs } from 'services/common';
-import { decodeUrl, encodeUrl } from 'utils/common';
-import { formatDateToString } from 'utils/datetime';
+import { decodeUrl } from 'utils/common';
 
 interface BlogDetailProps {
   params: {
@@ -11,32 +11,19 @@ interface BlogDetailProps {
   };
 }
 
-const BlogDetail = async (props: BlogDetailProps) => {
+const BlogDetailPage = (props: BlogDetailProps) => {
   const id = decodeUrl(props.params.blogId);
-  const res = await getBlogDetail(id ?? '');
+  const { data, error, isLoading } = useBlog(id!);
 
-  if (!res.status || res.result == null) {
-    return <div>Có lỗi xảy ra :{res.message}</div>;
+  if (isLoading) {
+    return <Preload />;
   }
-  const data = res.result;
-  return (
-    <div className="w-full m-auto max-w-screen-md items-center flex flex-col px-6 pt-[9.6rem]">
-      <div className="mb-[9.6rem] flex flex-col gap-3 items-center">
-        <div className="text-[4.8rem] font-bold text-gray-900 ">
-          {data.title}
-        </div>
-        <div className="text-base font-normal text-gray-500 ">
-          {formatDateToString(new Date(data.createdAt), 'dd/MM/yyyy')}
-        </div>
-      </div>
-      <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
-    </div>
-  );
+
+  if (data == null) {
+    return <div>Đã có lỗi xảy ra</div>;
+  }
+
+  return <BlogDetail data={data} />;
 };
 
-export default BlogDetail;
-
-export async function generateStaticParams() {
-  const blogs = await getBlogs();
-  return blogs.map(item => encodeUrl(item, LANG.VI));
-}
+export default BlogDetailPage;

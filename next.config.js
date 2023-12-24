@@ -19,8 +19,14 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'api.vietqr.io',
-        // port: '',
-        // pathname: '/account123/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'dev.kenchikunokaze.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'http://195.35.45.33:9000',
       },
     ],
   },

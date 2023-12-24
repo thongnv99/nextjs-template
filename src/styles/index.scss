@@ -49,8 +49,14 @@ body {
   font-weight: 600;
   color: var(--gray-700);
   transition: background-color 0.2s;
+  outline: none;
   &:hover {
     background-color: var(--gray-50);
+  }
+  &.btn-icon {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
   }
 }
 
@@ -76,6 +82,12 @@ body {
   .disabled {
     background-color: var(--primary-200);
     border: 1px solid var(--primary-200);
+  }
+
+  &.btn-icon {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
   }
 }
 

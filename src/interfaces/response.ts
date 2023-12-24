@@ -1,14 +1,14 @@
 import { IBlog } from './model';
 
 export interface RestError {
-  status: boolean;
+  status: number;
   code?: string;
   message?: string;
   messageParams?: Record<string, unknown>;
 }
 
 export interface RestSuccess<T = Record<string, unknown>> {
-  status: boolean;
+  status: number;
   result?: T;
 }
 

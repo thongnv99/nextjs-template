@@ -1,7 +1,7 @@
 import { LANG } from 'global';
 import { IBlog } from 'interfaces';
 
-export const isBlank = (str?: string): boolean => {
+export const isBlank = (str?: string | null): boolean => {
   return str == null || /^\s*$/.test(str);
 };
 

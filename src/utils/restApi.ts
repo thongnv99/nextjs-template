@@ -10,7 +10,9 @@ export const replacePlaceholder = (
     if (data instanceof FormData) {
       return data.get(replaced) || replaced;
     }
-    return data[replaced] || replaced;
+    const key = data[replaced] || replaced;
+    data[replaced] = undefined;
+    return key;
   });
 
   return parts.join('');
@@ -21,8 +23,9 @@ export const fetcher = async <T = Record<string, unknown>>(
   method: METHOD,
   body?: Record<string, unknown> | FormData,
   headers?: HeadersInit,
+  noEndPoint?: boolean,
 ) => {
-  let parsedUri = `${process.env.BASE_API_URL ?? ''}${url}${
+  let parsedUri = `${noEndPoint ? '' : process.env.BASE_API_URL ?? ''}${url}${
     method === METHOD.GET && body
       ? `?${new URLSearchParams(body as unknown as Record<string, string>)}`
       : ''

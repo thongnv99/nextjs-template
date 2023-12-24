@@ -12,9 +12,10 @@ export interface IBlog {
   id: string;
   content: string;
   title: string;
+  description?: string;
   status: 'PUBLISH' | 'DRAFT';
   createdAt: number;
-  createdBy: {
+  createdBy?: {
     email: string;
     id: string;
     name?: string;

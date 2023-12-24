@@ -1,0 +1,12 @@
+.header {
+  .nav {
+    .nav-menu {
+      display: none;
+    }
+    &:hover {
+      .nav-menu {
+        display: flex;
+      }
+    }
+  }
+}

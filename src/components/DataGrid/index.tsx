@@ -59,6 +59,7 @@ const DataGrid = forwardRef(
             ...defaultColDef,
           }}
           suppressDragLeaveHidesColumns
+          suppressRowHoverHighlight
           {...rest}
         />
       </div>

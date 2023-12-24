@@ -29,6 +29,9 @@
   }
 
   .ag-row {
+    &.ag-row-hover {
+      background-color: transparent !important;
+    }
     .ag-cell {
       color: var(--gray-500);
       font-size: 1.4rem;

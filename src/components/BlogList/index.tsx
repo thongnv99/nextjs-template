@@ -36,10 +36,10 @@ const BlogList = () => {
       <div className="py-6  flex items-center justify-between w-full max-w-screen-sm m-auto">
         <div className="text-lg font-semibold">Tất cả</div>
         <Link
-          href={'blog/my-blog'}
+          href={'blog/blog-management'}
           className="text-sm text-blue-500 font-semibold"
         >
-          Blog của tôi
+          Quản lý blog
         </Link>
       </div>
       <div className="flex-1 w-full flex flex-col gap-6  max-w-screen-sm m-auto pb-8">
