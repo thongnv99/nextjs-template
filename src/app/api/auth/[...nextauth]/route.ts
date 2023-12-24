@@ -1,4 +1,4 @@
-import { AuthOptions, OutgoingResponse, Session, User } from 'next-auth';
+import { OutgoingResponse, Session, User } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -34,7 +34,7 @@ const cookies = {
   },
 };
 
-export const authOptions: AuthOptions = {
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -141,8 +141,6 @@ export const authOptions: AuthOptions = {
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
-
-const handler = NextAuth(authOptions);
+});
 
 export { handler as GET, handler as POST };
