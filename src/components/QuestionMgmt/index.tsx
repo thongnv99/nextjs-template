@@ -6,6 +6,7 @@ import { uuid } from 'utils/common';
 import Plus from 'assets/svg/plus.svg';
 import TextInput from 'elements/TextInput';
 import Search from 'assets/svg/search.svg';
+import Dropdown from 'elements/Dropdown';
 
 type Props = {};
 
@@ -35,6 +36,22 @@ const QuestionMgmt = (props: Props) => {
           <TextInput
             leadingIcon={<Search />}
             placeholder="Nhập nội dung câu hỏi"
+          />
+        </div>
+        <div className="max-w-lg flex-1">
+          <Dropdown
+            placeholder="Loại câu hỏi"
+            className="w-full"
+            options={[
+              {
+                label: 'Trắc nghiệm',
+                value: 'Trắc nghiệm',
+              },
+              {
+                label: 'Tự luận',
+                value: 'Tự luận',
+              },
+            ]}
           />
         </div>
       </div>
