@@ -1,6 +1,11 @@
 import { METHOD } from 'global';
 import { useSWRWrapper } from './swr';
-import { IBlog, PaymentMethodRes, PaymentPackageRes } from 'interfaces';
+import {
+  CategoryQuestionRes,
+  IBlog,
+  PaymentMethodRes,
+  PaymentPackageRes,
+} from 'interfaces';
 
 export const usePaymentMethod = () => {
   return useSWRWrapper<PaymentMethodRes>('/api/v1/paymentMethods', {
@@ -18,6 +23,18 @@ export const usePaymentPackages = () => {
     revalidateOnMount: true,
     refreshInterval: 86400000, // 1 day
   });
+};
+
+export const useCategoryQuestions = () => {
+  return useSWRWrapper<{ items: CategoryQuestionRes[] }>(
+    '/api/v1/questionCategories',
+    {
+      url: '/api/v1/questionCategories',
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      refreshInterval: 86400000, // 1 day
+    },
+  );
 };
 
 export const useBlog = (postId: string) => {

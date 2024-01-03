@@ -10,8 +10,18 @@ import './style.scss';
 
 const NavConfig = [
   {
-    label: 'Đề thi',
-    route: '/exam',
+    label: 'Câu hỏi',
+    route: '/question',
+    children: [
+      {
+        label: 'Câu hỏi',
+        route: '/question',
+      },
+      {
+        label: 'Tạo  câu hỏi',
+        route: '/question/question-form',
+      },
+    ],
   },
   {
     label: 'Lịch sử thi',

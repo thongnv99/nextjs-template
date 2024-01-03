@@ -9,11 +9,12 @@ type DropdownProps = {
   options?: DropdownOption[];
   placeholder?: string;
   selected?: string;
-
+  onChange?: (value: string) => void;
   label?: string;
   hasError?: boolean;
   errorMessage?: string;
   className?: string;
+  initial?: boolean;
 };
 
 interface DropdownOption {
@@ -24,20 +25,29 @@ interface DropdownOption {
 
 const Dropdown = (props: DropdownProps) => {
   const { t } = useTranslation();
-  const mapLabel = useRef<Record<string, string>>({});
+  const [mapLabel, setMapLabel] = useState<Record<string, string>>({});
   const { label, hasError, errorMessage, className } = props;
 
   const [selected, setSelected] = useState<string | undefined>(
     props.options?.find(item => item.value === props.selected)?.value,
   );
   useEffect(() => {
+    const mapRecord: Record<string, string> = {};
     props.options?.forEach(option => {
-      mapLabel.current[option.value] = option.label;
+      mapRecord[option.value] = option.label;
     });
+    setMapLabel(mapRecord);
+    if (props.initial && props.options?.length) {
+      const active = props.options?.find(item => item.value === props.selected);
+      if (active == null) {
+        handleChange(props.options[0].value);
+      }
+    }
   }, [props.options]);
 
   const handleChange = (value: string) => {
     setSelected(value);
+    props.onChange?.(value);
   };
   return (
     <div
@@ -53,8 +63,8 @@ const Dropdown = (props: DropdownProps) => {
       <Listbox value={selected} onChange={handleChange}>
         <div className="relative w-full">
           <Listbox.Button className="dropdown-button">
-            <span className="block truncate">
-              {mapLabel.current[selected ?? ''] ?? props.placeholder ?? ''}
+            <span className="block truncate font-normal">
+              {mapLabel[selected ?? ''] ?? props.placeholder ?? ''}
             </span>
             <span className=" ">
               <ChevronDown
@@ -69,7 +79,7 @@ const Dropdown = (props: DropdownProps) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-10">
               {props.options?.map((option, idx) => (
                 <Listbox.Option
                   key={idx}

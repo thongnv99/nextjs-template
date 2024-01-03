@@ -27,6 +27,12 @@ export interface PaymentPackageRes {
   discount: number;
 }
 
+export interface CategoryQuestionRes {
+  id: string;
+  name: string;
+  description: string;
+}
+
 export interface PaymentMethodRes {
   items: {
     id: number;

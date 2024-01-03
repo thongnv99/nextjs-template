@@ -16,9 +16,10 @@ const BlogCard = ({ data }: { data: IBlog }) => {
       <div className="text-[2.4rem] font-bold text-black mb-8 text-ellipsis w-full  whitespace-nowrap">
         {data.title}
       </div>
-      <div className="text-base font-normal text-[#4A4A68] mb-3 text-ellipsis w-full line-clamp-[4]">
-        {data.content}
-      </div>
+      <div
+        className="text-base font-normal text-[#4A4A68] mb-3 text-ellipsis w-full line-clamp-[4]"
+        dangerouslySetInnerHTML={{ __html: data.content }}
+      ></div>
       <div className="text-base font-normal text-[#4A4A68]">
         {formatDateToString(new Date(data.createdAt), 'dd/MM/yyyy')}
       </div>
