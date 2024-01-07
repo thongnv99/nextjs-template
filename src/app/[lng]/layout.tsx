@@ -5,6 +5,7 @@ import { languages } from 'app/i18n/settings';
 import { Lexend } from 'next/font/google';
 import { NextAuthProvider } from './provider';
 import { ClientProvider } from './ClientProvider';
+import SessionTimeout from 'components/SessionTimeout';
 
 const lexend = Lexend({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -25,6 +26,7 @@ const Layout = ({ children, lng }: { children: ReactNode; lng: string }) => {
       <body suppressHydrationWarning={true}>
         <ClientProvider lng={lng}>{children}</ClientProvider>
         <ToastContainer autoClose={3000} />
+        <SessionTimeout />
       </body>
     </html>
   );

@@ -6,7 +6,7 @@ import { isBlank, uuid } from 'utils/common';
 import { fetcher, replacePlaceholder } from 'utils/restApi';
 import { NotificationConfig, RestError, RestResponse } from 'interfaces';
 import { FetcherResponse, PublicConfiguration } from 'swr/_internal';
-import { COMMON_LOADING } from 'store/key';
+import { COMMON_LOADING, TRIGGER_SESSION_TIMEOUT } from 'store/key';
 import { toast } from 'react-toastify';
 import ToastNotification from 'components/ToastNotification';
 
@@ -125,6 +125,10 @@ export const useMutation = <T = Record<string, unknown>,>(
     },
     {
       onError(err, key, config) {
+        console.log({ err });
+        if (err.message === 'TOKEN_INVALID') {
+          mutate(TRIGGER_SESSION_TIMEOUT, {});
+        }
         options.onError?.(err, key, config as any);
         if (notification && !notification.ignoreError) {
           toast(
