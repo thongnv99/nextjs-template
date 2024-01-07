@@ -1060,6 +1060,13 @@
   dependencies:
     ckeditor5 "40.2.0"
 
+"@ckeditor/ckeditor5-alignment@40.2.0":
+  version "40.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-alignment/-/ckeditor5-alignment-40.2.0.tgz#4ad3ae6e87f89ba0cc9614d25cb5b71f3b86204c"
+  integrity sha512-OMvOdgEWBzFQbcHLu4CYMe/LONSmn07BxrXQ4Uxd++Wr45U2ElrbkKcJldARa+J97YGEzaaCI3igXDh6g4fkRA==
+  dependencies:
+    ckeditor5 "40.2.0"
+
 "@ckeditor/ckeditor5-autoformat@40.2.0":
   version "40.2.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-autoformat/-/ckeditor5-autoformat-40.2.0.tgz#ee858ccb2bdfa975d13f1ecb013be9c06cbd0a5f"
@@ -1190,10 +1197,31 @@
   dependencies:
     ckeditor5 "40.2.0"
 
+"@ckeditor/ckeditor5-font@40.2.0":
+  version "40.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-font/-/ckeditor5-font-40.2.0.tgz#ac7640436fc54ba948a0ec7ac0923ec90e5576cc"
+  integrity sha512-k38+eQQF+zfiauVDxcMBHGG1ShRwCNibaJipu5FKzvGY5PJELUsIfor1dsSPsTADWxWMpBi5qEaSO4S4+Lu/JA==
+  dependencies:
+    ckeditor5 "40.2.0"
+
 "@ckeditor/ckeditor5-heading@40.2.0":
   version "40.2.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-heading/-/ckeditor5-heading-40.2.0.tgz#072989200e8b35840b86fbe17d7962555749f997"
   integrity sha512-uDT1sttMy+KrKi90jnqEI43886o1wfKrROWqaMbmKOerTbIi58GNH9LvX04sf1RyHV3+3566RRmB248fsLkYjA==
+  dependencies:
+    ckeditor5 "40.2.0"
+
+"@ckeditor/ckeditor5-highlight@40.2.0":
+  version "40.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-highlight/-/ckeditor5-highlight-40.2.0.tgz#bf413d89dc44557fd7b31eb6054a2efc7ac6ba0d"
+  integrity sha512-V9/KfZzTv3JdLK4o+kojy4bBFtpt35Y8EFfuJfSqubztrQVjG7uYkbeN0AypP+5ovIM/WbQx+Vh14PDEfBNaMg==
+  dependencies:
+    ckeditor5 "40.2.0"
+
+"@ckeditor/ckeditor5-horizontal-line@40.2.0":
+  version "40.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-horizontal-line/-/ckeditor5-horizontal-line-40.2.0.tgz#78ed488ed34d3b8fa54f29fd1c70058b5af8ab0f"
+  integrity sha512-cngw6unhl+GIin+InlGgg4SnzXagM302UypwR7t9WtVqO75ohecVRZ2S0H9WHrsb9IlbfCN+o7WVIb4MmXkRVQ==
   dependencies:
     ckeditor5 "40.2.0"
 
@@ -1236,6 +1264,14 @@
   dependencies:
     "@ckeditor/ckeditor5-ui" "40.2.0"
     ckeditor5 "40.2.0"
+
+"@ckeditor/ckeditor5-mention@40.2.0":
+  version "40.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-mention/-/ckeditor5-mention-40.2.0.tgz#4c055bf2cffb9e26c6e49d1e47ad99488b279ea7"
+  integrity sha512-W/P35BhcKi0u4Ek+T3P6i+DOgtcMKa0NjTocUE/Jx87QSFOVTka2POeaG3uUA5JkJ1ukSNOVRxj8/ypx2pFQLg==
+  dependencies:
+    ckeditor5 "40.2.0"
+    lodash-es "4.17.21"
 
 "@ckeditor/ckeditor5-paragraph@40.2.0":
   version "40.2.0"
@@ -2243,6 +2279,31 @@ chownr@^1.1.1:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
   integrity sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==
+
+"ckeditor5-custom-build@file:./ckeditor5":
+  version "0.0.1"
+  dependencies:
+    "@ckeditor/ckeditor5-alignment" "40.2.0"
+    "@ckeditor/ckeditor5-autoformat" "40.2.0"
+    "@ckeditor/ckeditor5-basic-styles" "40.2.0"
+    "@ckeditor/ckeditor5-block-quote" "40.2.0"
+    "@ckeditor/ckeditor5-editor-classic" "40.2.0"
+    "@ckeditor/ckeditor5-essentials" "40.2.0"
+    "@ckeditor/ckeditor5-font" "40.2.0"
+    "@ckeditor/ckeditor5-heading" "40.2.0"
+    "@ckeditor/ckeditor5-highlight" "40.2.0"
+    "@ckeditor/ckeditor5-horizontal-line" "40.2.0"
+    "@ckeditor/ckeditor5-image" "40.2.0"
+    "@ckeditor/ckeditor5-indent" "40.2.0"
+    "@ckeditor/ckeditor5-link" "40.2.0"
+    "@ckeditor/ckeditor5-list" "40.2.0"
+    "@ckeditor/ckeditor5-media-embed" "40.2.0"
+    "@ckeditor/ckeditor5-mention" "40.2.0"
+    "@ckeditor/ckeditor5-paragraph" "40.2.0"
+    "@ckeditor/ckeditor5-paste-from-office" "40.2.0"
+    "@ckeditor/ckeditor5-table" "40.2.0"
+    "@ckeditor/ckeditor5-typing" "40.2.0"
+    "@ckeditor/ckeditor5-undo" "40.2.0"
 
 ckeditor5@40.2.0:
   version "40.2.0"

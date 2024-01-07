@@ -2,7 +2,7 @@
  * @license Copyright (c) 2014-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
-import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
+import { InlineEditor } from '@ckeditor/ckeditor5-editor-inline';
 import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
 import { Bold, Code, Italic, Underline } from '@ckeditor/ckeditor5-basic-styles';
@@ -24,7 +24,7 @@ import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
 import { Table, TableCaption, TableCellProperties, TableColumnResize, TableProperties, TableToolbar } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 import { Undo } from '@ckeditor/ckeditor5-undo';
-declare class Editor extends ClassicEditor {
+declare class Editor extends InlineEditor {
     static builtinPlugins: (typeof Alignment | typeof AutoImage | typeof AutoLink | typeof Autoformat | typeof BlockQuote | typeof Bold | typeof Code | typeof Essentials | typeof FontBackgroundColor | typeof FontColor | typeof FontFamily | typeof FontSize | typeof Heading | typeof Highlight | typeof HorizontalLine | typeof Image | typeof ImageCaption | typeof ImageInsert | typeof ImageResize | typeof ImageStyle | typeof ImageToolbar | typeof ImageUpload | typeof Indent | typeof Italic | typeof Link | typeof List | typeof MediaEmbed | typeof MediaEmbedToolbar | typeof Mention | typeof Paragraph | typeof PasteFromOffice | typeof Table | typeof TableCaption | typeof TableCellProperties | typeof TableColumnResize | typeof TableProperties | typeof TableToolbar | typeof TextTransformation | typeof Underline | typeof Undo)[];
     static defaultConfig: EditorConfig;
 }

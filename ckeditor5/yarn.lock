@@ -200,6 +200,14 @@
     ckeditor5 "40.2.0"
     lodash-es "4.17.21"
 
+"@ckeditor/ckeditor5-editor-inline@^40.2.0":
+  version "40.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-editor-inline/-/ckeditor5-editor-inline-40.2.0.tgz#6cc41707e9dc51de9846bf91cc9e63c25d0c4dec"
+  integrity sha512-Ox9lQiCSv0acyKaQLCcoebBjAMRE6L6iCBN8XVeQ3u91KZV6/LOhP+CJ314c8AuH+UHPeJt9MHP6eGU0trKHGQ==
+  dependencies:
+    ckeditor5 "40.2.0"
+    lodash-es "4.17.21"
+
 "@ckeditor/ckeditor5-engine@40.2.0":
   version "40.2.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-engine/-/ckeditor5-engine-40.2.0.tgz#0d982dfbc6e13855f1f6b04204d9a5c4b5079f89"

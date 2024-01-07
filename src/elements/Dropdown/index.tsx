@@ -31,6 +31,13 @@ const Dropdown = (props: DropdownProps) => {
   const [selected, setSelected] = useState<string | undefined>(
     props.options?.find(item => item.value === props.selected)?.value,
   );
+
+  useEffect(() => {
+    if (props.selected !== selected) {
+      setSelected(props.selected);
+    }
+  }, [props.selected]);
+
   useEffect(() => {
     const mapRecord: Record<string, string> = {};
     props.options?.forEach(option => {
