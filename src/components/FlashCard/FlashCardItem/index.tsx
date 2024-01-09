@@ -3,21 +3,22 @@ import { IFlashCard } from 'interfaces';
 import React, { useRef, useState } from 'react';
 import Edit from 'assets/svg/edit.svg';
 import Trash from 'assets/svg/trash.svg';
+import Eye from 'assets/svg/eye.svg';
 import ModalProvider from 'components/ModalProvider';
 import { uuid } from 'utils/common';
 import Loader from 'components/Loader';
 import ConfirmModal from 'components/ConfirmModal';
 import { useMutation } from 'hooks/swr';
 import { METHOD } from 'global';
-import { mutate } from 'swr';
-import { FLASH_CARD_QUERY_LIST } from 'store/key';
 import FlashCardForm from '../FlashCardForm';
 
 type FlashCardItemProps = {
   data: IFlashCard;
+  onView(): void;
+  onRefresh(): void;
 };
 
-const FlashCardItem = ({ data }: FlashCardItemProps) => {
+const FlashCardItem = ({ data, onView, onRefresh }: FlashCardItemProps) => {
   const componentId = useRef(uuid());
   const [modalDelete, setModalDelete] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
@@ -33,7 +34,7 @@ const FlashCardItem = ({ data }: FlashCardItemProps) => {
     },
     onSuccess() {
       handleCloseDelete();
-      mutate(FLASH_CARD_QUERY_LIST);
+      onRefresh();
     },
   });
 
@@ -63,6 +64,7 @@ const FlashCardItem = ({ data }: FlashCardItemProps) => {
       <div className="flex justify-between p-4">
         <div></div>
         <div className="flex gap-5 text-gray-500">
+          <Eye className="cursor-pointer" onClick={onView} />
           <Edit className="cursor-pointer" onClick={handleShowUpdate} />
           <Trash className="cursor-pointer" onClick={handleShowDelete} />
         </div>
@@ -79,7 +81,11 @@ const FlashCardItem = ({ data }: FlashCardItemProps) => {
         </Loader>
       </ModalProvider>
       <ModalProvider show={modalUpdate}>
-        <FlashCardForm data={data} onClose={handleCloseUpdate} />
+        <FlashCardForm
+          data={data}
+          onClose={handleCloseUpdate}
+          onRefresh={onRefresh}
+        />
       </ModalProvider>
     </div>
   );

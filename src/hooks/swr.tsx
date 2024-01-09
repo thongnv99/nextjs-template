@@ -16,13 +16,13 @@ export function useSWRWrapper<T = Record<string, unknown>>(
     url,
     ignoreKeyParse,
     method,
-    body,
+    params,
     auth,
     ...config
   }: {
     url?: string;
     method?: METHOD;
-    body?: Record<string, unknown>;
+    params?: Record<string, unknown>;
     auth?: boolean;
     ignoreKeyParse?: boolean;
   } & Partial<PublicConfiguration<T, RestError, (arg: string) => any>>,
@@ -30,16 +30,6 @@ export function useSWRWrapper<T = Record<string, unknown>>(
   const { data: session } = useSession();
   let keyParse = typeof key === 'string' ? key : key?.();
 
-  if (!ignoreKeyParse && !isBlank(keyParse!)) {
-    if (body && (!method || method === METHOD.GET)) {
-      keyParse =
-        key + `?${new URLSearchParams(body as Record<string, string>)}`;
-    }
-    keyParse = replacePlaceholder(
-      keyParse!,
-      (body as unknown as Record<string, unknown>) || {},
-    );
-  }
   return useSWR<T>(
     isBlank(keyParse!) ? null : (keyParse as any),
     () => {
@@ -47,7 +37,7 @@ export function useSWRWrapper<T = Record<string, unknown>>(
         fetcher<T>(
           url ?? (typeof key === 'string' ? key : key?.()) ?? '',
           method ?? METHOD.GET,
-          body,
+          params,
           {
             Authorization: `Bearer ${session?.token}`,
           },

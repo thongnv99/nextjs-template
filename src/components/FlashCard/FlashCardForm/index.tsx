@@ -12,6 +12,7 @@ import { isBlank, uuid } from 'utils/common';
 type FlashCardForm = {
   data?: IFlashCard; // for edit
   onClose(): void;
+  onRefresh(): void;
 };
 
 interface FlashCardInput {
@@ -35,7 +36,7 @@ const FlashCardForm = (props: FlashCardForm) => {
       },
       onSuccess() {
         props.onClose();
-        mutate(FLASH_CARD_QUERY_LIST);
+        props.onRefresh();
       },
     },
   );
@@ -52,7 +53,7 @@ const FlashCardForm = (props: FlashCardForm) => {
       },
       onSuccess() {
         props.onClose();
-        mutate(FLASH_CARD_QUERY_LIST);
+        props.onRefresh();
       },
     },
   );
