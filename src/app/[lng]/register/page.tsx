@@ -128,6 +128,7 @@ const Register = () => {
                 <TextInput
                   label="Họ và Tên"
                   name="name"
+                  value={values.name}
                   className="col-span-2"
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -140,6 +141,7 @@ const Register = () => {
                   label="Ngày sinh"
                   name="dob"
                   type="date"
+                  value={values.dob}
                   className="col-span-1"
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -164,6 +166,7 @@ const Register = () => {
                   label="Số điện thoại"
                   name="phoneNumber"
                   type="text"
+                  value={values.phoneNumber}
                   className="col-span-2"
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -172,14 +175,15 @@ const Register = () => {
                 />
                 <TextInput
                   label="Email"
-                  name="email"
+                  name="phoneNumber"
+                  value={values.phoneNumber}
                   className="col-span-2"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="off"
                   leadingIcon={<Mail />}
-                  hasError={touched.email && !isBlank(errors.email)}
-                  errorMessage={errors.email}
+                  hasError={touched.phoneNumber && !isBlank(errors.phoneNumber)}
+                  errorMessage={errors.phoneNumber}
                 />
                 <div className="col-span-2">
                   <TextInput
@@ -189,6 +193,7 @@ const Register = () => {
                     autoComplete="off"
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    value={values.password}
                     leadingIcon={<Lock />}
                     hasError={touched.password && !isBlank(errors.password)}
                     errorMessage={errors.password}
@@ -203,6 +208,7 @@ const Register = () => {
                   className="col-span-2"
                   name="confirmPassword"
                   type="password"
+                  value={values.confirmPassword}
                   autoComplete="off"
                   onChange={handleChange}
                   onBlur={handleBlur}
