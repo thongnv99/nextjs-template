@@ -117,6 +117,7 @@ const handler = NextAuth({
         return {
           accessToken: (user as unknown as OutgoingResponse).accessToken,
           expiredAt: decodedToken.exp,
+          exp: decodedToken.exp,
           user: (user as unknown as OutgoingResponse).user,
         };
       }
@@ -131,6 +132,7 @@ const handler = NextAuth({
     async session({ session, token }: { session: Session; token: JWT }) {
       session.user = token.user as User;
       session.token = token.accessToken as string;
+      session.expires = new Date((token.exp as number) * 1000).toString();
       return session;
     },
     async redirect({ url, baseUrl }) {

@@ -5,6 +5,7 @@ interface ModalProviderProps {
   show?: boolean;
   onClose?: () => void;
   children: React.ReactNode;
+  dialogClass?: string;
 }
 
 const ModalProvider = (props: ModalProviderProps) => {
@@ -38,7 +39,9 @@ const ModalProvider = (props: ModalProviderProps) => {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={`w-fit transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all`}
+                className={`w-fit transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all ${
+                  props.dialogClass ?? ''
+                }`}
               >
                 {props.children}
               </Dialog.Panel>

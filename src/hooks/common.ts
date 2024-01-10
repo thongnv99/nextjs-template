@@ -2,10 +2,12 @@ import { METHOD } from 'global';
 import { useSWRWrapper } from './swr';
 import {
   CategoryQuestionRes,
+  FlashCardRes,
   IBlog,
   PaymentMethodRes,
   PaymentPackageRes,
 } from 'interfaces';
+import { isBlank } from 'utils/common';
 
 export const usePaymentMethod = () => {
   return useSWRWrapper<PaymentMethodRes>('/api/v1/paymentMethods', {
@@ -42,5 +44,19 @@ export const useBlog = (postId: string) => {
     url: `/api/v1/posts/${postId}`,
     revalidateOnFocus: false,
     revalidateOnMount: true,
+  });
+};
+
+export const useFlashCard = (status: string) => {
+  return useSWRWrapper<FlashCardRes>(`/api/v1/flashcards?status=${status}`, {
+    url: '/api/v1/flashcards',
+    method: METHOD.GET,
+    params: {
+      ...(!isBlank(status) && {
+        status,
+      }),
+    },
+    revalidateOnFocus: false,
+    refreshInterval: 0,
   });
 };

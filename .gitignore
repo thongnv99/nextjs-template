@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/ckeditor5/node_modules
+/ckeditor5/sample
 /.pnp
 .pnp.js
 .yarn/install-state.gz
