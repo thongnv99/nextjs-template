@@ -141,7 +141,7 @@ const Register = () => {
                   label="Ngày sinh"
                   name="dob"
                   type="date"
-                  value={values.dob}
+                  value={values.dob as unknown as string}
                   className="col-span-1"
                   onChange={handleChange}
                   onBlur={handleBlur}
