@@ -4,6 +4,8 @@
 /node_modules
 /ckeditor5/node_modules
 /ckeditor5/sample
+/ckeditor5/build
+
 /.pnp
 .pnp.js
 .yarn/install-state.gz

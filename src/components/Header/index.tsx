@@ -9,20 +9,20 @@ import ArrowDown from 'assets/svg/chevron-down.svg';
 import './style.scss';
 
 const NavConfig = [
-  // {
-  //   label: 'Câu hỏi',
-  //   route: '/question',
-  //   children: [
-  //     {
-  //       label: 'Câu hỏi',
-  //       route: '/question',
-  //     },
-  //     {
-  //       label: 'Tạo  câu hỏi',
-  //       route: '/question/question-form',
-  //     },
-  //   ],
-  // },
+  {
+    label: 'Câu hỏi',
+    route: '/question',
+    children: [
+      {
+        label: 'Câu hỏi',
+        route: '/question',
+      },
+      {
+        label: 'Tạo  câu hỏi',
+        route: '/question/question-form',
+      },
+    ],
+  },
   {
     label: 'Lịch sử thi',
     route: '/exam-history',

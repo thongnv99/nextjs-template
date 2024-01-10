@@ -14,10 +14,15 @@ import Editor from 'components/Editor';
 import { useCreateQuestionMutation } from './mutation';
 import Loader from 'components/Loader';
 
+const BLANK_DETECT = `<span class="mention" data-mention="[(n)]">[(n)]</span>`;
+
 interface QuestionFormValues {
   title?: string;
   content?: string;
+  answerExplain?: string;
   options: string[];
+  blanks: Record<string, string>;
+  blankPositions: string[];
   correctOption?: string;
   questionCategoryId?: string;
   type: QUESTION_TYPE;
@@ -68,14 +73,46 @@ const QuestionForm = () => {
   const formRef = useRef<FormikProps<QuestionFormValues>>();
 
   const handleSubmit = (values: QuestionFormValues) => {
-    const payload = {
-      type: values.type,
-      level: values.level,
-      questionCategoryId: values.questionCategoryId,
-      source: 'QUESTION',
-      content: values.content,
-      answer: 'Tự chấm',
-    };
+    let payload = {} as Record<string, unknown>;
+    if (values.type === QUESTION_TYPE.ESSAY) {
+      payload = {
+        type: values.type,
+        level: values.level,
+        questionCategoryId: values.questionCategoryId,
+        source: 'QUESTION',
+        content: values.content,
+        answer: 'Tự chấm',
+      };
+    } else if (values.type === QUESTION_TYPE.MULTIPLE_CHOICE) {
+      payload = {
+        type: values.type,
+        level: values.level,
+        questionCategoryId: values.questionCategoryId,
+        source: 'QUESTION',
+        content: values.content,
+        correctOption: values.correctOption,
+        options: values.options,
+      };
+    } else {
+      const container = document.createElement('div');
+      container.innerHTML = values.content ?? '';
+      const codes = container.getElementsByTagName('code');
+      const blankPositions: Record<string, string>[] = [];
+      for (let i = 0; i < codes.length; i++) {
+        const mention = codes.item(i);
+        if (mention) {
+          blankPositions.push({ answer: mention.innerHTML });
+        }
+      }
+      payload = {
+        type: values.type,
+        level: values.level,
+        questionCategoryId: values.questionCategoryId,
+        source: 'QUESTION',
+        content: values.content,
+        blankPositions: blankPositions ?? [],
+      };
+    }
 
     trigger(payload);
   };
@@ -108,9 +145,12 @@ const QuestionForm = () => {
           innerRef={instance => (formRef.current = instance!)}
           initialValues={{
             level: QUESTION_LEVEL.EASY,
-            type: QUESTION_TYPE.ESSAY,
+            type: QUESTION_TYPE.MULTIPLE_CHOICE,
             options: ['', '', ''],
             content: '',
+            correctOption: '0',
+            blanks: {},
+            blankPositions: ['', '', ''],
           }}
         >
           {({
@@ -176,14 +216,10 @@ const QuestionForm = () => {
                         options={QuestionTypeOptions}
                         selected={values.type}
                         onChange={value => setFieldValue('type', value)}
+                        menuAlignRight
                       />
                     </div>
                   </div>
-                  {/* <TextInput
-                    label="Nội dung câu hỏi"
-                    type="textarea"
-                    placeholder="Nhập nội dung câu hỏi"
-                  /> */}
                   <div className="w-full min-h-[10rem]">
                     <Editor
                       data={values.content}
@@ -191,6 +227,15 @@ const QuestionForm = () => {
                       placeholder="Nhập nội dung câu hỏi"
                     />
                   </div>
+                  {values.type === QUESTION_TYPE.FILL_IN_THE_BLANK && (
+                    <>
+                      <div className="ck-content mt-4">
+                        <strong>Hướng dẫn: </strong> Nhập nội dung câu hỏi, bôi
+                        đen phần muốn thay thế bằng chỗ trống và chọn biểu tượng{' '}
+                        <code>{`<>`}</code>trên toolbar{' '}
+                      </div>
+                    </>
+                  )}
                 </div>
                 {values.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
                   <div className="question-section">
@@ -251,13 +296,18 @@ const QuestionForm = () => {
                     </div>
                   </div>
                 )}
-                {values.type !== QUESTION_TYPE.ESSAY && (
+
+                {values.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
                   <div className="question-section">
                     <div className="title">Giải thích đáp án</div>
                     <TextInput
-                      label="Nội dung câu hỏi"
+                      label="Giải thích đáp án"
                       type="textarea"
-                      placeholder="Nhập nội dung câu hỏi"
+                      name="answerExplain"
+                      placeholder="Giải thích đáp án"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.answerExplain}
                     />
                   </div>
                 )}

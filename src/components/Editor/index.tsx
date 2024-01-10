@@ -35,30 +35,41 @@ const Editor = (props: EditorProps) => {
           props.onChange?.(data);
         }}
         config={{
-          // toolbar: ['bold', 'italic'],
-          removePlugins: ['Title'],
-          placeholder: props.placeholder,
-          mention: {
-            feeds: [
-              {
-                marker: '[',
-                feed: [
-                  '[(1)]',
-                  '[(2)]',
-                  '[(3)]',
-                  '[(4)]',
-                  '[(5)]',
-                  '[(6)]',
-                  '[(7)]',
-                  '[(8)]',
-                  '[(9)]',
-                  '[(10)]',
-                  '[(11)]',
-                ],
-                minimumCharacters: 1,
-              },
+          toolbar: {
+            items: [
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              'underline',
+              'code',
+              'link',
+              'bulletedList',
+              'numberedList',
+              '|',
+              'outdent',
+              'indent',
+              '|',
+              'imageUpload',
+              'blockQuote',
+              'insertTable',
+              'mediaEmbed',
+              '|',
+              'fontBackgroundColor',
+              'fontColor',
+              'fontFamily',
+              'fontSize',
+              '|',
+              'highlight',
+              'horizontalLine',
+              'imageInsert',
+              '|',
+              'undo',
+              'redo',
             ],
           },
+          removePlugins: ['Title'],
+          placeholder: props.placeholder,
         }}
       />
     </div>
