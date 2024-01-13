@@ -175,15 +175,15 @@ const Register = () => {
                 />
                 <TextInput
                   label="Email"
-                  name="phoneNumber"
-                  value={values.phoneNumber}
+                  name="email"
+                  value={values.email}
                   className="col-span-2"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="off"
                   leadingIcon={<Mail />}
-                  hasError={touched.phoneNumber && !isBlank(errors.phoneNumber)}
-                  errorMessage={errors.phoneNumber}
+                  hasError={touched.email && !isBlank(errors.email)}
+                  errorMessage={errors.email}
                 />
                 <div className="col-span-2">
                   <TextInput
