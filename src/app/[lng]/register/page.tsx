@@ -21,6 +21,8 @@ import { passwordRegex } from 'global/regex';
 
 interface RegisterForm {
   name?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
@@ -51,7 +53,8 @@ const Register = () => {
     },
   });
   const schema = yup.object().shape({
-    name: yup.string().label('Họ và tên').required(),
+    firstName: yup.string().label('Tên').required(),
+    lastName: yup.string().label('Họ').required(),
     email: yup.string().label('Email').required().email(),
     password: yup
       .string()
@@ -63,7 +66,6 @@ const Register = () => {
       .label('Xác nhận mật khẩu')
       .required()
       .oneOf([yup.ref('password')], 'Mật khẩu không khớp'),
-    phoneNumber: yup.string().label('Số điện thoại').required(),
   });
   const handleRegister = (values: RegisterForm) => {
     const payload = {
@@ -126,16 +128,26 @@ const Register = () => {
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-[3.2rem]">
                 <TextInput
-                  label="Họ và Tên"
-                  name="name"
-                  value={values.name}
-                  className="col-span-2"
+                  label="Họ"
+                  name="lastName"
+                  value={values.lastName}
+                  className="col-span-1"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="off"
-                  placeholder="Tên của bạn là..."
-                  hasError={touched.name && !isBlank(errors.name)}
-                  errorMessage={errors.name}
+                  hasError={touched.lastName && !isBlank(errors.lastName)}
+                  errorMessage={errors.lastName}
+                />
+                <TextInput
+                  label="Tên"
+                  name="firstName"
+                  value={values.firstName}
+                  className="col-span-1"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoComplete="off"
+                  hasError={touched.firstName && !isBlank(errors.firstName)}
+                  errorMessage={errors.firstName}
                 />
                 <TextInput
                   label="Ngày sinh"

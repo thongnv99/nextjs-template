@@ -2,7 +2,7 @@
 import Loader from 'components/Loader';
 import { FLASH_CARD_STATUS, METHOD } from 'global';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { isBlank, uuid } from 'utils/common';
 import FlashCardItem from './FlashCardItem';
 import Plus from 'assets/svg/plus.svg';
@@ -13,6 +13,9 @@ import Dropdown from 'elements/Dropdown';
 import { useFlashCard } from 'hooks/common';
 import FlashCardViewer from 'components/FlashCardViewer';
 import Preload from 'components/Preload';
+import { Transition } from '@headlessui/react';
+import ChevronLeft from 'assets/svg/chevron-left.svg';
+import CloseIcon from 'assets/svg/x.svg';
 
 type Props = {};
 
@@ -129,7 +132,39 @@ const FlashCard = (props: Props) => {
           }}
         />
       </ModalProvider>
-      <ModalProvider
+      <Transition
+        show={viewModal.show}
+        appear
+        as="div"
+        enter="ease-out duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100 scale-100"
+        leave="ease-in duration-200"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0"
+        className="fixed ease-out duration-300 top-0 left-0 right-0 bottom-0 z-20 flex flex-col bg-gray-500 p-10"
+      >
+        <div className=" flex gap-2  items-center justify-between  text-lg font-semibold text-white cursor-pointer">
+          flashcard
+          <CloseIcon
+            onClick={() => setViewModal({ show: false, currentIdx: 0 })}
+          />
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div
+            className={`w-fit  p-2 transform  rounded-2xl overflow-visible bg-white text-left align-middle shadow-xl transition-all`}
+          >
+            <FlashCardViewer
+              flashCards={data?.items ?? []}
+              currentIdx={viewModal.currentIdx}
+            />
+            <div className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-center text-primary-500">
+              Click để lật flashcard
+            </div>
+          </div>
+        </div>
+      </Transition>
+      {/* <ModalProvider
         dialogClass="!bg-transparent !rounded-none !overflow-visible"
         show={viewModal.show}
         onClose={() => setViewModal({ show: false, currentIdx: 0 })}
@@ -142,7 +177,7 @@ const FlashCard = (props: Props) => {
         ) : (
           <Preload />
         )}
-      </ModalProvider>
+      </ModalProvider> */}
     </Loader>
   );
 };

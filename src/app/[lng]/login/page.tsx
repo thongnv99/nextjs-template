@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { redirect, useParams, useRouter } from 'next/navigation';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { METHOD, ROUTES } from 'global';
@@ -23,6 +23,7 @@ interface LoginForm {
 
 const Login = () => {
   const { lng } = useParams();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>();
   const schema = yup.object().shape({
@@ -40,7 +41,7 @@ const Login = () => {
       method: METHOD.POST,
       onSuccess(data) {
         if (data.result?.googleLoginUrl) {
-          window.open(data.result.googleLoginUrl, 'blank');
+          router.replace(data.result.googleLoginUrl);
         }
       },
     },
