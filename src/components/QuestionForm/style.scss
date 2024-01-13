@@ -9,5 +9,8 @@
       font-weight: 700;
       margin-bottom: 1.6rem;
     }
+    code {
+      border-bottom: 1px solid var(--primary-500);
+    }
   }
 }

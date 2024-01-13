@@ -3,8 +3,7 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-// import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
-import { InlineEditor } from '@ckeditor/ckeditor5-editor-inline';
+import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic';
 import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
 import {
@@ -56,7 +55,7 @@ import { Undo } from '@ckeditor/ckeditor5-undo';
 // You can read more about extending the build with additional plugins in the "Installing plugins" guide.
 // See https://ckeditor.com/docs/ckeditor5/latest/installation/plugins/installing-plugins.html for details.
 
-class Editor extends InlineEditor {
+class Editor extends ClassicEditor {
   public static override builtinPlugins = [
     Alignment,
     AutoImage,

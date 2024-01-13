@@ -1,4 +1,4 @@
-import { FLASH_CARD_STATUS } from 'global';
+import { FLASH_CARD_STATUS, QUESTION_LEVEL, QUESTION_TYPE } from 'global';
 
 export interface NotificationConfig {
   title?: string;
@@ -30,4 +30,13 @@ export interface IFlashCard {
   question: string;
   answer: string;
   status: FLASH_CARD_STATUS;
+}
+
+export interface IQuestion {
+  id: string;
+  type: QUESTION_TYPE;
+  level: QUESTION_LEVEL;
+  content: string;
+  score: number;
+  createdAt: number;
 }
