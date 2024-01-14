@@ -15,7 +15,8 @@ import { User } from 'next-auth';
 import { formatDateToString, formatStringToDate } from 'utils/datetime';
 
 interface UpdateProfileForm {
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   dob?: string;
   gender?: string;
   phoneNumber?: string;
@@ -25,7 +26,7 @@ interface UpdateProfileForm {
 const ProfileModal = (props: { onClose?: () => void }) => {
   const componentId = useRef();
   const formRef = useRef<FormikProps<UpdateProfileForm>>();
-  const { data: userInfo } = useSWRWrapper<RestResponse<{ user: User }>>(
+  const { data: userInfo, isLoading } = useSWRWrapper<{ user: User }>(
     ACCOUNT_PROFILE_INFO,
     {
       url: '/api/v1/verifyAccessToken',
@@ -51,10 +52,11 @@ const ProfileModal = (props: { onClose?: () => void }) => {
 
   useEffect(() => {
     console.log({ userInfo });
-    if (userInfo?.status) {
-      const data = userInfo.result?.user;
+    if (userInfo) {
+      const data = userInfo.user;
       formRef.current?.setValues({
-        name: data?.name!,
+        firstName: data?.firstName!,
+        lastName: data?.lastName!,
         email: data?.email!,
         phoneNumber: data?.phoneNumber!,
         gender: data?.gender!,
@@ -70,7 +72,8 @@ const ProfileModal = (props: { onClose?: () => void }) => {
   }, [userInfo]);
   const handleUpdateProfile = (values: UpdateProfileForm) => {
     trigger({
-      name: values.name,
+      firstName: values.firstName,
+      lastName: values.lastName,
       phoneNumber: values.phoneNumber,
       gender: values.gender,
     });
@@ -87,16 +90,17 @@ const ProfileModal = (props: { onClose?: () => void }) => {
   return (
     <Loader
       id={componentId.current}
+      loading={isLoading}
       className="flex flex-col w-[35rem] p-4 pt-5 items-center"
     >
       <div className="text-lg font-bold mb-8">Thông tin tài khoản</div>
       <Formik
         initialValues={
           {
-            // name: userInfo?.result?.name!,
-            // email: userInfo?.result?.email!,
-            // phoneNumber: userInfo?.result?.phoneNumber!,
-            // gender: userInfo?.result?.gender!,
+            // name: userInfo?.name!,
+            // email: userInfo?.email!,
+            // phoneNumber: userInfo?.phoneNumber!,
+            // gender: userInfo?.gender!,
           }
         }
         onSubmit={handleUpdateProfile}
@@ -113,15 +117,26 @@ const ProfileModal = (props: { onClose?: () => void }) => {
         }) => (
           <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
             <TextInput
+              label="Họ"
+              className="mb-1"
+              name="name"
+              type="text"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.lastName}
+              hasError={touched.lastName && !isBlank(errors.lastName)}
+              errorMessage={errors.lastName}
+            />
+            <TextInput
               label="Tên"
               className="mb-1"
               name="name"
               type="text"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.name}
-              hasError={touched.name && !isBlank(errors.name)}
-              errorMessage={errors.name}
+              value={values.firstName}
+              hasError={touched.firstName && !isBlank(errors.firstName)}
+              errorMessage={errors.firstName}
             />
             <TextInput
               label="Email"
