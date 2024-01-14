@@ -1,15 +1,19 @@
 import { Disclosure, Transition } from '@headlessui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Trash from 'assets/svg/trash.svg';
 import Edit from 'assets/svg/edit.svg';
 import Copy from 'assets/svg/copy.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
-import { QUESTION_TYPE } from 'global';
-import { formatNumber } from 'utils/common';
+import { METHOD, QUESTION_TYPE } from 'global';
+import { formatNumber, uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
+import ModalProvider from 'components/ModalProvider';
+import Loader from 'components/Loader';
+import ConfirmModal from 'components/ConfirmModal';
+import { useMutation } from 'hooks/swr';
 
-type Props = { data: IQuestion };
+type Props = { data: IQuestion; onRefresh(): void };
 
 const mapQuestionType = {
   [QUESTION_TYPE.ESSAY]: 'Tự luận',
@@ -18,6 +22,23 @@ const mapQuestionType = {
 };
 
 const QuestionItem = (props: Props) => {
+  const [modalDelete, setModalDelete] = useState(false);
+  const componentId = useRef(uuid());
+  const { trigger: deleteQuestion } = useMutation('QUESTION_DELETE_QUESTION', {
+    url: '/api/v1/questions/{questionId}',
+    method: METHOD.DELETE,
+    componentId: componentId.current,
+    loading: true,
+    notification: {
+      title: 'Xóa câu hỏi',
+      content: 'Xóa câu hỏi thành công',
+    },
+    onSuccess() {
+      handleCloseDelete();
+      props.onRefresh();
+    },
+  });
+
   const handleEdit = (event: MouseEvent) => {
     event.stopPropagation();
     console.log('edit');
@@ -29,8 +50,17 @@ const QuestionItem = (props: Props) => {
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();
     console.log('delete');
+    setModalDelete(true);
   };
 
+  const handleConfirmDelete = () => {
+    deleteQuestion({
+      questionId: props.data.id,
+    });
+  };
+  const handleCloseDelete = () => {
+    setModalDelete(false);
+  };
   return (
     <Disclosure>
       {({ open }) => {
@@ -100,6 +130,17 @@ const QuestionItem = (props: Props) => {
                 </div>
               </Disclosure.Panel>
             </Transition>
+            <ModalProvider show={modalDelete}>
+              <Loader id={componentId.current}>
+                <ConfirmModal
+                  title="Xóa câu hỏi"
+                  content="Câu hỏi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa câu hỏi này không?"
+                  onConfirm={handleConfirmDelete}
+                  onCancel={handleCloseDelete}
+                  type={'warning'}
+                />
+              </Loader>
+            </ModalProvider>
           </div>
         );
       }}

@@ -10,6 +10,7 @@ import Dropdown from 'elements/Dropdown';
 import { QUESTION_TYPE } from 'global';
 import { useSWRWrapper } from 'hooks/swr';
 import { QuestionRes } from 'interfaces';
+import { useParams, useRouter } from 'next/navigation';
 const QuestionTypeOptions = [
   {
     label: 'Trắc nghiệm',
@@ -28,9 +29,11 @@ type Props = {};
 
 const QuestionMgmt = (props: Props) => {
   const componentId = useRef(uuid());
+  const router = useRouter();
+  const { lng } = useParams();
   const [type, setType] = useState('');
 
-  const { data, isLoading } = useSWRWrapper<QuestionRes>(
+  const { data, isLoading, mutate } = useSWRWrapper<QuestionRes>(
     `/api/v1/questions?type=${type}`,
     {
       url: '/api/v1/questions',
@@ -43,7 +46,11 @@ const QuestionMgmt = (props: Props) => {
   );
 
   const handleCreateQuestion = () => {
-    console.log('question');
+    router.push(`/${lng}/customer/question/question-form`);
+  };
+
+  const handleRefresh = () => {
+    mutate();
   };
   return (
     <Loader
@@ -80,7 +87,7 @@ const QuestionMgmt = (props: Props) => {
       </div>
       <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
-          <QuestionItem key={item.id} data={item} />
+          <QuestionItem key={item.id} data={item} onRefresh={handleRefresh} />
         ))}
       </div>
     </Loader>
