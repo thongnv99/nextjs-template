@@ -1,18 +1,24 @@
 'use client';
 import TextInput from 'elements/TextInput';
 import { Formik, FormikProps } from 'formik';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './style.scss';
 import Dropdown from 'elements/Dropdown';
-import { QUESTION_LEVEL, QUESTION_TYPE } from 'global';
+import { METHOD, QUESTION_LEVEL, QUESTION_TYPE } from 'global';
 import { isBlank, uuid } from 'utils/common';
 import { useCategoryQuestions } from 'hooks/common';
 import Checkbox from 'elements/CheckBox';
 import Delete from 'assets/svg/delete.svg';
 import Plus from 'assets/svg/plus-square.svg';
 import Editor from 'components/Editor';
-import { useCreateQuestionMutation } from './mutation';
+import {
+  useCreateQuestionMutation,
+  useUpdateQuestionMutation,
+} from './mutation';
 import Loader from 'components/Loader';
+import { useSWRWrapper } from 'hooks/swr';
+import { IQuestion } from 'interfaces';
+import { useRouter } from 'next/navigation';
 
 const BLANK_DETECT = `<span class="mention" data-mention="[(n)]">[(n)]</span>`;
 
@@ -28,6 +34,7 @@ interface QuestionFormValues {
   type: QUESTION_TYPE;
   level: QUESTION_LEVEL;
   score?: number;
+  source?: string;
   duration?: number;
 }
 
@@ -61,16 +68,64 @@ const LevelOptions = [
   },
 ];
 
-const QuestionForm = () => {
+interface QuestionFormProps {
+  questionId?: string; // for edit or duplicate
+  isEdit?: boolean;
+}
+
+const QuestionForm = (props: QuestionFormProps) => {
+  const router = useRouter();
   const componentId = useRef(uuid());
-  const { trigger } = useCreateQuestionMutation({
+  console.log(props.questionId);
+  const { data } = useSWRWrapper<IQuestion>(
+    props.questionId ? `/api/v1/questions/${props.questionId}` : null,
+    {
+      url: `/api/v1/questions/${props.questionId}`,
+      method: METHOD.GET,
+    },
+  );
+
+  const { trigger: createQuestion } = useCreateQuestionMutation({
     onSuccess: () => {
+      if (props.questionId) {
+        router.back();
+        return;
+      }
       formRef.current?.resetForm();
+    },
+    componentId: componentId.current,
+  });
+  const { trigger: updateQuestion } = useUpdateQuestionMutation({
+    onSuccess: () => {
+      router.back();
     },
     componentId: componentId.current,
   });
   const optionsRef = useRef<HTMLDivElement | null>(null);
   const formRef = useRef<FormikProps<QuestionFormValues>>();
+
+  useEffect(() => {
+    if (data) {
+      const values: QuestionFormValues = {
+        type: data.type,
+        level: data.level,
+        score: data.score,
+        source: data.source,
+        content: data.content,
+        duration: data.duration,
+        answerExplain: data.answerExplain,
+        questionCategoryId: data.questionCategoryId?.id,
+        options: data.options ?? [],
+        blanks: {},
+        correctOption: String(data.correctOption),
+        blankPositions: [],
+      };
+      formRef.current?.setValues({
+        ...formRef.current.values,
+        ...values,
+      });
+    }
+  }, [data]);
 
   const handleSubmit = (values: QuestionFormValues) => {
     let payload = {} as Record<string, unknown>;
@@ -114,7 +169,16 @@ const QuestionForm = () => {
       };
     }
 
-    trigger(payload);
+    if (props.isEdit) {
+      updateQuestion({
+        ...payload,
+        questionId: props.questionId,
+        type: null,
+        source: null,
+      });
+    } else {
+      createQuestion(payload);
+    }
   };
 
   const handleSaveClick = () => {
@@ -125,16 +189,24 @@ const QuestionForm = () => {
   return (
     <Loader id={componentId.current} className="base-container question-form">
       <div className="base-top-container">
-        <div className="base-title">Tạo mới câu hỏi</div>
+        <div className="base-title">
+          {props.isEdit ? 'Cập nhật câu hỏi' : 'Tạo mới câu hỏi'}
+        </div>
         <div className="flex gap-2">
           <button
             type="button"
             className="btn-primary"
             onClick={handleSaveClick}
           >
-            Tạo mới
+            {props.isEdit ? 'Cập nhật' : 'Tạo mới'}
           </button>
-          <button type="button" className="btn">
+          <button
+            type="button"
+            className="btn"
+            onClick={() => {
+              router.back();
+            }}
+          >
             Hủy
           </button>
         </div>
@@ -211,14 +283,16 @@ const QuestionForm = () => {
                 <div className="question-section">
                   <div className="flex items-center justify-between mb-4">
                     <div className="title !mb-0">Câu hỏi</div>
-                    <div>
-                      <Dropdown
-                        options={QuestionTypeOptions}
-                        selected={values.type}
-                        onChange={value => setFieldValue('type', value)}
-                        menuAlignRight
-                      />
-                    </div>
+                    {props.questionId == null && (
+                      <div>
+                        <Dropdown
+                          options={QuestionTypeOptions}
+                          selected={values.type}
+                          onChange={value => setFieldValue('type', value)}
+                          menuAlignRight
+                        />
+                      </div>
+                    )}
                   </div>
                   <div className="w-full min-h-[10rem]">
                     <Editor

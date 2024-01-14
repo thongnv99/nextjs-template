@@ -12,6 +12,7 @@ import ModalProvider from 'components/ModalProvider';
 import Loader from 'components/Loader';
 import ConfirmModal from 'components/ConfirmModal';
 import { useMutation } from 'hooks/swr';
+import { useParams, useRouter } from 'next/navigation';
 
 type Props = { data: IQuestion; onRefresh(): void };
 
@@ -22,6 +23,8 @@ const mapQuestionType = {
 };
 
 const QuestionItem = (props: Props) => {
+  const router = useRouter();
+  const { lng } = useParams();
   const [modalDelete, setModalDelete] = useState(false);
   const componentId = useRef(uuid());
   const { trigger: deleteQuestion } = useMutation('QUESTION_DELETE_QUESTION', {
@@ -41,15 +44,14 @@ const QuestionItem = (props: Props) => {
 
   const handleEdit = (event: MouseEvent) => {
     event.stopPropagation();
-    console.log('edit');
+    router.push(`/${lng}/customer/question/update-question/${props.data.id}`);
   };
   const handleCopy = (event: MouseEvent) => {
     event.stopPropagation();
-    console.log('copy');
+    router.push(`/${lng}/customer/question/question-form/${props.data.id}`);
   };
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();
-    console.log('delete');
     setModalDelete(true);
   };
 
@@ -73,9 +75,9 @@ const QuestionItem = (props: Props) => {
                     className="text-base text-left text-gray-900 font-semibold"
                     dangerouslySetInnerHTML={{ __html: props.data.content }}
                   ></div>
-                  <div className="text-sm text-gray-500 font-normal">
+                  {/* <div className="text-sm text-gray-500 font-normal">
                     Up to 10 users and 20GB individual data.
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex gap-8">
                   <Edit onClick={handleEdit} />
