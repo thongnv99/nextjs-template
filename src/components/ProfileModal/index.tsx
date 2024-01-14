@@ -97,11 +97,19 @@ const ProfileModal = (props: { onClose?: () => void }) => {
       <Formik
         initialValues={
           {
-            // name: userInfo?.name!,
-            // email: userInfo?.email!,
-            // phoneNumber: userInfo?.phoneNumber!,
-            // gender: userInfo?.gender!,
-          }
+            firstName: userInfo?.user?.firstName!,
+            lastName: userInfo?.user?.lastName!,
+            email: userInfo?.user?.email!,
+            phoneNumber: userInfo?.user?.phoneNumber!,
+            gender: userInfo?.user?.gender!,
+            dob:
+              (userInfo?.user?.dob! &&
+                formatDateToString(
+                  formatStringToDate(userInfo?.user?.dob, 'dd/MM/yyyy'),
+                  'yyyy-MM-dd',
+                )) ??
+              '',
+          } as UpdateProfileForm
         }
         onSubmit={handleUpdateProfile}
         innerRef={instance => (formRef.current = instance!)}
