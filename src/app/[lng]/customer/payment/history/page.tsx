@@ -18,6 +18,7 @@ const PaymentHistoryPage = () => {
   const componentId = useRef(uuid());
   const { data: paymentMethod } = usePaymentMethod();
   const { data: paymentPackages } = usePaymentPackages();
+
   const { trigger: confirmPaid } = usePaymentPaidMutation(
     componentId.current,
     refreshData,
@@ -48,6 +49,8 @@ const PaymentHistoryPage = () => {
       field: 'packageId',
       cellClass: 'bold',
       valueGetter: params => {
+        console.log('data có gì', params, paymentPackages);
+
         const payment = paymentPackages?.items?.find(
           item => item.id === params.data?.packageId,
         );
