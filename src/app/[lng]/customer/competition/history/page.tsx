@@ -10,6 +10,7 @@ import PieChart from 'components/PieChart'
 import TextInput from 'elements/TextInput';
 import Search from 'assets/svg/search.svg';
 import Filter from 'assets/svg/Filters lines.svg'
+import ActionIcon from 'components/InfoUser/ActionIcon'
 const CompetitionHistory = () => {
   const gridRef = useRef<DataGridHandle>();
   const componentId = useRef(uuid());
@@ -74,6 +75,12 @@ const CompetitionHistory = () => {
       flex: 1,
       field: 'sinceTime',
     },
+    {
+      headerName: '',
+      flex:0.1,
+      cellRenderer:ActionIcon,
+      cellRendererParams:{}
+    },
   ];
 
   const handleRequest = (e: any) => {
@@ -85,8 +92,8 @@ const CompetitionHistory = () => {
       id={componentId.current}
       className="h-full w-full border border-gray-200 rounded-lg flex flex-col shadow-sm p-1"
     >
-      <div className="px-5 pt-3 text-lg font-semibold">
-        Lịch sử cuộc thi
+      <div className="px-5 py-3 text-lg font-semibold gap-x-3 flex items-center">
+        Lịch sử cuộc thi <span className="text-[1.2rem] text-[var(--brand-800)] bg-[var(--gray-50)] rounded-full px-[1rem]">240 người tham gia</span>
       </div>
       <div className="flex h-1/4 justify-evenly">
 
