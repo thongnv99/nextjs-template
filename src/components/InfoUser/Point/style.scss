@@ -1,0 +1,14 @@
+.progress{
+    height: 1rem; /* Chiều cao của thanh tiến trình */
+    overflow: hidden; /* Ẩn phần tiếp theo nếu nó vượt qua giới hạn */
+   
+    background-color: #e0e0e0; /* Màu nền của thanh tiến trình */
+}
+  
+  /* Thiết lập chiều dài và màu sắc của thanh tiến trình đã tiêu thụ */
+.progress-bar {
+    height: 100%;
+    width: 0; /* Chiều dài mặc định là 0, sẽ thay đổi theo giá trị từ 'style' */
+    background-color: var(--brand-600); /* Màu sắc của thanh tiến trình đã tiêu thụ */
+    transition: width 0.3s ease-in-out; /* Hiệu ứng chuyển động khi thay đổi chiều dài */
+}

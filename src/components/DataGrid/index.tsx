@@ -31,7 +31,6 @@ const DataGrid = forwardRef(
     const dataGridRef = useRef<{
       api?: GridApi;
     }>({});
-
     useImperativeHandle(
       ref,
       () => ({
@@ -43,7 +42,6 @@ const DataGrid = forwardRef(
     const handleGridReady = (event: GridReadyEvent) => {
       dataGridRef.current.api = event.api;
       setGridInit(true);
-
       setTimeout(() => {
         onGridReady?.(event);
       });
