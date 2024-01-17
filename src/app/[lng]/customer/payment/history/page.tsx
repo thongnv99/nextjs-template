@@ -49,8 +49,6 @@ const PaymentHistoryPage = () => {
       field: 'packageId',
       cellClass: 'bold',
       valueGetter: params => {
-        console.log('data có gì', params, paymentPackages);
-
         const payment = paymentPackages?.items?.find(
           item => item.id === params.data?.packageId,
         );

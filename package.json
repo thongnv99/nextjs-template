@@ -23,6 +23,7 @@
     "focus-formik-error": "^1.1.0",
     "formik": "^2.4.1",
     "highcharts": "^11.3.0",
+    "highcharts-react-official": "^3.2.1",
     "http-proxy": "^1.18.1",
     "i18next": "^22.5.0",
     "i18next-browser-languagedetector": "^7.1.0",

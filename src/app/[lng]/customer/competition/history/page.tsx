@@ -5,8 +5,8 @@ import Loader from 'components/Loader';
 import React, { useRef } from 'react';
 import InfoUser from 'components/InfoUser';
 import { uuid } from 'utils/common';
-import InfoUserPoint from 'components/InfoUser/InfoUserPoint';
-import PieChart from 'components/PieChart'
+import InfoUserPoint from 'components/InfoUser/Point';
+import ExamSummaryChart from 'components/ExamSummaryChart';;
 import TextInput from 'elements/TextInput';
 import Search from 'assets/svg/search.svg';
 import Filter from 'assets/svg/Filters lines.svg'
@@ -95,15 +95,15 @@ const CompetitionHistory = () => {
       <div className="px-5 py-3 text-lg font-semibold gap-x-3 flex items-center">
         Lịch sử cuộc thi <span className="text-[1.2rem] text-[var(--brand-800)] bg-[var(--gray-50)] rounded-full px-[1rem]">240 người tham gia</span>
       </div>
-      <div className="flex h-1/4 justify-evenly">
+      <div className="flex  justify-evenly">
 
-        <PieChart data={data1}/>
-        <PieChart data={data2}/>
+        <ExamSummaryChart data={data1}/>
+        <ExamSummaryChart data={data2} />
       </div>
       <div className="w-full my-4 flex justify-between">
         <button className="btn ">Group button</button>
         <div className="flex gap-x-1">
-          <TextInput leadingIcon={<Search />} placeholder="Search" lineheight="!py-2" />
+          <TextInput leadingIcon={<Search />} placeholder="Search" inputClass="!py-2" />
             <button className="btn flex items-center gap-x-2" type="button"><Filter/>Filter</button>
         </div>
       </div>
