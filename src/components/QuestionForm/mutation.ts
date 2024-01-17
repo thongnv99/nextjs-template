@@ -27,3 +27,29 @@ export const useCreateQuestionMutation = ({
     },
   });
 };
+
+export const useUpdateQuestionMutation = ({
+  onSuccess,
+  componentId,
+  notification,
+}: {
+  onSuccess: () => void;
+  componentId?: string;
+  notification?: NotificationConfig;
+}) => {
+  return useMutation<{
+    items: Record<string, unknown>[];
+  }>('QUESTION_UPDATE_QUESTION', {
+    url: '/api/v1/questions/{questionId}',
+    method: METHOD.PUT,
+    loading: true,
+    componentId,
+    notification: notification ?? {
+      title: 'Cập nhật câu hỏi',
+      content: 'Cập nhật câu hỏi thành công',
+    },
+    onSuccess: data => {
+      onSuccess();
+    },
+  });
+};

@@ -1,15 +1,20 @@
 import { Disclosure, Transition } from '@headlessui/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Trash from 'assets/svg/trash.svg';
 import Edit from 'assets/svg/edit.svg';
 import Copy from 'assets/svg/copy.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
-import { QUESTION_TYPE } from 'global';
-import { formatNumber } from 'utils/common';
+import { METHOD, QUESTION_TYPE } from 'global';
+import { formatNumber, uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
+import ModalProvider from 'components/ModalProvider';
+import Loader from 'components/Loader';
+import ConfirmModal from 'components/ConfirmModal';
+import { useMutation } from 'hooks/swr';
+import { useParams, useRouter } from 'next/navigation';
 
-type Props = { data: IQuestion };
+type Props = { data: IQuestion; onRefresh(): void };
 
 const mapQuestionType = {
   [QUESTION_TYPE.ESSAY]: 'Tự luận',
@@ -18,19 +23,46 @@ const mapQuestionType = {
 };
 
 const QuestionItem = (props: Props) => {
+  const router = useRouter();
+  const { lng } = useParams();
+  const [modalDelete, setModalDelete] = useState(false);
+  const componentId = useRef(uuid());
+  const { trigger: deleteQuestion } = useMutation('QUESTION_DELETE_QUESTION', {
+    url: '/api/v1/questions/{questionId}',
+    method: METHOD.DELETE,
+    componentId: componentId.current,
+    loading: true,
+    notification: {
+      title: 'Xóa câu hỏi',
+      content: 'Xóa câu hỏi thành công',
+    },
+    onSuccess() {
+      handleCloseDelete();
+      props.onRefresh();
+    },
+  });
+
   const handleEdit = (event: MouseEvent) => {
     event.stopPropagation();
-    console.log('edit');
+    router.push(`/${lng}/customer/question/update-question/${props.data.id}`);
   };
   const handleCopy = (event: MouseEvent) => {
     event.stopPropagation();
-    console.log('copy');
+    router.push(`/${lng}/customer/question/question-form/${props.data.id}`);
   };
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();
-    console.log('delete');
+    setModalDelete(true);
   };
 
+  const handleConfirmDelete = () => {
+    deleteQuestion({
+      questionId: props.data.id,
+    });
+  };
+  const handleCloseDelete = () => {
+    setModalDelete(false);
+  };
   return (
     <Disclosure>
       {({ open }) => {
@@ -43,9 +75,9 @@ const QuestionItem = (props: Props) => {
                     className="text-base text-left text-gray-900 font-semibold"
                     dangerouslySetInnerHTML={{ __html: props.data.content }}
                   ></div>
-                  <div className="text-sm text-gray-500 font-normal">
+                  {/* <div className="text-sm text-gray-500 font-normal">
                     Up to 10 users and 20GB individual data.
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex gap-8">
                   <Edit onClick={handleEdit} />
@@ -100,6 +132,17 @@ const QuestionItem = (props: Props) => {
                 </div>
               </Disclosure.Panel>
             </Transition>
+            <ModalProvider show={modalDelete}>
+              <Loader id={componentId.current}>
+                <ConfirmModal
+                  title="Xóa câu hỏi"
+                  content="Câu hỏi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa câu hỏi này không?"
+                  onConfirm={handleConfirmDelete}
+                  onCancel={handleCloseDelete}
+                  type={'warning'}
+                />
+              </Loader>
+            </ModalProvider>
           </div>
         );
       }}

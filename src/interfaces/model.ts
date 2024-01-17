@@ -37,6 +37,14 @@ export interface IQuestion {
   type: QUESTION_TYPE;
   level: QUESTION_LEVEL;
   content: string;
+  answerExplain?: string;
+  correctOption?: string;
+  options?: string[];
   score: number;
+  duration?: number;
+  questionCategoryId?: {
+    id: string;
+  };
+  source?: string;
   createdAt: number;
 }

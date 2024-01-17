@@ -21,16 +21,13 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
     >
       <div className="flip-card-inner">
         <div
-          className="flip-card-front flex items-center justify-center rounded-2xl"
+          className="flip-card-front text-[4rem] flex items-center justify-center rounded-2xl"
           dangerouslySetInnerHTML={{ __html: data.question }}
         ></div>
         <div
-          className="flip-card-back flex items-center justify-center rounded-2xl"
+          className="flip-card-back text-[4rem] flex items-center justify-center rounded-2xl"
           dangerouslySetInnerHTML={{ __html: data.answer }}
         ></div>
-      </div>
-      <div className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-center text-primary-500">
-        Click để lật flashcard
       </div>
     </div>
   );
