@@ -15,8 +15,10 @@ interface AddExamFormValues {
     competitionName:string,
     password:string,
     dateStart:Date,
+    dateFinish:Date,
     note:string,
-    exam:string
+    exam:string,
+    
 }
 const AddExamForm =(props: AddExamForm)=>{
   const CategoriesExam=[
@@ -59,7 +61,8 @@ const AddExamForm =(props: AddExamForm)=>{
         initialValues={{
             competitionName: '', 
             password: '',      
-            dateStart: new Date(), 
+            dateStart: new Date(),
+            dateFinish:new Date(),
             note: '', 
             exam:''
         }}
@@ -85,17 +88,29 @@ const AddExamForm =(props: AddExamForm)=>{
               hasError={touched.competitionName && !isBlank(errors.competitionName)}
               errorMessage={errors.competitionName}
             />
+            <div className="flex gap-x-4">
+              <TextInput
+                label="Ngày bắt đầu"
+                name="dateStart"
+                placeholder="dd/mm/yy ..."
+                type="date"
+                className="mb-4 w-1/2"
+                onChange={handleChange}
+                value={values?.dateStart as unknown as string}
+                onBlur={handleBlur}
+              />
+              <TextInput
+                label="Ngày kết thúc"
+                name="dateFinish"
+                placeholder="dd/mm/yy ..."
+                type="date"
+                className="mb-4 w-1/2"
+                onChange={handleChange}
+                value={values?.dateFinish as unknown as string}
+                onBlur={handleBlur}
+              />
+            </div>
             
-            <TextInput
-              label="Ngày bắt đầu"
-              name="dateStart"
-              placeholder="dd/MM/yy ..."
-              type="date"
-              className="mb-4"
-              onChange={handleChange}
-              value={values?.dateStart as unknown as string}
-              onBlur={handleBlur}
-            />
             <TextInput
               label="Mật khẩu (nếu có)"
               name="password"
