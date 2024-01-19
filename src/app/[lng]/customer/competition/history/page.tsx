@@ -11,6 +11,7 @@ import TextInput from 'elements/TextInput';
 import Search from 'assets/svg/search.svg';
 import Filter from 'assets/svg/Filters lines.svg'
 import ActionIcon from 'components/InfoUser/ActionIcon'
+import GroupButton from 'components/GroupButton'
 const CompetitionHistory = () => {
   const gridRef = useRef<DataGridHandle>();
   const componentId = useRef(uuid());
@@ -101,7 +102,7 @@ const CompetitionHistory = () => {
         <ExamSummaryChart data={data2} />
       </div>
       <div className="w-full my-4 flex justify-between">
-        <button className="btn ">Group button</button>
+        <GroupButton/>
         <div className="flex gap-x-1">
           <TextInput leadingIcon={<Search />} placeholder="Search" inputClass="!py-2" />
             <button className="btn flex items-center gap-x-2" type="button"><Filter/>Filter</button>
