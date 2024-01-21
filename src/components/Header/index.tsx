@@ -24,6 +24,10 @@ const NavConfig = [
     ],
   },
   {
+    label: 'Đề thi',
+    route: '/exam',
+  },
+  {
     label: 'Lịch sử thi',
     route: '/exam-history',
   },
