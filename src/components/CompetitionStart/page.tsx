@@ -1,4 +1,4 @@
-import Plus from 'assets/svg/plus.svg';
+
 import Calendar from 'assets/svg/calendar.svg';
 import Checkcircle from 'assets/svg/check-circle.svg'
 import Alertcircle from 'assets/svg/alert-circle.svg';;

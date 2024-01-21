@@ -114,13 +114,13 @@ const Competition=()=>{
             </div>
             <div className="flex-1">
                 <DataGrid
-                ref={gridRef}
-                columnDefs={columnDefs}
-                headerHeight={44}
-                rowData={rowData}
-                suppressCellFocus
-                rowHeight={50}
-                onGridReady={handleRequest}
+                  ref={gridRef}
+                  columnDefs={columnDefs}
+                  headerHeight={44}
+                  rowData={rowData}
+                  suppressCellFocus
+                  rowHeight={50}
+                  onGridReady={handleRequest}
                 />
             </div>
             <ModalProvider show={createModal}>
