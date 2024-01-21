@@ -48,7 +48,20 @@ export interface PaymentMethodRes {
   }[];
 }
 
+export interface IExam {
+  id: string;
+  title: string;
+  description: string;
+  isSample: boolean;
+  parts: {
+    duration: number;
+    questions: string[];
+  }[];
+  createdAt: number;
+}
+
 export type BlogListRes = ArrayResponse<IBlog>;
 
 export type FlashCardRes = ArrayResponse<IFlashCard>;
 export type QuestionRes = ArrayResponse<IQuestion>;
+export type ExamRes = ArrayResponse<IExam>;

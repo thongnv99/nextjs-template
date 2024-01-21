@@ -9,7 +9,7 @@ import { FLASH_CARD_QUERY_LIST } from 'store/key';
 import { useSWRConfig } from 'swr';
 import { isBlank, uuid } from 'utils/common';
 
-type FlashCardForm = {
+type FlashCardFormProps = {
   data?: IFlashCard; // for edit
   onClose(): void;
   onRefresh(): void;
@@ -20,7 +20,7 @@ interface FlashCardInput {
   answer: string;
 }
 
-const FlashCardForm = (props: FlashCardForm) => {
+const FlashCardForm = (props: FlashCardFormProps) => {
   const componentId = useRef(uuid());
   const { mutate } = useSWRConfig();
   const { trigger: createFlashCard } = useMutation(
