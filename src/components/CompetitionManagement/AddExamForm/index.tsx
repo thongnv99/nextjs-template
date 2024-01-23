@@ -2,25 +2,32 @@ import Loader from 'components/Loader';
 import TextInput from 'elements/TextInput';
 import { Formik,FormikProps } from 'formik';
 import React, { useRef } from 'react';
-import { useSWRConfig } from 'swr';
 import { isBlank, uuid } from 'utils/common';
 import Dropdown from 'elements/Dropdown';
+import { useMutation } from 'hooks/swr';
+import { METHOD } from 'global';
+import { useSWRConfig } from 'swr';
+import { ICompetition } from 'interfaces';
+
 import * as yup from 'yup';
 type AddExamForm = {
+    data?: ICompetition; // for edit
     onClose(): void;
+    onRefresh(): void;
   };
   
 
 interface AddExamFormValues {
-    competitionName:string,
+    title:string,
     password:string,
     dateStart:Date,
     dateFinish:Date,
-    note:string,
+    description:string,
     exam:string,
     
 }
 const AddExamForm =(props: AddExamForm)=>{
+  const componentId = useRef(uuid());
   const CategoriesExam=[
     {
         label:'Đề thi 2023',
@@ -39,16 +46,62 @@ const AddExamForm =(props: AddExamForm)=>{
         value:4
     },
   ]
-
+  const { trigger: createCompetition } = useMutation(
+    'COMPETITION_CREATE_COMPETITION',
+    {
+      url: '/api/v1/contests',
+      method: METHOD.POST,
+      componentId: componentId.current,
+      loading: true,
+      notification: {
+        title: 'Tạo cuộc thi',
+        content: 'Tạo cuộc thi thành công.',
+      },
+      onSuccess() {
+        props.onClose();
+        props.onRefresh();
+      },
+    },
+  );
+  const { trigger: updateCompetition } = useMutation(
+    'COMPETITION_UPDATE_COMPETITION',
+    {
+      url: '/api/v1/contests/{contestId}',
+      method: METHOD.PUT,
+      componentId: componentId.current,
+      loading: true,
+      notification: {
+        title: 'Cập nhật cuộc thi ',
+        content: 'Cập nhật cuộc thi thành công.',
+      },
+      onSuccess() {
+        props.onClose();
+        props.onRefresh();
+      },
+    },
+  );
   const handleSubmit = (values: AddExamFormValues) => {
-    console.log("Kiềm tra xem có ra cái gì không nào",values)
+    if(props.data){
+      updateCompetition({
+        contestId:props.data?.id,
+        title:values.title,
+        description:values.description
+      })
+    }
+    else {
+      createCompetition({
+        title:values.title,
+        description:values.description
+      })
+    }
+    
   };
   const schema = yup.object().shape({
-    competitionName: yup.string().label('Tên cuộc thi').required(),
+    title: yup.string().label('Tên cuộc thi').required(),
   });
 
   return (
-    <Loader  className="w-screen max-w-screen-md p-6">
+    <Loader id={componentId.current}  className="w-screen max-w-screen-md p-6">
       <div className="flex flex-col mb-5">
         <div className="text-lg font-bold text-gray-900">Tạo cuộc thi</div>
         <div className="text-sm font-normal text-gray-500">
@@ -59,12 +112,8 @@ const AddExamForm =(props: AddExamForm)=>{
         validationSchema={schema}
         onSubmit={handleSubmit}
         initialValues={{
-            competitionName: '', 
-            password: '',      
-            dateStart: new Date(),
-            dateFinish:new Date(),
-            note: '', 
-            exam:''
+          title:props.data?.title??'',
+          description:props.data?.description??'',
         }}
       >
         {({
@@ -79,16 +128,16 @@ const AddExamForm =(props: AddExamForm)=>{
           <form onSubmit={handleSubmit}>
             <TextInput
               label="Tên cuộc thi"
-              name="competitionName"
+              name="title"
               placeholder="Nhập tên cuộc thi ..."
               className="mb-4"
               onChange={handleChange}
-              value={values?.competitionName}
+              value={values?.title}
               onBlur={handleBlur}
-              hasError={touched.competitionName && !isBlank(errors.competitionName)}
-              errorMessage={errors.competitionName}
+              hasError={touched.title && !isBlank(errors.title)}
+              errorMessage={errors.title}
             />
-            <div className="flex gap-x-4">
+            {/* <div className="flex gap-x-4">
               <TextInput
                 label="Ngày bắt đầu"
                 name="dateStart"
@@ -109,21 +158,9 @@ const AddExamForm =(props: AddExamForm)=>{
                 value={values?.dateFinish as unknown as string}
                 onBlur={handleBlur}
               />
-            </div>
+            </div> */}
             
-            <TextInput
-              label="Mật khẩu (nếu có)"
-              name="password"
-              placeholder="***********"
-              className="mb-4"
-              type="password"
-              onChange={handleChange}
-              value={values?.password}
-              onBlur={handleBlur}
-              hasError={touched.password && !isBlank(errors.password)}
-              errorMessage={errors.password}
-            />
-            <Dropdown
+            {/* <Dropdown
                 options={CategoriesExam?.map((item:any)=>{
                     return {
                         label:item.label,
@@ -138,19 +175,19 @@ const AddExamForm =(props: AddExamForm)=>{
                 onChange={value =>
                     setFieldValue('exam', value)
                 }
-            />
+            /> */}
            {/* Chọn đề thi <Đang thiếu > */}
             <TextInput
-              label="Ghi chú"
-              name="note"
+              label="Mô tả"
+              name="description"
               className="mb-3"
               type="textarea"
-              placeholder="Nội dung câu hỏi..."
-              value={values?.note}
+              placeholder="Mô tả cuộc thi...."
+              value={values?.description}
               onChange={handleChange}
               onBlur={handleBlur}
-              hasError={touched.note && !isBlank(errors.note)}
-              errorMessage={errors.note}
+              hasError={touched.description && !isBlank(errors.description)}
+              errorMessage={errors.description}
             />
             <div className="flex gap-3">
               <button
