@@ -6,6 +6,7 @@ import {
   IBlog,
   PaymentMethodRes,
   PaymentPackageRes,
+  ICompetition,
 } from 'interfaces';
 import { isBlank } from 'utils/common';
 
@@ -60,3 +61,13 @@ export const useFlashCard = (status: string) => {
     refreshInterval: 0,
   });
 };
+
+//lấy danh sách cuộc thi hiện tại
+export const useCompetition=()=>{
+  return useSWRWrapper<ICompetition>(`api/v1/contests`,{
+    url:'/api/v1/contests',
+    method:METHOD.GET,
+    revalidateOnFocus: false,
+    refreshInterval: 0,
+  })
+}

@@ -45,6 +45,7 @@ const FlashCard = (props: Props) => {
   const [viewModal, setViewModal] = useState({ show: false, currentIdx: 0 });
   const [status, setStatus] = useState('');
   const { data, isLoading, mutate } = useFlashCard(status);
+  console.log("Kiểm tra data", data)
   const timer = useRef<NodeJS.Timeout>();
 
   const handleCreateClick = () => {

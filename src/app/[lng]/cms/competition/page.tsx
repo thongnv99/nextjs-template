@@ -4,82 +4,150 @@ import Plus from 'assets/svg/plus.svg';
 import TextInput from 'elements/TextInput';
 import Search from 'assets/svg/search.svg';
 import Filter from 'assets/svg/Filters lines.svg'
-import { ColDef, ColGroupDef, IDatasource } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
 import DataGrid, { DataGridHandle } from 'components/DataGrid';
 import React, { useRef,useState } from 'react';
-import {EXAM_STATUS} from 'global'
 import StatusCell from 'components/CompetitionManagement/StatusCell'
-import ActionGroupIcon from 'components/CompetitionManagement/ActionGroupIcon'
 import GroupButton from 'components/GroupButton'
-import FlashCardForm from 'components/FlashCard/FlashCardForm';
 import ModalProvider from 'components/ModalProvider';
 import AddExamForm from 'components/CompetitionManagement/AddExamForm'
+import { useSWRWrapper } from 'hooks/swr';
+import { ICompetition } from 'interfaces';
+import CoppyIcon from 'assets/svg/copy.svg'
+import TrashIcon from 'assets/svg/trash-2.svg'
+import EditIcon from 'assets/svg/edit-2.svg'
+import ButtonCell from 'components/DataGrid/ButtonCell';
+import ConfirmModal from 'components/ConfirmModal';
+import { uuid } from 'utils/common';
+import { METHOD } from 'global';
+import { useMutation } from 'hooks/swr';
+const Coppy=(props: { onClick(): void })=>{
+  return (
+    <div>
+      <CoppyIcon className='hover:cursor-pointer' />
+    </div>     
+  )
+}
+const Trash=(props: { onClick(): void })=>{
+  return (
+    <div onClick={props.onClick}>
+      <TrashIcon className='hover:cursor-pointer' />
+    </div>
+  )
+}
 
+const Edit=(props: { onClick(): void })=>{
+  return (
+    <div onClick={props.onClick}>
+      <EditIcon className='hover:cursor-pointer'/>
+    </div>
+  )
+}
 
 const Competition=()=>{
     const gridRef = useRef<DataGridHandle>();
+    const componentId = useRef(uuid());
     const [createModal, setCreateModal] = useState(false);
-    const rowData = [
-        // Example data, replace with your actual data
-        { name: "Thi thử 2023",exam:'Đề thi 2023', dateStart: '23/1/2023', dateFinish: '25/1/2023', count: '21',password:'*****', status:'UPCOMING' },
-        { name: "Thi thử 2023",exam:'Đề thi 2023', dateStart: '23/1/2023', dateFinish: '25/1/2023', count: '21',password:'*****', status:'HAPPENNING' },
-        { name: "Thi thử 2023",exam:'Đề thi 2023', dateStart: '23/1/2023', dateFinish: '25/1/2023', count: '21',password:'*****', status:'COMPLETE' },
-        { name: "Thi thử 2023",exam:'Đề thi 2023', dateStart: '23/1/2023', dateFinish: '25/1/2023', count: '21',password:'*****', status:'CANCEL' },
-        { name: "Thi thử 2023",exam:'Đề thi 2023', dateStart: '23/1/2023', dateFinish: '25/1/2023', count: '21',password:'*****', status:'COMPLETE' },
-        { name: "Thi thử 2023",exam:'Đề thi 2023', dateStart: '23/1/2023', dateFinish: '25/1/2023', count: '21',password:'*****', status:'COMPLETE' },
-        // ... add more rows as needed
-      ];
+    const [confirmDeleteModal, setConfirmDeleteModal] = useState<{
+      show?: boolean;
+      data?:ICompetition
+    }>({ show: false });
+    const [editModal, setEditModal] = useState<{
+      show?: boolean;
+      data?:ICompetition
+    }>({ show: false });
+
+
+    const handleShowConfirmDelete = (data: ICompetition) => {
+      setConfirmDeleteModal({ show: true,data });
+    };
+    const handleShowEditModal=(data:ICompetition)=>{
+      setEditModal({show:true,data})
+    }
+
+    const handleConfirmDelete = () => {
+      deleteCompetition({contestId:confirmDeleteModal.data?.id})
+    };
+    const handleCloseDelete = () => {
+      setConfirmDeleteModal({ show: false });
+    };
+    //lấy danh sách cuộc thi hiện tại
+    const {data, isLoading, mutate}=useSWRWrapper<ICompetition>(`api/v1/contests`,{
+      url:'/api/v1/contests',
+      method:METHOD.GET,
+      revalidateOnFocus: false,
+      refreshInterval: 0,
+    })
+    //Xóa cuộc thi
+    const { trigger: deleteCompetition } = useMutation<{
+      items: Record<string, unknown>[];
+    }>('COMPETITION_DELETE_COMPETITION', {
+      url: '/api/v1/contests/{contestId}',
+      method: METHOD.DELETE,
+      loading: true,
+      componentId: componentId.current,
+      notification: {
+        title: 'Xóa cuộc thi',
+        content: 'Xóa cuộc thi thành công',
+      },
+      onSuccess: data => {
+        setConfirmDeleteModal({ show: false })
+        mutate()
+      },
+    });
+
+    //Thêm cuộc thi
+
+
     const columnDefs: Array<ColDef> = [
         {
           headerName: 'Tên cuộc thi',
           flex: 1,
-          field: 'name',
+          field: 'title',
           cellClass: 'bold',
         },
         {
-          headerName:'Đề thi',
-          flex: 1,
-          field: 'exam',
+          headerName:'Mô tả',
+          flex: 2,
+          field: 'description',
         },
         {
           headerName: 'Ngày bắt đầu',
           flex: 1,
-          field: 'dateStart',
+          field: 'startTime',
         },
         {
           headerName: 'Ngày kết thúc',
           flex: 1,
-          field: 'dateFinish',
+          field: 'endTime',
         },
         {
-            headerName: 'SL tham gia',
-            flex: 1,
-            field: 'count',
-        },
-        {
-            headerName: 'Mật khẩu',
-            flex: 1,
-            field: 'password',
-        },
-        {
-            headerName: 'Trạng thái',
-            flex: 1,
-            field: 'status',
-            cellRenderer:StatusCell,
-            cellRendererParams:{
-                colorClass:{
-                    UPCOMING:'bg-[var(--warning-50)] text-[var(--warning-700)]',
-                    HAPPENNING:'bg-[var(--success-50)] text-[var(--success-700)]',
-                    CANCEL:'bg-[var(--error-50)] text-[var(--error-500)]',
-                    COMPLETE:'bg-[var(--purple-50)] text-[var(--purple-700)]'
-                },
-            },
+          headerName: 'Trạng thái',
+          flex: 1,
+          field: 'status',
+          cellRenderer:StatusCell,
+          cellRendererParams:{
+              colorClass:{
+                  DRAFT:'bg-[var(--warning-50)] text-[var(--warning-700)]',
+                  PUBLISH:'bg-[var(--success-50)] text-[var(--success-700)]',
+              },
+          },
         },
         {
           headerName: '',
           flex:1,
-          cellRenderer:ActionGroupIcon,
+          cellRenderer:ButtonCell,
           cellRendererParams:{
+            buttons: [
+              {
+                render: Trash,
+                onClick: handleShowConfirmDelete,
+              },
+              {
+                render:Edit,
+                onClick:handleShowEditModal,
+              }
+            ],
           }
         },
       ];
@@ -92,7 +160,7 @@ const Competition=()=>{
         setCreateModal(true);
       };    
     return (
-        <Loader className="h-full w-full border border-gray-200 rounded-lg  m-auto flex flex-col shadow-sm p-5 ">
+        <Loader id={componentId.current} className="h-full w-full border border-gray-200 rounded-lg  m-auto flex flex-col shadow-sm p-5 ">
             <div className="flex justify-between">
                 <div className="text-lg font-semibold">Quản lý cuộc thi</div>
                 <div className="flex items-center gap-4">
@@ -117,7 +185,7 @@ const Competition=()=>{
                 ref={gridRef}
                 columnDefs={columnDefs}
                 headerHeight={44}
-                rowData={rowData}
+                rowData={data?.items}
                 suppressCellFocus
                 rowHeight={50}
                 onGridReady={handleRequest}
@@ -126,6 +194,31 @@ const Competition=()=>{
             <ModalProvider show={createModal}>
               <AddExamForm
                 onClose={() => setCreateModal(false)}
+                onRefresh={() => {
+                  mutate();
+                }}
+              />
+            </ModalProvider>
+
+            <ModalProvider
+              show={confirmDeleteModal?.show}
+            >
+              <ConfirmModal
+                type="error"
+                title="Xóa cuộc thi"
+                content="Bạn có chắc chắn muốn xóa cuộc thi này không?"
+                onCancel={handleCloseDelete}
+                onConfirm={handleConfirmDelete}
+              />
+            </ModalProvider>
+
+            <ModalProvider show={editModal?.show}>
+              <AddExamForm
+                data={editModal?.data}
+                onClose={() => setEditModal({show:false})}
+                onRefresh={() => {
+                  mutate();
+                }}
               />
             </ModalProvider>
 

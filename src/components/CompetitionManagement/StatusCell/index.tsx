@@ -9,10 +9,8 @@ interface StatusCellProps extends ICellRendererParams {
 }
 const  StatusCell=(props:StatusCellProps)=>{
     const labelStatus={
-        [EXAM_STATUS.UPCOMING]:'Sắp diễn ra',
-        [EXAM_STATUS.COMPLETE]:'Hoàn thành',
-        [EXAM_STATUS.CANCEL]:'Hủy bỏ',
-        [EXAM_STATUS.HAPPENNING]:'Đang diễn ra'
+        [EXAM_STATUS.DRAFT]:'Nháp',
+        [EXAM_STATUS.PUBLISH]:'Đã mở',
     }
     return (
         <div className={`${props.colorClass?.[props.value]??''} flex items-center rounded-full leading-none p-[1rem] text-[1.2rem]`}>
