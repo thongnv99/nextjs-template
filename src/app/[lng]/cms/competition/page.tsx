@@ -12,7 +12,7 @@ import GroupButton from 'components/GroupButton'
 import ModalProvider from 'components/ModalProvider';
 import AddExamForm from 'components/CompetitionManagement/AddExamForm'
 import { useSWRWrapper } from 'hooks/swr';
-import { ICompetition } from 'interfaces';
+import { ICompetition,CompetitionRes } from 'interfaces';
 import CoppyIcon from 'assets/svg/copy.svg'
 import TrashIcon from 'assets/svg/trash-2.svg'
 import EditIcon from 'assets/svg/edit-2.svg'
@@ -72,7 +72,7 @@ const Competition=()=>{
       setConfirmDeleteModal({ show: false });
     };
     //lấy danh sách cuộc thi hiện tại
-    const {data, isLoading, mutate}=useSWRWrapper<ICompetition>(`api/v1/contests`,{
+    const {data, isLoading, mutate}=useSWRWrapper<CompetitionRes>(`api/v1/contests`,{
       url:'/api/v1/contests',
       method:METHOD.GET,
       revalidateOnFocus: false,
@@ -185,7 +185,7 @@ const Competition=()=>{
                 ref={gridRef}
                 columnDefs={columnDefs}
                 headerHeight={44}
-                rowData={data?.items}
+                rowData={data?.items??[]}
                 suppressCellFocus
                 rowHeight={50}
                 onGridReady={handleRequest}

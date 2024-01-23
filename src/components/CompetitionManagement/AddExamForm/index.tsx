@@ -7,7 +7,7 @@ import Dropdown from 'elements/Dropdown';
 import { useMutation } from 'hooks/swr';
 import { METHOD } from 'global';
 import { useSWRConfig } from 'swr';
-import { ICompetition } from 'interfaces';
+import { ICompetition,IResponseDefault } from 'interfaces';
 
 import * as yup from 'yup';
 type AddExamForm = {
@@ -19,11 +19,8 @@ type AddExamForm = {
 
 interface AddExamFormValues {
     title:string,
-    password:string,
-    dateStart:Date,
-    dateFinish:Date,
     description:string,
-    exam:string,
+
     
 }
 const AddExamForm =(props: AddExamForm)=>{

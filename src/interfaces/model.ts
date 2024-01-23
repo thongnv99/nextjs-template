@@ -48,15 +48,9 @@ export interface IQuestion {
   source?: string;
   createdAt: number;
 }
-export interface ICompetition {
-  id:string,
-  title:string,
-  description:string,
-  startTime:number,
-  endTime:number,
-  parts:{
-    duration: number;
-    questions: string[];
-  }[],
-  status:string
+
+
+export interface IResponseDefault{
+  items:[],
+  pagination:{}
 }
