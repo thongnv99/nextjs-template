@@ -1,7 +1,7 @@
 'use client';
 import Loader from 'components/Loader';
 import Preload from 'components/Preload';
-import { useSWRWrapper } from 'hooks/swr';
+import { useMutation, useSWRWrapper } from 'hooks/swr';
 import { IExam, IQuestion } from 'interfaces';
 import React, { useRef, useState } from 'react';
 import ArrowRight from 'assets/svg/chevron-right.svg';
@@ -13,6 +13,8 @@ import { Formik, FormikProps } from 'formik';
 import Delete from 'assets/svg/delete.svg';
 import Plus from 'assets/svg/plus-circle.svg';
 import QuestionPicker from 'components/QuestionPicker';
+import { METHOD } from 'global';
+import { uuid } from 'utils/common';
 interface ExamConfigProps {
   examId: string;
 }
@@ -27,6 +29,7 @@ interface ExamConfigValues {
 const ExamConfig = (props: ExamConfigProps) => {
   const router = useRouter();
   const { lng } = useParams();
+  const componentId = useRef(uuid());
   const formRef = useRef<FormikProps<ExamConfigValues>>();
   const [titleModal, setTitleModal] = useState(false);
   const [questionModal, setQuestionModal] = useState<{
@@ -41,8 +44,28 @@ const ExamConfig = (props: ExamConfigProps) => {
     url: `/api/v1/exams/${props.examId}`,
   });
 
+  const { trigger: updateExam } = useMutation('EXAM_UPDATE_EXAM', {
+    url: '/api/v1/exams/{examId}',
+    method: METHOD.PUT,
+    componentId: componentId.current,
+    loading: true,
+    notification: {
+      title: 'Cập nhật đề thi',
+      content: 'Cập nhật đề thi thành công.',
+    },
+    onSuccess() {
+      router.push(`/${lng}/customer/exam`);
+    },
+  });
+
   const handleSubmit = (values: ExamConfigValues) => {
-    console.log(values);
+    updateExam({
+      examId: props.examId,
+      parts: values.parts.map(part => ({
+        duration: part.duration,
+        questions: part.questions.map(item => item.id),
+      })),
+    });
   };
 
   const handleSelectQuestion = (questions: IQuestion[]) => {
@@ -63,7 +86,10 @@ const ExamConfig = (props: ExamConfigProps) => {
     return <Preload />;
   }
   return (
-    <Loader className="h-full w-full   max-w-screen-lg m-auto flex flex-col ">
+    <Loader
+      id={componentId.current}
+      className="h-full w-full   max-w-screen-lg m-auto flex flex-col "
+    >
       <div className="px-5 py-6 flex items-center justify-between">
         <div className="text-lg font-semibold flex gap-1 items-center">
           <div
@@ -97,12 +123,12 @@ const ExamConfig = (props: ExamConfigProps) => {
           innerRef={instance => (formRef.current = instance!)}
           initialValues={
             {
-              parts: [],
+              parts: exam.parts ?? [],
             } as ExamConfigValues
           }
         >
           {({ values, setFieldValue }) => (
-            <form>
+            <form className="flex flex-col gap-4">
               {values.parts.map((part, idx) => (
                 <div key={idx} className="border rounded-2xl transition-all">
                   <div className="mb-8 flex items-center justify-between p-6  border-b border-primary-200">

@@ -55,26 +55,26 @@ export interface IExam {
   isSample: boolean;
   parts: {
     duration: number;
-    questions: string[];
+    questions: IQuestion[];
   }[];
   createdAt: number;
 }
 
 export interface ICompetition {
-  id:string,
-  title:string,
-  description:string,
-  startTime:number,
-  endTime:number,
-  parts:{
+  id: string;
+  title: string;
+  description: string;
+  startTime: number;
+  endTime: number;
+  parts: {
     duration: number;
     questions: string[];
-  }[],
-  status:string
+  }[];
+  status: string;
 }
 export type BlogListRes = ArrayResponse<IBlog>;
 
 export type FlashCardRes = ArrayResponse<IFlashCard>;
 export type QuestionRes = ArrayResponse<IQuestion>;
 export type ExamRes = ArrayResponse<IExam>;
-export type CompetitionRes=ArrayResponse<ICompetition>
+export type CompetitionRes = ArrayResponse<ICompetition>;

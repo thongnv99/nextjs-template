@@ -15,6 +15,7 @@ import { useMutation } from 'hooks/swr';
 import { useParams, useRouter } from 'next/navigation';
 import Calendar from 'assets/svg/calendar.svg';
 import HelpCircle from 'assets/svg/help-circle.svg';
+import Layer from 'assets/svg/3-layers.svg';
 import Star from 'assets/svg/star.svg';
 
 type Props = { data: IExam; onRefresh(): void };
@@ -86,6 +87,10 @@ const ExamItem = (props: Props) => {
                         'dd/MM/yyyy',
                       )}
                     </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Layer className="w-[1.6rem] h-[1.6rem]" />{' '}
+                    <div>{`${props.data.parts.length} phần thi`} </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <HelpCircle className="w-[1.6rem] h-[1.6rem]" />{' '}
