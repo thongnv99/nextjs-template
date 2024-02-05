@@ -15,6 +15,7 @@ import Plus from 'assets/svg/plus-circle.svg';
 import QuestionPicker from 'components/QuestionPicker';
 import { METHOD } from 'global';
 import { uuid } from 'utils/common';
+import TextInput from 'elements/TextInput';
 interface ExamConfigProps {
   examId: string;
 }
@@ -124,21 +125,38 @@ const ExamConfig = (props: ExamConfigProps) => {
             } as ExamConfigValues
           }
         >
-          {({ values, setFieldValue }) => (
+          {({
+            values,
+            setFieldValue,
+            handleChange,
+            handleBlur,
+            errors,
+            touched,
+          }) => (
             <form className="flex flex-col gap-4">
               {values.parts.map((part, idx) => (
                 <div key={idx} className="border rounded-2xl transition-all">
-                  <div className="mb-8 flex items-center justify-between p-6  border-b border-primary-200">
-                    <div>Phần {idx + 1}</div>
-                    <button
-                      type="button"
-                      className="btn !border-primary-500 btn-icon !text-primary-500"
-                      onClick={() =>
-                        setQuestionModal({ show: true, currentPart: idx })
-                      }
-                    >
-                      <Plus /> Thêm câu hỏi
-                    </button>
+                  <div className="mb-8 flex flex-col  p-6  border-b border-primary-200">
+                    <div className="flex w-full items-center justify-between">
+                      <div>Phần {idx + 1}</div>
+                      <button
+                        type="button"
+                        className="btn !border-primary-500 btn-icon !text-primary-500"
+                        onClick={() =>
+                          setQuestionModal({ show: true, currentPart: idx })
+                        }
+                      >
+                        <Plus /> Thêm câu hỏi
+                      </button>
+                    </div>
+                    <TextInput
+                      label="Thời gian (phút)"
+                      name={`parts[${idx}].duration`}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={part.duration}
+                      type="number"
+                    />
                   </div>
                   <div className="p-6  flex flex-col gap-4">
                     {part.questions.map(question => (

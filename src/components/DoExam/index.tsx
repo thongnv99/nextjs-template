@@ -11,8 +11,11 @@ import { isBlank, uuid } from 'utils/common';
 import Loader from 'components/Loader';
 import { formatDateToString } from 'utils/datetime';
 import { useParams, useRouter } from 'next/navigation';
+import ModalProvider from 'components/ModalProvider';
+import ConfirmModal from 'components/ConfirmModal';
 
 const DoExam = (props: { examId: string }) => {
+  const [modalNext, setModalNext] = useState(false);
   const router = useRouter();
   const { lng } = useParams();
   const { data: examData } = useSWRWrapper<IExam>(
@@ -156,22 +159,45 @@ const DoExam = (props: { examId: string }) => {
                   />
                 ),
               )}
+
+              {values.currentPart < (values.parts?.length ?? 0) - 1 && (
+                <div className="w-full flex justify-center">
+                  <button
+                    className="btn"
+                    type="button"
+                    disabled={
+                      values.currentPart + 1 > (values.parts?.length ?? 0)
+                    }
+                    onClick={() => {
+                      if (
+                        values.currentPart <=
+                        (values.parts?.length ?? 0) - 1
+                      ) {
+                        setModalNext(true);
+                      }
+                    }}
+                  >
+                    Phần tiếp theo
+                  </button>
+                </div>
+              )}
             </div>
             <div className="min-w-[30rem] border border-gray-200 p-4 rounded-md ">
               <div className="w-full mb-4">
-                <TimeViewer ref={timerController} />
+                <TimeViewer
+                  initTime={values.parts?.[values.currentPart]?.duration ?? 0}
+                  ref={timerController}
+                />
               </div>
               <button className="btn-primary w-full mb-8" type="submit">
                 Nộp bài
               </button>
 
-              <div>
-                <h2 className="text-[2rem] mb-2">
-                  Phần {values.currentPart + 1}
-                </h2>
-                <div className="grid grid-cols-4 gap-4">
-                  {values.parts?.[values.currentPart]?.questions.map(
-                    (item, idx) => (
+              {values.parts?.map((part, idx) => (
+                <div key={idx}>
+                  <h2 className="text-[2rem] mb-2">Phần {idx + 1}</h2>
+                  <div className="grid grid-cols-4 gap-4">
+                    {part?.questions.map((item, idx) => (
                       <div
                         className={` border ${
                           !isBlank(item.answer) ? 'bg-gray-200' : ''
@@ -180,11 +206,26 @@ const DoExam = (props: { examId: string }) => {
                       >
                         {idx + 1}
                       </div>
-                    ),
-                  )}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
+            <ModalProvider show={modalNext} onClose={() => setModalNext(false)}>
+              <ConfirmModal
+                onConfirm={() => {
+                  timerController.current?.setTime(
+                    values.parts?.[values.currentPart]?.duration ?? 0,
+                  );
+                  setFieldValue('currentPart', values.currentPart + 1);
+                  setModalNext(false);
+                }}
+                type="warning"
+                onCancel={() => setModalNext(false)}
+                title="Chuyển phần tiếp theo"
+                content="Sau khi chuyển sang phần tiếp theo bạn sẽ không được quay lại. Bạn có muốn tiếp tục không?"
+              />
+            </ModalProvider>
           </form>
         )}
       </Formik>

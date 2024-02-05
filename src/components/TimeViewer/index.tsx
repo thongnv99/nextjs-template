@@ -10,11 +10,11 @@ import React, {
 export interface TimeViewerHandle {
   startCount(): void;
   endCount(): void;
-  setTime(seconds: number): void;
+  setTime(minutes: number): void;
 }
 
-const TimeViewer = forwardRef((props, ref) => {
-  const [seconds, setSeconds] = useState(120 * 60); // giây;
+const TimeViewer = forwardRef((props: { initTime: number }, ref) => {
+  const [seconds, setSeconds] = useState(props.initTime * 60); // giây;
   const timer = useRef<NodeJS.Timeout>();
   useEffect(() => {
     startCount();
@@ -24,13 +24,17 @@ const TimeViewer = forwardRef((props, ref) => {
   }, []);
 
   useEffect(() => {
+    setSeconds(props.initTime * 60);
+  }, [props.initTime]);
+
+  useEffect(() => {
     if (seconds === 0) {
       endCount();
     }
   }, [seconds]);
 
-  const setTime = (seconds: number) => {
-    setSeconds(seconds);
+  const setTime = (minutes: number) => {
+    setSeconds(minutes * 60);
   };
 
   const startCount = () => {
