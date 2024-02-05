@@ -28,8 +28,8 @@ const NavConfig = [
     route: '/exam',
   },
   {
-    label: 'Lịch sử thi',
-    route: '/exam-history',
+    label: 'Cuộc thi',
+    route: '/competition',
   },
   {
     label: 'Flash card',
@@ -105,14 +105,6 @@ const Header = () => {
             )}
           </div>
         ))}
-        <div>
-            <Link
-              className={`px-8 mx-2 h-full flex  items-center text-base font-medium text-gray-500 hover:text-primary`}
-              href={`/${lng}/cms/competition`}
-            >
-              Cuộc thi
-            </Link>
-        </div>
       </nav>
       <div className="flex items-center  divide-x">
         <div className="mr-4 h-fit">
