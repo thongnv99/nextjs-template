@@ -53,11 +53,13 @@ export interface IExam {
   title: string;
   description: string;
   isSample: boolean;
-  parts: {
-    duration: number;
-    questions: IQuestion[];
-  }[];
+  parts: IPart[];
   createdAt: number;
+}
+
+export interface IPart {
+  duration: number;
+  questions: IQuestion[];
 }
 
 export interface ICompetition {
@@ -66,10 +68,7 @@ export interface ICompetition {
   description: string;
   startTime: number;
   endTime: number;
-  parts: {
-    duration: number;
-    questions: string[];
-  }[];
+  parts: IPart[];
   status: string;
 }
 export type BlogListRes = ArrayResponse<IBlog>;
@@ -78,3 +77,23 @@ export type FlashCardRes = ArrayResponse<IFlashCard>;
 export type QuestionRes = ArrayResponse<IQuestion>;
 export type ExamRes = ArrayResponse<IExam>;
 export type CompetitionRes = ArrayResponse<ICompetition>;
+
+export interface DoExamRes {
+  sessionId: string;
+  startTime: number;
+  status: string;
+  totalQuestion: number;
+  totalScore: number;
+  parts: IPart[];
+}
+
+export interface SubmitExamRes {
+  id: string;
+  startTime: number;
+  endTime: number;
+  status: string;
+  totalQuestion: number;
+  totalScore: number;
+  totalQuestionAchieved: number;
+  totalScoreAchieved: number;
+}

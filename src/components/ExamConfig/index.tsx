@@ -2,7 +2,7 @@
 import Loader from 'components/Loader';
 import Preload from 'components/Preload';
 import { useMutation, useSWRWrapper } from 'hooks/swr';
-import { IExam, IQuestion } from 'interfaces';
+import { IExam, IPart, IQuestion } from 'interfaces';
 import React, { useRef, useState } from 'react';
 import ArrowRight from 'assets/svg/chevron-right.svg';
 import Edit from 'assets/svg/edit-2.svg';
@@ -20,10 +20,7 @@ interface ExamConfigProps {
 }
 
 interface ExamConfigValues {
-  parts: {
-    questions: IQuestion[];
-    duration: number;
-  }[];
+  parts: IPart[];
 }
 
 const ExamConfig = (props: ExamConfigProps) => {
@@ -44,7 +41,7 @@ const ExamConfig = (props: ExamConfigProps) => {
     url: `/api/v1/exams/${props.examId}`,
   });
 
-  const { trigger: updateExam } = useMutation('EXAM_UPDATE_EXAM', {
+  const { trigger: updateExam } = useMutation(`/api/v1/exams/${props.examId}`, {
     url: '/api/v1/exams/{examId}',
     method: METHOD.PUT,
     componentId: componentId.current,

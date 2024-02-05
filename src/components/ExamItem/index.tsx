@@ -46,7 +46,7 @@ const ExamItem = (props: Props) => {
   };
   const handleCopy = (event: MouseEvent) => {
     event.stopPropagation();
-    // router.push(`/${lng}/customer/question/question-form/${props.data.id}`);
+    router.push(`/${lng}/customer/exam/do-exam/${props.data.id}`);
   };
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();

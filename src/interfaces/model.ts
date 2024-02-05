@@ -47,10 +47,10 @@ export interface IQuestion {
   };
   source?: string;
   createdAt: number;
+  answer?: string;
 }
 
-
-export interface IResponseDefault{
-  items:[],
-  pagination:{}
+export interface IResponseDefault {
+  items: [];
+  pagination: {};
 }

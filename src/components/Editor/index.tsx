@@ -8,7 +8,7 @@ import './style.scss';
 interface EditorProps {
   innerRef?: (instance: CustomEditor) => void;
   data?: string;
-  onChange?: (data?: string) => void;
+  onChange?: (data: string) => void;
   id?: string;
   placeholder?: string;
   inline?: boolean;
@@ -32,7 +32,7 @@ const Editor = (props: EditorProps) => {
         }}
         onChange={event => {
           const data = editorRef.current?.getData();
-          props.onChange?.(data);
+          props.onChange?.(data ?? '');
         }}
         config={{
           toolbar: {
