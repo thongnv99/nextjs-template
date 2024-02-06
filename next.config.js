@@ -10,6 +10,11 @@ const nextConfig = {
         destination: '/vi/customer/question',
         permanent: true,
       },
+      {
+        source: '/vi',
+        destination: '/vi/customer/question',
+        permanent: true,
+      },
     ];
   },
   rewrites() {
@@ -19,7 +24,7 @@ const nextConfig = {
     },
     {
       source: '/vi',// ^(?!.*(?:vi|en)).*$
-      destination: '/vi/customer',
+      destination: '/vi/customer/question',
     }];
   },
   reactStrictMode: false,
