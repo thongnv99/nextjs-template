@@ -27,10 +27,10 @@ const NavConfig = [
     label: 'Đề thi',
     route: '/exam',
   },
-  {
-    label: 'Cuộc thi',
-    route: '/competition',
-  },
+  // {
+  //   label: 'Cuộc thi',
+  //   route: '/competition',
+  // },
   {
     label: 'Flash card',
     route: '/flash-card',
@@ -80,7 +80,7 @@ const Header = () => {
         {NavConfig.map((item, idx) => (
           <div className={`relative h-full nav `} key={idx}>
             <Link
-              className={`px-8 mx-2 h-full flex  items-center text-base font-medium text-gray-500 hover:text-primary ${
+              className={` px-2 md:px-4 xl:px-8 mx-2 h-full flex  items-center text-[1.2rem] lg:text-base font-medium text-gray-500 hover:text-primary ${
                 pathName.startsWith(`/${lng}/customer${item.route}`)
                   ? 'text-primary '
                   : ''

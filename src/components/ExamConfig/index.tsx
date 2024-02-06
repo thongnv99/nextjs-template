@@ -16,6 +16,7 @@ import QuestionPicker from 'components/QuestionPicker';
 import { METHOD } from 'global';
 import { uuid } from 'utils/common';
 import TextInput from 'elements/TextInput';
+import Close from 'assets/svg/x-circle.svg';
 interface ExamConfigProps {
   examId: string;
 }
@@ -88,7 +89,7 @@ const ExamConfig = (props: ExamConfigProps) => {
       id={componentId.current}
       className="h-full w-full   max-w-screen-lg m-auto flex flex-col "
     >
-      <div className="px-5 py-6 flex items-center justify-between">
+      <div className="px-0 py-6 flex items-center justify-between">
         <div className="text-lg font-semibold flex gap-1 items-center">
           <div
             className="text-gray-500 cursor-pointer"
@@ -135,20 +136,28 @@ const ExamConfig = (props: ExamConfigProps) => {
           }) => (
             <form className="flex flex-col gap-4">
               {values.parts.map((part, idx) => (
-                <div key={idx} className="border rounded-2xl transition-all">
-                  <div className="mb-8 flex flex-col  p-6  border-b border-primary-200">
+                <div
+                  key={idx}
+                  className="border rounded-2xl transition-all p-6  "
+                >
+                  <div className="mb-8 flex flex-col  ">
                     <div className="flex w-full items-center justify-between">
-                      <div>Phần {idx + 1}</div>
-                      <button
-                        type="button"
-                        className="btn !border-primary-500 btn-icon !text-primary-500"
-                        onClick={() =>
-                          setQuestionModal({ show: true, currentPart: idx })
-                        }
+                      <div className="text-lg">Phần {idx + 1}</div>
+                      <div
+                        data-tooltip-id="default-tooltip"
+                        data-tooltip-content="Xóa phần thi"
+                        className="cursor-pointer text-gray-700 hover:text-gray-900"
+                        onClick={() => {
+                          const arr = [...values.parts];
+                          arr.splice(idx, 1);
+                          setFieldValue('parts', arr);
+                        }}
                       >
-                        <Plus /> Thêm câu hỏi
-                      </button>
+                        <Close />
+                      </div>
                     </div>
+                  </div>
+                  <div className="flex flex-col w-full gap-4">
                     <TextInput
                       label="Thời gian (phút)"
                       name={`parts[${idx}].duration`}
@@ -157,31 +166,47 @@ const ExamConfig = (props: ExamConfigProps) => {
                       value={part.duration}
                       type="number"
                     />
-                  </div>
-                  <div className="p-6  flex flex-col gap-4">
-                    {part.questions.map(question => (
-                      <div
-                        key={question.id}
-                        className="flex items-center border border-primary-400 rounded-[0.8rem] p-4 justify-between"
-                      >
-                        <div
-                          dangerouslySetInnerHTML={{ __html: question.content }}
-                        ></div>
-                        <div>
-                          <Delete
-                            className="h-4 w-4 cursor-pointer text-gray-500 hover:text-gray-900"
-                            onClick={() => {
-                              setFieldValue(
-                                `parts[${idx}].questions`,
-                                part.questions.filter(
-                                  item => item.id !== question.id,
-                                ),
-                              );
-                            }}
-                          />
-                        </div>
+                    <div>
+                      <div className="flex w-full items-center justify-between">
+                        <div>Danh sách câu hỏi</div>
+                        <button
+                          type="button"
+                          className="btn !border-primary-500 btn-icon !text-primary-500"
+                          onClick={() =>
+                            setQuestionModal({ show: true, currentPart: idx })
+                          }
+                        >
+                          <Plus /> Thêm câu hỏi
+                        </button>
                       </div>
-                    ))}
+                      <div className="p-6  flex flex-col gap-4">
+                        {part.questions.map(question => (
+                          <div
+                            key={question.id}
+                            className="flex items-center border border-primary-400 rounded-[0.8rem] p-4 justify-between"
+                          >
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: question.content,
+                              }}
+                            ></div>
+                            <div>
+                              <Delete
+                                className="h-4 w-4 cursor-pointer text-gray-500 hover:text-gray-900"
+                                onClick={() => {
+                                  setFieldValue(
+                                    `parts[${idx}].questions`,
+                                    part.questions.filter(
+                                      item => item.id !== question.id,
+                                    ),
+                                  );
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
