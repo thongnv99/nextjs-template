@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import { METHOD } from 'global';
 import { useMutation } from 'hooks/swr';
 import { IExam, IFlashCard } from 'interfaces';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
 import { FLASH_CARD_QUERY_LIST } from 'store/key';
 import { useSWRConfig } from 'swr';
@@ -23,20 +24,25 @@ interface FlashCardInput {
 const ExamForm = (props: ExamFormProps) => {
   const componentId = useRef(uuid());
   const { mutate } = useSWRConfig();
-  const { trigger: createExam } = useMutation('EXAM_CREATE_EXAM', {
-    url: '/api/v1/exams',
-    method: METHOD.POST,
-    componentId: componentId.current,
-    loading: true,
-    notification: {
-      title: 'Thêm đề thi',
-      content: 'Thêm đề thi thành công.',
+  const router = useRouter();
+  const { lng } = useParams();
+  const { trigger: createExam } = useMutation<Record<string, unknown>>(
+    'EXAM_CREATE_EXAM',
+    {
+      url: '/api/v1/exams',
+      method: METHOD.POST,
+      componentId: componentId.current,
+      loading: true,
+      notification: {
+        title: 'Thêm đề thi',
+        content: 'Thêm đề thi thành công.',
+      },
+      onSuccess(data) {
+        props.onClose();
+        router.push(`/${lng}/customer/exam/config/${data?.result?.id}`);
+      },
     },
-    onSuccess() {
-      props.onClose();
-      props.onRefresh();
-    },
-  });
+  );
   const { trigger: updateExam } = useMutation('EXAM_UPDATE_EXAM', {
     url: '/api/v1/exams/{examId}',
     method: METHOD.PUT,

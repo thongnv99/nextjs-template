@@ -13,7 +13,8 @@ import Loader from 'components/Loader';
 import ConfirmModal from 'components/ConfirmModal';
 import { useMutation } from 'hooks/swr';
 import { useParams, useRouter } from 'next/navigation';
-
+import './style.scss';
+import Badge from 'components/Badge';
 type Props = { data: IQuestion; onRefresh(): void };
 
 const mapQuestionType = {
@@ -67,26 +68,48 @@ const QuestionItem = (props: Props) => {
     <Disclosure>
       {({ open }) => {
         return (
-          <div className="w-full flex flex-col">
+          <div className="w-full flex flex-col question-item">
             <Disclosure.Button>
               <div className="flex items-center justify-between p-4 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
-                <div className="flex flex-col justify-between items-start">
+                <div className="flex  justify-between items-start">
                   <div
                     className="text-base text-left text-gray-900 font-semibold"
                     dangerouslySetInnerHTML={{ __html: props.data.content }}
                   ></div>
-                  {/* <div className="text-sm text-gray-500 font-normal">
-                    Up to 10 users and 20GB individual data.
-                  </div> */}
+                  {props.data.isSample && (
+                    <Badge
+                      content="Mẫu"
+                      className="bg-primary-100 text-primary-500 ml-4 -translate-y-[0.8rem] text-[1rem]"
+                    />
+                  )}
                 </div>
                 <div className="flex gap-8">
-                  <Edit onClick={handleEdit} />
-                  <Copy onClick={handleCopy} />
-                  <Trash onClick={handleDelete} />
+                  <Copy
+                    data-tooltip-id="default-tooltip"
+                    data-tooltip-content="Nhân bản"
+                    onClick={handleCopy}
+                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                  />
+                  {!props.data.isSample && (
+                    <>
+                      <Edit
+                        data-tooltip-id="default-tooltip"
+                        data-tooltip-content="Sửa"
+                        onClick={handleEdit}
+                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                      />
+                      <Trash
+                        onClick={handleDelete}
+                        data-tooltip-id="default-tooltip"
+                        data-tooltip-content="Xóa"
+                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                      />
+                    </>
+                  )}
                   <Chevron
                     className={`${
                       open ? 'rotate-180' : ''
-                    } transform transition duration-75`}
+                    } w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transform transition duration-75`}
                   />
                 </div>
               </div>

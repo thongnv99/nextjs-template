@@ -11,7 +11,12 @@ import { QUESTION_TYPE } from 'global';
 import { useSWRWrapper } from 'hooks/swr';
 import { QuestionRes } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
+import PaginationBar from 'components/PaginationBar';
 const QuestionTypeOptions = [
+  {
+    label: 'Tất cả',
+    value: '',
+  },
   {
     label: 'Trắc nghiệm',
     value: QUESTION_TYPE.MULTIPLE_CHOICE,
@@ -25,6 +30,21 @@ const QuestionTypeOptions = [
     value: QUESTION_TYPE.ESSAY,
   },
 ];
+
+const SampleOptions = [
+  {
+    label: 'Tất cả',
+    value: '',
+  },
+  {
+    label: 'Câu hỏi mẫu',
+    value: 'true',
+  },
+  {
+    label: 'Câu hỏi thường',
+    value: 'false',
+  },
+];
 type Props = {};
 
 const QuestionMgmt = (props: Props) => {
@@ -32,15 +52,22 @@ const QuestionMgmt = (props: Props) => {
   const router = useRouter();
   const { lng } = useParams();
   const [type, setType] = useState('');
+  const [sample, setSample] = useState('');
+  const [currPage, setCurrPage] = useState(1);
 
   const { data, isLoading, mutate } = useSWRWrapper<QuestionRes>(
-    `/api/v1/questions?type=${type}`,
+    `/api/v1/questions?type=${type}&page=${currPage}&isSample=${sample}`,
     {
       url: '/api/v1/questions',
       params: {
         ...(!isBlank(type) && {
           type,
         }),
+        ...(!isBlank(sample) && {
+          isSample: sample === 'true',
+        }),
+        page: currPage,
+        limit: 10,
       },
     },
   );
@@ -69,12 +96,12 @@ const QuestionMgmt = (props: Props) => {
         </button>
       </div>
       <div className="h-[4.4rem] px-5 my-4 flex gap-2">
-        <div className="max-w-lg">
+        {/* <div className="max-w-lg">
           <TextInput
             leadingIcon={<Search />}
             placeholder="Nhập nội dung câu hỏi"
           />
-        </div>
+        </div> */}
         <div className="max-w-lg flex-1">
           <Dropdown
             placeholder="Loại câu hỏi"
@@ -84,12 +111,29 @@ const QuestionMgmt = (props: Props) => {
             onChange={value => setType(value)}
           />
         </div>
+        <div className="max-w-lg flex-1">
+          <Dropdown
+            placeholder="Câu hỏi mẫu"
+            className="w-full"
+            options={SampleOptions}
+            selected={sample}
+            onChange={value => setSample(value)}
+          />
+        </div>
       </div>
       <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
           <QuestionItem key={item.id} data={item} onRefresh={handleRefresh} />
         ))}
+        <div className="mt-auto">
+          <PaginationBar
+            page={currPage}
+            onChangePage={setCurrPage}
+            totalPages={data?.pagination.totalPage ?? 0}
+          />
+        </div>
       </div>
+      <div></div>
     </Loader>
   );
 };

@@ -3,6 +3,15 @@ const nextConfig = {
   env: {
     BASE_API_URL: process.env.BASE_API_URL,
   },
+  async redirects() {
+    return [
+      {
+        source: '/vi/customer',
+        destination: '/vi/customer/question',
+        permanent: true,
+      },
+    ];
+  },
   rewrites() {
     return [{
       source: '/',// ^(?!.*(?:vi|en)).*$

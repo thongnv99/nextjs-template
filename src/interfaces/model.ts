@@ -37,6 +37,7 @@ export interface IQuestion {
   type: QUESTION_TYPE;
   level: QUESTION_LEVEL;
   content: string;
+  isSample?: boolean;
   answerExplain?: string;
   correctOption?: string;
   options?: string[];

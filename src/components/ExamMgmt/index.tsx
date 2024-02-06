@@ -11,6 +11,7 @@ import { useParams, useRouter } from 'next/navigation';
 import ExamItem from 'components/ExamItem';
 import ModalProvider from 'components/ModalProvider';
 import ExamForm from 'components/ExamForm';
+import PaginationBar from 'components/PaginationBar';
 
 type Props = {};
 
@@ -22,6 +23,7 @@ const ExamMgmt = (props: Props) => {
   const router = useRouter();
   const { lng } = useParams();
   const [type, setType] = useState('');
+  const [currPage, setCurrPage] = useState(1);
 
   const { data, isLoading, mutate } = useSWRWrapper<ExamRes>(`/api/v1/exams`, {
     url: '/api/v1/exams',
@@ -29,6 +31,8 @@ const ExamMgmt = (props: Props) => {
       // ...(!isBlank(type) && {
       //   type,
       // }),
+      page: currPage,
+      limit: 10,
     },
     revalidateOnFocus: false,
   });
@@ -78,6 +82,13 @@ const ExamMgmt = (props: Props) => {
         {data?.items.map(item => (
           <ExamItem key={item.id} data={item} onRefresh={handleRefresh} />
         ))}
+        <div className="mt-auto">
+          <PaginationBar
+            page={currPage}
+            onChangePage={setCurrPage}
+            totalPages={data?.pagination.totalPage ?? 0}
+          />
+        </div>
       </div>
 
       <ModalProvider

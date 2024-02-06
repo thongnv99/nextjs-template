@@ -2,7 +2,7 @@ import { Disclosure, Transition } from '@headlessui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import Trash from 'assets/svg/trash.svg';
 import Edit from 'assets/svg/edit.svg';
-import Copy from 'assets/svg/copy.svg';
+import Link from 'assets/svg/external-link.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IExam, IQuestion } from 'interfaces';
 import { METHOD, QUESTION_TYPE } from 'global';
@@ -16,7 +16,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Calendar from 'assets/svg/calendar.svg';
 import HelpCircle from 'assets/svg/help-circle.svg';
 import Layer from 'assets/svg/3-layers.svg';
-import Star from 'assets/svg/star.svg';
+import Badge from 'components/Badge';
 
 type Props = { data: IExam; onRefresh(): void };
 
@@ -73,10 +73,18 @@ const ExamItem = (props: Props) => {
           <div className="w-full flex flex-col">
             <div className="flex items-center justify-between p-4 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
               <div className="flex flex-col justify-between items-start">
-                <div
-                  className="text-base text-left text-gray-900 font-semibold mb-2"
-                  dangerouslySetInnerHTML={{ __html: props.data.title }}
-                ></div>
+                <div className="flex">
+                  <div
+                    className="text-base text-left text-gray-900 font-semibold mb-2"
+                    dangerouslySetInnerHTML={{ __html: props.data.title }}
+                  ></div>
+                  {props.data.isSample && (
+                    <Badge
+                      content="Mẫu"
+                      className="bg-primary-100 text-primary-500 ml-4 -translate-y-[0.8rem] text-[1rem]"
+                    />
+                  )}
+                </div>
                 <div className="text-sm flex items-center gap-4 text-gray-500 font-normal">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-[1.6rem] h-[1.6rem]" />{' '}
@@ -96,25 +104,31 @@ const ExamItem = (props: Props) => {
                     <HelpCircle className="w-[1.6rem] h-[1.6rem]" />{' '}
                     <div>{`${questionCount} câu hỏi`} </div>
                   </div>
-                  {/* <div className="flex items-center gap-2">
-                    <Star className="w-[1.6rem] h-[1.6rem]" />{' '}
-                    <div>10 điểm</div>
-                  </div> */}
                 </div>
               </div>
               <div className="flex gap-6">
-                <Copy
+                <Link
+                  data-tooltip-id="default-tooltip"
+                  data-tooltip-content="Thi"
                   onClick={handleCopy}
                   className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                 />
-                <Edit
-                  onClick={handleEdit}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                <Trash
-                  onClick={handleDelete}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
+                {!props.data.isSample && (
+                  <>
+                    <Edit
+                      data-tooltip-id="default-tooltip"
+                      data-tooltip-content="Sửa"
+                      onClick={handleEdit}
+                      className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                    />
+                    <Trash
+                      data-tooltip-id="default-tooltip"
+                      data-tooltip-content="Xóa"
+                      onClick={handleDelete}
+                      className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                    />
+                  </>
+                )}
               </div>
             </div>
             <ModalProvider show={modalDelete}>

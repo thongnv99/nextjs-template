@@ -5,8 +5,9 @@ import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { TRIGGER_SESSION_TIMEOUT } from 'store/key';
 import { SWRConfig, mutate } from 'swr';
+import { Tooltip } from 'react-tooltip';
 import { setYupLocale } from 'utils/validator';
-
+import 'react-tooltip/dist/react-tooltip.css';
 type Props = {
   children?: React.ReactNode;
   lng?: string;
@@ -31,6 +32,7 @@ export const ClientProvider = ({ children, lng }: Props) => {
       }}
     >
       {status === 'loading' ? <Preload /> : children}
+      <Tooltip id="default-tooltip" />
     </SWRConfig>
   );
 };
