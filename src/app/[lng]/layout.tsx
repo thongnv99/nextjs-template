@@ -25,7 +25,7 @@ const Layout = ({ children, lng }: { children: ReactNode; lng: string }) => {
       <head />
       <body suppressHydrationWarning={true}>
         <ClientProvider lng={lng}>{children}</ClientProvider>
-        <ToastContainer autoClose={3000} />
+        <ToastContainer autoClose={2000} />
         <SessionTimeout />
       </body>
     </html>

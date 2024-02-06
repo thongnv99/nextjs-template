@@ -25,16 +25,16 @@ const FlashCardStatusOptions = [
     value: '',
   },
   {
-    label: 'Chưa xem',
+    label: 'Yêu thích',
+    value: FLASH_CARD_STATUS.REVIEW_AGAIN,
+  },
+  {
+    label: 'Chưa thuộc',
     value: FLASH_CARD_STATUS.UNREVIEW,
   },
   {
-    label: 'Đã xem',
+    label: 'Đã thuộc',
     value: FLASH_CARD_STATUS.REVIEWED,
-  },
-  {
-    label: 'Cần xem lại',
-    value: FLASH_CARD_STATUS.REVIEW_AGAIN,
   },
 ];
 
@@ -45,7 +45,7 @@ const FlashCard = (props: Props) => {
   const [viewModal, setViewModal] = useState({ show: false, currentIdx: 0 });
   const [status, setStatus] = useState('');
   const { data, isLoading, mutate } = useFlashCard(status);
-  console.log("Kiểm tra data", data)
+  console.log('Kiểm tra data', data);
   const timer = useRef<NodeJS.Timeout>();
 
   const handleCreateClick = () => {
@@ -159,9 +159,6 @@ const FlashCard = (props: Props) => {
               flashCards={data?.items ?? []}
               currentIdx={viewModal.currentIdx}
             />
-            <div className="absolute bottom-0 left-0 w-full p-2 flex items-center justify-center text-primary-500">
-              Click để lật flashcard
-            </div>
           </div>
         </div>
       </Transition>

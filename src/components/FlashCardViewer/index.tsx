@@ -1,33 +1,101 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.scss';
 import { useKeenSlider, TrackDetails } from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
 import { IFlashCard } from 'interfaces';
 import Left from 'assets/svg/chevron-left.svg';
 import Right from 'assets/svg/chevron-right.svg';
+import { useMutation } from 'hooks/swr';
+import { FLASH_CARD_STATUS, METHOD } from 'global';
 
 const FlipCard = ({ data }: { data: IFlashCard }) => {
   const [active, setActive] = useState(false);
+  const [status, setStatus] = useState(data.status);
+  const { trigger: updateFlashCard } = useMutation(
+    'FLASH_CARD_UPDATE_FLASH_CARD',
+    {
+      url: '/api/v1/flashcards/{flashcardId}',
+      method: METHOD.PUT,
+      notification: {
+        title: 'Cập nhật flash card',
+        content: 'Cập nhật flash card thành công.',
+      },
+      onSuccess() {
+        // props.onClose();
+        // props.onRefresh();
+      },
+    },
+  );
+
+  const changeStatus = (status: FLASH_CARD_STATUS) => {
+    console.log({
+      status,
+      flashcardId: data.id,
+    });
+    updateFlashCard({
+      status,
+      flashcardId: data.id,
+    });
+    setStatus(status);
+  };
   const toggleActive = () => {
     setActive(!active);
   };
+
   return (
-    <div
-      className={`flip-card w-full cursor-pointer relative h-full  bg-white rounded-2xl ${
-        active ? 'active' : ''
-      }`}
-      onClick={toggleActive}
-    >
-      <div className="flip-card-inner">
+    <div className="bg-[#2B308B] rounded-2xl flex flex-col h-full w-full">
+      <div
+        className={`flip-card w-full cursor-pointer bg-[#2B308B] relative flex-1    ${
+          active ? 'active' : ''
+        }`}
+        onClick={toggleActive}
+      >
+        <div className="flip-card-inner">
+          <div
+            className="flip-card-front text-[4rem] flex items-center justify-center rounded-2xl"
+            dangerouslySetInnerHTML={{ __html: data.question }}
+          ></div>
+          <div
+            className="flip-card-back text-[4rem] flex items-center justify-center rounded-2xl"
+            dangerouslySetInnerHTML={{ __html: data.answer }}
+          ></div>
+        </div>
+      </div>
+      <div className="flex justify-center items-center gap-4 mt-8">
         <div
-          className="flip-card-front text-[4rem] flex items-center justify-center rounded-2xl"
-          dangerouslySetInnerHTML={{ __html: data.question }}
-        ></div>
+          className={`px-4 py-2 bg-gray-200 cursor-pointer rounded-sm ${
+            status === FLASH_CARD_STATUS.REVIEW_AGAIN
+              ? '!bg-yellow-500 text-white'
+              : ''
+          }`}
+          onClick={() => changeStatus(FLASH_CARD_STATUS.REVIEW_AGAIN)}
+        >
+          Yêu thích
+        </div>
         <div
-          className="flip-card-back text-[4rem] flex items-center justify-center rounded-2xl"
-          dangerouslySetInnerHTML={{ __html: data.answer }}
-        ></div>
+          className={`px-4 py-2 bg-gray-200 cursor-pointer rounded-sm ${
+            status === FLASH_CARD_STATUS.UNREVIEW
+              ? '!bg-red-500 text-white'
+              : ''
+          }`}
+          onClick={() => changeStatus(FLASH_CARD_STATUS.UNREVIEW)}
+        >
+          Chưa thuộc
+        </div>
+        <div
+          className={`px-4 py-2 bg-gray-200 cursor-pointer rounded-sm ${
+            status === FLASH_CARD_STATUS.REVIEWED
+              ? '!bg-green-500 text-white'
+              : ''
+          }`}
+          onClick={() => changeStatus(FLASH_CARD_STATUS.REVIEWED)}
+        >
+          Đã thuộc
+        </div>
+      </div>
+      <div className="w-full p-2 flex items-center justify-center text-gray-100">
+        Click để lật flashcard
       </div>
     </div>
   );
