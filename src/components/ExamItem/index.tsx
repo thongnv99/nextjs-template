@@ -16,6 +16,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Calendar from 'assets/svg/calendar.svg';
 import HelpCircle from 'assets/svg/help-circle.svg';
 import Layer from 'assets/svg/3-layers.svg';
+import FileText from 'assets/svg/file-text.svg';
 import Badge from 'components/Badge';
 
 type Props = { data: IExam; onRefresh(): void };
@@ -44,9 +45,13 @@ const ExamItem = (props: Props) => {
     event.stopPropagation();
     router.push(`/${lng}/customer/exam/config/${props.data.id}`);
   };
-  const handleCopy = (event: MouseEvent) => {
+  const handleDoExam = (event: MouseEvent) => {
     event.stopPropagation();
     router.push(`/${lng}/customer/exam/do-exam/${props.data.id}`);
+  };
+  const handleViewHistory = (event: MouseEvent) => {
+    event.stopPropagation();
+    router.push(`/${lng}/customer/exam/history/${props.data.id}`);
   };
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();
@@ -110,7 +115,13 @@ const ExamItem = (props: Props) => {
                 <Link
                   data-tooltip-id="default-tooltip"
                   data-tooltip-content="Thi"
-                  onClick={handleCopy}
+                  onClick={handleDoExam}
+                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                />
+                <FileText
+                  data-tooltip-id="default-tooltip"
+                  data-tooltip-content="Lịch sử"
+                  onClick={handleViewHistory}
                   className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                 />
                 {!props.data.isSample && (
