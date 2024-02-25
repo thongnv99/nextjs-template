@@ -76,7 +76,6 @@ interface QuestionFormProps {
 const QuestionForm = (props: QuestionFormProps) => {
   const router = useRouter();
   const componentId = useRef(uuid());
-  console.log(props.questionId);
   const { data } = useSWRWrapper<IQuestion>(
     props.questionId ? `/api/v1/questions/${props.questionId}` : null,
     {
@@ -120,6 +119,18 @@ const QuestionForm = (props: QuestionFormProps) => {
         correctOption: String(data.correctOption),
         blankPositions: [],
       };
+      if (values.type === QUESTION_TYPE.FILL_IN_THE_BLANK) {
+        const container = document.createElement('div');
+        container.innerHTML = values.content ?? '';
+        const codes = container.getElementsByTagName('code');
+        for (let i = 0; i < codes.length; i++) {
+          const mention = codes.item(i);
+          if (mention) {
+            mention.innerHTML = data.blankPositions?.[i].answer ?? '';
+          }
+        }
+        values.content = container.innerHTML;
+      }
       formRef.current?.setValues({
         ...formRef.current.values,
         ...values,
@@ -157,6 +168,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         const mention = codes.item(i);
         if (mention) {
           blankPositions.push({ answer: mention.innerHTML });
+          mention.innerHTML = `[(${i + 1})]`;
         }
       }
       payload = {
@@ -164,7 +176,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         level: values.level,
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
-        content: values.content,
+        content: container.innerHTML,
         blankPositions: blankPositions ?? [],
       };
     }

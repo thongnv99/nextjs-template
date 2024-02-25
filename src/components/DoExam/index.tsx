@@ -2,8 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DoQuestion from './DoQuestion';
 import { useMutation, useSWRWrapper } from 'hooks/swr';
-import { DoExamRes, IExam, IPart, SubmitExamRes } from 'interfaces';
-import { METHOD } from 'global';
+import { DoExamRes, IExam, IPart, IQuestion, SubmitExamRes } from 'interfaces';
+import { METHOD, QUESTION_TYPE } from 'global';
 import TimeViewer, { TimeViewerHandle } from 'components/TimeViewer';
 import Preload from 'components/Preload';
 import { Formik } from 'formik';
@@ -18,6 +18,7 @@ const DoExam = (props: { examId: string }) => {
   const [modalNext, setModalNext] = useState(false);
   const router = useRouter();
   const { lng } = useParams();
+  const [expModal, setExpModal] = useState(false);
   const { data: examData } = useSWRWrapper<IExam>(
     `/api/v1/exams/${props.examId}`,
     {
@@ -73,7 +74,7 @@ const DoExam = (props: { examId: string }) => {
       sessionId: exam?.result?.sessionId,
       answersByPart: values.parts?.map((part, idx) => ({
         part: idx,
-        answers: part.questions.map(question => question.answer),
+        answers: part.questions.map(question => question.answer ?? ''),
       })),
     });
   };
@@ -127,6 +128,14 @@ const DoExam = (props: { examId: string }) => {
       </div>
     );
   }
+
+  const checkQuestionFinished = (question: IQuestion) => {
+    if (question.type !== QUESTION_TYPE.FILL_IN_THE_BLANK) {
+      return !isBlank(question.answer as string);
+    }
+
+    return (question.answer as string[])?.every(item => !isBlank(item));
+  };
 
   return (
     <Loader id={componentId.current} className=" w-full max-w-screen-lg m-auto">
@@ -182,11 +191,15 @@ const DoExam = (props: { examId: string }) => {
                 </div>
               )}
             </div>
-            <div className="min-w-[30rem] border border-gray-200 p-4 rounded-md ">
+            <div className="min-w-[30rem] border border-gray-200 p-4 rounded-md h-fit sticky top-0 right-0">
               <div className="w-full mb-4">
+                <div>Thời gian còn lại</div>
                 <TimeViewer
                   initTime={values.parts?.[values.currentPart]?.duration ?? 0}
                   ref={timerController}
+                  onExp={() => {
+                    setExpModal(true);
+                  }}
                 />
               </div>
               <button className="btn-primary w-full mb-8" type="submit">
@@ -200,7 +213,7 @@ const DoExam = (props: { examId: string }) => {
                     {part?.questions.map((item, idx) => (
                       <div
                         className={` border ${
-                          !isBlank(item.answer) ? 'bg-gray-200' : ''
+                          checkQuestionFinished(item) ? 'bg-gray-200' : ''
                         } aspect-square border-gray-200 w-full flex items-center justify-center rounded-[50%]`}
                         key={idx}
                       >
@@ -215,8 +228,9 @@ const DoExam = (props: { examId: string }) => {
               <ConfirmModal
                 onConfirm={() => {
                   timerController.current?.setTime(
-                    values.parts?.[values.currentPart]?.duration ?? 0,
+                    values.parts?.[values.currentPart + 1]?.duration ?? 0,
                   );
+                  timerController.current?.startCount();
                   setFieldValue('currentPart', values.currentPart + 1);
                   setModalNext(false);
                 }}
@@ -224,6 +238,34 @@ const DoExam = (props: { examId: string }) => {
                 onCancel={() => setModalNext(false)}
                 title="Chuyển phần tiếp theo"
                 content="Sau khi chuyển sang phần tiếp theo bạn sẽ không được quay lại. Bạn có muốn tiếp tục không?"
+              />
+            </ModalProvider>
+            <ModalProvider show={expModal} onClose={() => {}}>
+              <ConfirmModal
+                onConfirm={() => {
+                  if (values.currentPart < (values.parts?.length ?? 0) - 1) {
+                    timerController.current?.setTime(
+                      values.parts?.[values.currentPart + 1]?.duration ?? 0,
+                    );
+                    timerController.current?.startCount();
+                    setFieldValue('currentPart', values.currentPart + 1);
+                    setExpModal(false);
+                  } else {
+                    handleSubmit();
+                  }
+                }}
+                labelConfirm={
+                  values.currentPart < (values.parts?.length ?? 0) - 1
+                    ? 'Xác nhận'
+                    : 'Nộp bài'
+                }
+                type="warning"
+                title="Hết thời gian"
+                content={
+                  values.currentPart < (values.parts?.length ?? 0) - 1
+                    ? `Thời gian làm bài phần ${values.currentPart + 1} đã hết`
+                    : 'Thời gian làm bài đã hết'
+                }
               />
             </ModalProvider>
           </form>

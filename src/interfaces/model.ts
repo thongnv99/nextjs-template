@@ -48,7 +48,8 @@ export interface IQuestion {
   };
   source?: string;
   createdAt: number;
-  answer?: string;
+  answer?: string | string[];
+  blankPositions?: { answer: string }[];
 }
 
 export interface IResponseDefault {

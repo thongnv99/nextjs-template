@@ -34,9 +34,15 @@ const ConfirmModal = (props: NoticeModalProps) => {
         dangerouslySetInnerHTML={{ __html: t(props.content ?? '')! }}
       ></div>
       <div className="w-full flex gap-2">
-        <button className="btn  !w-full" type="button" onClick={props.onCancel}>
-          {t('Đóng')}
-        </button>
+        {props.onCancel && (
+          <button
+            className="btn  !w-full"
+            type="button"
+            onClick={props.onCancel}
+          >
+            {t('Đóng')}
+          </button>
+        )}
         <button
           className="btn btn-primary !w-full"
           type="button"
