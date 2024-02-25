@@ -218,7 +218,7 @@ const QuestionForm = (props: QuestionFormProps) => {
           initialValues={{
             level: QUESTION_LEVEL.EASY,
             type: QUESTION_TYPE.MULTIPLE_CHOICE,
-            options: ['', '', ''],
+            options: ['', '', '', ''],
             content: '',
             correctOption: '0',
             blanks: {},

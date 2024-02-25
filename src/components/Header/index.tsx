@@ -10,6 +10,10 @@ import './style.scss';
 
 const NavConfig = [
   {
+    label: 'Đề thi',
+    route: '/exam',
+  },
+  {
     label: 'Câu hỏi',
     route: '/question',
     children: [
@@ -23,14 +27,6 @@ const NavConfig = [
       },
     ],
   },
-  {
-    label: 'Đề thi',
-    route: '/exam',
-  },
-  // {
-  //   label: 'Cuộc thi',
-  //   route: '/competition',
-  // },
   {
     label: 'Flash card',
     route: '/flash-card',

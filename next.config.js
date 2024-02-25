@@ -2,17 +2,18 @@
 const nextConfig = {
   env: {
     BASE_API_URL: process.env.BASE_API_URL,
+    FETCH_COUNT: Number(process.env.FETCH_COUNT ?? 20),
   },
   async redirects() {
     return [
       {
         source: '/vi/customer',
-        destination: '/vi/customer/question',
+        destination: '/vi/customer/exam',
         permanent: true,
       },
       {
         source: '/vi',
-        destination: '/vi/customer/question',
+        destination: '/vi/customer/exam',
         permanent: true,
       },
     ];
@@ -24,7 +25,7 @@ const nextConfig = {
     },
     {
       source: '/vi',// ^(?!.*(?:vi|en)).*$
-      destination: '/vi/customer/question',
+      destination: '/vi/customer/exam',
     }];
   },
   reactStrictMode: false,

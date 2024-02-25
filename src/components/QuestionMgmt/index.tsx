@@ -67,7 +67,7 @@ const QuestionMgmt = (props: Props) => {
           isSample: sample === 'true',
         }),
         page: currPage,
-        limit: 10,
+        limit: 20,
       },
     },
   );
@@ -85,7 +85,7 @@ const QuestionMgmt = (props: Props) => {
       loading={isLoading}
       className="h-full w-full border border-gray-200 rounded-lg max-w-screen-lg m-auto flex flex-col shadow-sm"
     >
-      <div className="px-5 py-6 flex items-center justify-between">
+      <div className="p-5 pb-0 flex items-center justify-between">
         <div className="text-lg font-semibold">Danh sách câu hỏi</div>
         <button
           type="button"
@@ -95,15 +95,10 @@ const QuestionMgmt = (props: Props) => {
           <Plus /> Thêm câu hỏi
         </button>
       </div>
-      <div className="h-[4.4rem] px-5 my-4 flex gap-2">
-        {/* <div className="max-w-lg">
-          <TextInput
-            leadingIcon={<Search />}
-            placeholder="Nhập nội dung câu hỏi"
-          />
-        </div> */}
+      <div className="px-5 mb-4 flex gap-2">
         <div className="max-w-lg flex-1">
           <Dropdown
+            label="Loại câu hỏi"
             placeholder="Loại câu hỏi"
             className="w-full"
             options={QuestionTypeOptions}
@@ -113,6 +108,7 @@ const QuestionMgmt = (props: Props) => {
         </div>
         <div className="max-w-lg flex-1">
           <Dropdown
+            label="Câu hỏi mẫu"
             placeholder="Câu hỏi mẫu"
             className="w-full"
             options={SampleOptions}
