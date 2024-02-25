@@ -14,6 +14,10 @@ const NavConfig = [
     route: '/exam',
   },
   {
+    label: 'Cuộc thi',
+    route: '/contest',
+  },
+  {
     label: 'Câu hỏi',
     route: '/question',
     children: [

@@ -61,26 +61,27 @@ export interface IExam {
   createdAt: number;
 }
 
-export interface IPart {
-  duration: number;
-  questions: IQuestion[];
-}
-
-export interface ICompetition {
+export interface IContest {
   id: string;
   title: string;
   description: string;
   startTime: number;
   endTime: number;
-  parts: IPart[];
   status: string;
+  createdAt: number;
+  parts: IPart[];
 }
+export interface IPart {
+  duration: number;
+  questions: IQuestion[];
+}
+
 export type BlogListRes = ArrayResponse<IBlog>;
 
 export type FlashCardRes = ArrayResponse<IFlashCard>;
 export type QuestionRes = ArrayResponse<IQuestion>;
 export type ExamRes = ArrayResponse<IExam>;
-export type CompetitionRes = ArrayResponse<ICompetition>;
+export type ContestRes = ArrayResponse<IContest>;
 
 export interface DoExamRes {
   sessionId: string;

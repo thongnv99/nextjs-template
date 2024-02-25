@@ -1,48 +1,45 @@
 import Loader from 'components/Loader';
 import TextInput from 'elements/TextInput';
-import { Formik,FormikProps } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import React, { useRef } from 'react';
 import { isBlank, uuid } from 'utils/common';
 import Dropdown from 'elements/Dropdown';
 import { useMutation } from 'hooks/swr';
 import { METHOD } from 'global';
 import { useSWRConfig } from 'swr';
-import { ICompetition,IResponseDefault } from 'interfaces';
+import { IContest, IResponseDefault } from 'interfaces';
 
 import * as yup from 'yup';
 type AddExamForm = {
-    data?: ICompetition; // for edit
-    onClose(): void;
-    onRefresh(): void;
-  };
-  
+  data?: IContest; // for edit
+  onClose(): void;
+  onRefresh(): void;
+};
 
 interface AddExamFormValues {
-    title:string,
-    description:string,
-
-    
+  title: string;
+  description: string;
 }
-const AddExamForm =(props: AddExamForm)=>{
+const AddExamForm = (props: AddExamForm) => {
   const componentId = useRef(uuid());
-  const CategoriesExam=[
+  const CategoriesExam = [
     {
-        label:'Đề thi 2023',
-        value:1
+      label: 'Đề thi 2023',
+      value: 1,
     },
     {
-        label:'Đề thi 2024',
-        value:2
+      label: 'Đề thi 2024',
+      value: 2,
     },
     {
-        label:'Đề thi 2019',
-        value:3
+      label: 'Đề thi 2019',
+      value: 3,
     },
     {
-        label:'Đề thi 2018',
-        value:4
+      label: 'Đề thi 2018',
+      value: 4,
     },
-  ]
+  ];
   const { trigger: createCompetition } = useMutation(
     'COMPETITION_CREATE_COMPETITION',
     {
@@ -78,27 +75,25 @@ const AddExamForm =(props: AddExamForm)=>{
     },
   );
   const handleSubmit = (values: AddExamFormValues) => {
-    if(props.data){
+    if (props.data) {
       updateCompetition({
-        contestId:props.data?.id,
-        title:values.title,
-        description:values.description
-      })
-    }
-    else {
+        contestId: props.data?.id,
+        title: values.title,
+        description: values.description,
+      });
+    } else {
       createCompetition({
-        title:values.title,
-        description:values.description
-      })
+        title: values.title,
+        description: values.description,
+      });
     }
-    
   };
   const schema = yup.object().shape({
     title: yup.string().label('Tên cuộc thi').required(),
   });
 
   return (
-    <Loader id={componentId.current}  className="w-screen max-w-screen-md p-6">
+    <Loader id={componentId.current} className="w-screen max-w-screen-md p-6">
       <div className="flex flex-col mb-5">
         <div className="text-lg font-bold text-gray-900">Tạo cuộc thi</div>
         <div className="text-sm font-normal text-gray-500">
@@ -109,8 +104,8 @@ const AddExamForm =(props: AddExamForm)=>{
         validationSchema={schema}
         onSubmit={handleSubmit}
         initialValues={{
-          title:props.data?.title??'',
-          description:props.data?.description??'',
+          title: props.data?.title ?? '',
+          description: props.data?.description ?? '',
         }}
       >
         {({
@@ -120,7 +115,7 @@ const AddExamForm =(props: AddExamForm)=>{
           touched,
           errors,
           handleSubmit,
-          setFieldValue
+          setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
             <TextInput
@@ -156,7 +151,7 @@ const AddExamForm =(props: AddExamForm)=>{
                 onBlur={handleBlur}
               />
             </div> */}
-            
+
             {/* <Dropdown
                 options={CategoriesExam?.map((item:any)=>{
                     return {
@@ -173,7 +168,7 @@ const AddExamForm =(props: AddExamForm)=>{
                     setFieldValue('exam', value)
                 }
             /> */}
-           {/* Chọn đề thi <Đang thiếu > */}
+            {/* Chọn đề thi <Đang thiếu > */}
             <TextInput
               label="Mô tả"
               name="description"
@@ -204,4 +199,4 @@ const AddExamForm =(props: AddExamForm)=>{
     </Loader>
   );
 };
-export default AddExamForm
+export default AddExamForm;

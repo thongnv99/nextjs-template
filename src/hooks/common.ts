@@ -6,9 +6,11 @@ import {
   IBlog,
   PaymentMethodRes,
   PaymentPackageRes,
-  ICompetition,
+  IContest,
 } from 'interfaces';
 import { isBlank } from 'utils/common';
+import { User } from 'next-auth';
+import { ACCOUNT_PROFILE_INFO } from 'store/key';
 
 export const usePaymentMethod = () => {
   return useSWRWrapper<PaymentMethodRes>('/api/v1/paymentMethods', {
@@ -63,11 +65,20 @@ export const useFlashCard = (status: string) => {
 };
 
 //lấy danh sách cuộc thi hiện tại
-export const useCompetition=()=>{
-  return useSWRWrapper<ICompetition>(`api/v1/contests`,{
-    url:'/api/v1/contests',
-    method:METHOD.GET,
+export const useCompetition = () => {
+  return useSWRWrapper<IContest>(`api/v1/contests`, {
+    url: '/api/v1/contests',
+    method: METHOD.GET,
     revalidateOnFocus: false,
     refreshInterval: 0,
-  })
-}
+  });
+};
+
+export const useUserInfo = () => {
+  return useSWRWrapper<{ user: User }>(ACCOUNT_PROFILE_INFO, {
+    url: '/api/v1/verifyAccessToken',
+    method: METHOD.POST,
+    revalidateOnFocus: false,
+    auth: true,
+  });
+};

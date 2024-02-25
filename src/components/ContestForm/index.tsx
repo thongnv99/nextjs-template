@@ -3,47 +3,49 @@ import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
 import { METHOD } from 'global';
 import { useMutation } from 'hooks/swr';
-import { IExam, IFlashCard } from 'interfaces';
+import { IContest, IFlashCard } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
-import { FLASH_CARD_QUERY_LIST } from 'store/key';
 import { useSWRConfig } from 'swr';
 import { isBlank, uuid } from 'utils/common';
 
-type ExamFormProps = {
-  data?: IExam; // for edit
+type ContestFormProps = {
+  data?: IContest; // for edit
   onClose(): void;
   onRefresh(): void;
 };
 
-interface FlashCardInput {
+interface ContestInput {
   title: string;
   description: string;
+  startTime?: string;
+  endTime?: string;
 }
 
-const ExamForm = (props: ExamFormProps) => {
+const ContestForm = (props: ContestFormProps) => {
   const componentId = useRef(uuid());
+  const { mutate } = useSWRConfig();
   const router = useRouter();
   const { lng } = useParams();
-  const { trigger: createExam } = useMutation<Record<string, unknown>>(
-    'EXAM_CREATE_EXAM',
+  const { trigger: createContest } = useMutation<Record<string, unknown>>(
+    'EXAM_CREATE_CONTEST',
     {
-      url: '/api/v1/exams',
+      url: '/api/v1/contests',
       method: METHOD.POST,
       componentId: componentId.current,
       loading: true,
       notification: {
-        title: 'Thêm đề thi',
-        content: 'Thêm đề thi thành công.',
+        title: 'Thêm cuộc thi',
+        content: 'Thêm cuộc thi thành công.',
       },
       onSuccess(data) {
         props.onClose();
-        router.push(`/${lng}/customer/exam/config/${data?.result?.id}`);
+        router.push(`/${lng}/customer/contest/config/${data?.result?.id}`);
       },
     },
   );
-  const { trigger: updateExam } = useMutation('EXAM_UPDATE_EXAM', {
-    url: '/api/v1/exams/{examId}',
+  const { trigger: updateContest } = useMutation('EXAM_UPDATE_CONTEST', {
+    url: '/api/v1/contests/{contestId}',
     method: METHOD.PUT,
     componentId: componentId.current,
     loading: true,
@@ -56,22 +58,31 @@ const ExamForm = (props: ExamFormProps) => {
       props.onRefresh();
     },
   });
-  const handleSubmit = (values: FlashCardInput) => {
+  const handleSubmit = (values: ContestInput) => {
     if (props.data) {
-      updateExam({
+      updateContest({
         ...values,
-        examId: props.data.id,
+        contestId: props.data.id,
       });
     } else {
-      createExam(values as unknown as Record<string, unknown>);
+      createContest({
+        ...values,
+        status: 'DRAFT',
+        ...(values.startTime && {
+          startTime: new Date(values.startTime).getTime(),
+        }),
+        ...(values.endTime && {
+          endTime: new Date(values.endTime).getTime(),
+        }),
+      });
     }
   };
   return (
     <Loader id={componentId.current} className="w-screen max-w-screen-md p-6">
       <div className="flex flex-col mb-5">
-        <div className="text-lg font-bold text-gray-900">Đề thi</div>
+        <div className="text-lg font-bold text-gray-900">Cuộc thi</div>
         <div className="text-sm font-normal text-gray-500">
-          Nhập tên và mô tả cho đề thi
+          Nhập thông tin cho cuộc thi
         </div>
       </div>
       <Formik
@@ -94,13 +105,39 @@ const ExamForm = (props: ExamFormProps) => {
               label="Tên"
               name="title"
               className="mb-3"
-              placeholder="Tên đề thi..."
+              placeholder="Tên cuộc thi..."
               value={values.title}
               onChange={handleChange}
               onBlur={handleBlur}
               hasError={touched.title && !isBlank(errors.title)}
               errorMessage={errors.title}
             />
+            <div className="flex gap-3">
+              <TextInput
+                label="Bắt đầu"
+                name="startTime"
+                className="mb-3 flex-1"
+                type="date"
+                placeholder="Thời gian bắt đầu"
+                value={values.startTime}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                hasError={touched.startTime && !isBlank(errors.startTime)}
+                errorMessage={errors.startTime}
+              />
+              <TextInput
+                label="Kết thúc"
+                name="endTime"
+                type="date"
+                className="mb-3 flex-1"
+                placeholder="Thời gian kết thúc"
+                value={values.endTime}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                hasError={touched.endTime && !isBlank(errors.endTime)}
+                errorMessage={errors.endTime}
+              />
+            </div>
             <TextInput
               label="Mô tả"
               name="description"
@@ -132,4 +169,4 @@ const ExamForm = (props: ExamFormProps) => {
   );
 };
 
-export default ExamForm;
+export default ContestForm;

@@ -2,7 +2,7 @@
 import Loader from 'components/Loader';
 import Preload from 'components/Preload';
 import { useMutation, useSWRWrapper } from 'hooks/swr';
-import { IExam, IPart, IQuestion } from 'interfaces';
+import { IContest, IExam, IPart, IQuestion } from 'interfaces';
 import React, { useRef, useState } from 'react';
 import ArrowRight from 'assets/svg/chevron-right.svg';
 import Edit from 'assets/svg/edit-2.svg';
@@ -17,8 +17,10 @@ import { METHOD } from 'global';
 import { uuid } from 'utils/common';
 import TextInput from 'elements/TextInput';
 import Close from 'assets/svg/x-circle.svg';
+import ContestForm from 'components/ContestForm';
 interface ExamConfigProps {
   examId: string;
+  isContest?: boolean;
 }
 
 interface ExamConfigValues {
@@ -39,23 +41,31 @@ const ExamConfig = (props: ExamConfigProps) => {
     data: exam,
     isLoading,
     mutate,
-  } = useSWRWrapper<IExam>(`/api/v1/exams/${props.examId}`, {
-    url: `/api/v1/exams/${props.examId}`,
-  });
+  } = useSWRWrapper<IExam | IContest>(
+    `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
+    {
+      url: `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
+    },
+  );
 
-  const { trigger: updateExam } = useMutation(`/api/v1/exams/${props.examId}`, {
-    url: '/api/v1/exams/{examId}',
-    method: METHOD.PUT,
-    componentId: componentId.current,
-    loading: true,
-    notification: {
-      title: 'Cập nhật đề thi',
-      content: 'Cập nhật đề thi thành công.',
+  const { trigger: updateExam } = useMutation(
+    `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
+    {
+      url: `/api/v1/${props.isContest ? 'contests' : 'exams'}/{examId}`,
+      method: METHOD.PUT,
+      componentId: componentId.current,
+      loading: true,
+      notification: {
+        title: props.isContest ? 'Cập nhật cuộc thi' : 'Cập nhật đề thi',
+        content: props.isContest
+          ? 'Cập nhật cuộc thi thành công.'
+          : 'Cập nhật đề thi thành công.',
+      },
+      onSuccess() {
+        router.push(`/${lng}/customer/${props.isContest ? 'contest' : 'exam'}`);
+      },
     },
-    onSuccess() {
-      router.push(`/${lng}/customer/exam`);
-    },
-  });
+  );
 
   const handleSubmit = (values: ExamConfigValues) => {
     updateExam({
@@ -97,7 +107,7 @@ const ExamConfig = (props: ExamConfigProps) => {
               router.push(`/${lng}/customer/exam`);
             }}
           >
-            Đề thi
+            {props.isContest ? 'Cuộc thi' : 'Đề thi'}
           </div>
           <ArrowRight />
           <div className="flex">
@@ -229,11 +239,19 @@ const ExamConfig = (props: ExamConfigProps) => {
         </Formik>
       </div>
       <ModalProvider show={titleModal} onClose={() => setTitleModal(false)}>
-        <ExamForm
-          data={exam}
-          onClose={() => setTitleModal(false)}
-          onRefresh={mutate}
-        />
+        {props.isContest ? (
+          <ContestForm
+            data={exam as IContest}
+            onClose={() => setTitleModal(false)}
+            onRefresh={mutate}
+          />
+        ) : (
+          <ExamForm
+            data={exam as IExam}
+            onClose={() => setTitleModal(false)}
+            onRefresh={mutate}
+          />
+        )}
       </ModalProvider>
       <ModalProvider
         show={questionModal.show}

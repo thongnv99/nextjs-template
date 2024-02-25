@@ -14,15 +14,15 @@ import { useParams, useRouter } from 'next/navigation';
 import ModalProvider from 'components/ModalProvider';
 import ConfirmModal from 'components/ConfirmModal';
 
-const DoExam = (props: { examId: string }) => {
+const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const [modalNext, setModalNext] = useState(false);
   const router = useRouter();
   const { lng } = useParams();
   const [expModal, setExpModal] = useState(false);
   const { data: examData } = useSWRWrapper<IExam>(
-    `/api/v1/exams/${props.examId}`,
+    `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
     {
-      url: `/api/v1/exams/${props.examId}`,
+      url: `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
     },
   );
   const componentId = useRef(uuid());
@@ -57,19 +57,23 @@ const DoExam = (props: { examId: string }) => {
   const timerController = useRef<TimeViewerHandle>();
 
   useEffect(() => {
-    trigger({
-      source: 'EXAM',
-      examId: props.examId,
-    });
+    trigger(
+      props.isContest
+        ? {
+            source: 'CONTEST',
+            contestId: props.examId,
+          }
+        : {
+            source: 'EXAM',
+            examId: props.examId,
+          },
+    );
   }, [props.examId, trigger]);
-
-  console.log({ exam });
 
   const handleSubmit = (values: {
     parts: IPart[] | undefined;
     currentPart: number;
   }) => {
-    console.log(values);
     submitExam({
       sessionId: exam?.result?.sessionId,
       answersByPart: values.parts?.map((part, idx) => ({
