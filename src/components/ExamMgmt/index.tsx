@@ -61,23 +61,6 @@ const ExamMgmt = (props: Props) => {
           <Plus /> Thêm đề thi
         </button>
       </div>
-      {/* <div className="h-[4.4rem] px-5 my-4 flex gap-2">
-        <div className="max-w-lg">
-          <TextInput
-            leadingIcon={<Search />}
-            placeholder="Nhập nội dung câu hỏi"
-          />
-        </div>
-        <div className="max-w-lg flex-1">
-          <Dropdown
-            placeholder="Loại câu hỏi"
-            className="w-full"
-            options={QuestionTypeOptions}
-            selected={type}
-            onChange={value => setType(value)}
-          />
-        </div>
-      </div> */}
       <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
           <ExamItem key={item.id} data={item} onRefresh={handleRefresh} />
