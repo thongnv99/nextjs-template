@@ -25,16 +25,12 @@ const FlashCardStatusOptions = [
     value: '',
   },
   {
-    label: 'Yêu thích',
-    value: FLASH_CARD_STATUS.REVIEW_AGAIN,
-  },
-  {
     label: 'Chưa thuộc',
-    value: FLASH_CARD_STATUS.UNREVIEW,
+    value: FLASH_CARD_STATUS.UNLEARNED,
   },
   {
     label: 'Đã thuộc',
-    value: FLASH_CARD_STATUS.REVIEWED,
+    value: FLASH_CARD_STATUS.LEARNED,
   },
 ];
 
@@ -45,7 +41,6 @@ const FlashCard = (props: Props) => {
   const [viewModal, setViewModal] = useState({ show: false, currentIdx: 0 });
   const [status, setStatus] = useState('');
   const { data, isLoading, mutate } = useFlashCard(status);
-  console.log('Kiểm tra data', data);
   const timer = useRef<NodeJS.Timeout>();
 
   const handleCreateClick = () => {
