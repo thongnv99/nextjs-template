@@ -141,7 +141,7 @@ export const vietnameseWithoutAccent = (alias: string) => {
 // encode decode
 export const encodeUrl = (blog?: IBlog, lng?: LANG) => {
   const title =
-    lng == LANG.EN && !isBlank(blog?.title) ? blog?.title : blog?.title;
+    lng == LANG.JA && !isBlank(blog?.title) ? blog?.title : blog?.title;
 
   return `${vietnameseWithoutAccent(title ?? '')
     .toLowerCase()

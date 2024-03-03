@@ -4,5 +4,14 @@
   "N_3": "{{field}} phải nhỏ hơn hoặc bằng {{value}}",
   "N_4": "{{field}} phải lớn hơn {{value}}",
   "N_5": "{{field}} phải nhỏ hơn {{value}}",
+  "J_1": "Đề thi",
+  "J_2": "Cuộc thi",
+  "J_3": "Câu hỏi",
+  "J_4": "Tạo  câu hỏi",
+  "J_5": "Flash card",
+  "J_6": "Blog",
+  "J_7": "Quản lý blog",
+  "J_8": "Tạo blog",
+  "J_9": "",
   "title": "Xin chào!"
 }

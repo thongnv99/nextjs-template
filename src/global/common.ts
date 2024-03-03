@@ -26,7 +26,7 @@ export enum GENDER {
 
 export enum LANG {
   VI = 'vi',
-  EN = 'en',
+  JA = 'ja',
 }
 
 export enum FLASH_CARD_STATUS {
@@ -48,12 +48,11 @@ export enum QUESTION_LEVEL {
 }
 //Status COMPETITION
 export enum COMPETITION_STATUS {
-  HAPPENNING='HAPPENNING',
-  END='END'
+  HAPPENNING = 'HAPPENNING',
+  END = 'END',
 }
 
 export enum EXAM_STATUS {
-  DRAFT='DRAFT',
-  PUBLISH='PUBLISH',
-
+  DRAFT = 'DRAFT',
+  PUBLISH = 'PUBLISH',
 }

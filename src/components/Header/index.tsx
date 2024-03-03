@@ -2,80 +2,82 @@
 import React from 'react';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
-import LanguagePicker from 'components/LanguagePicker';
+import LanguagePicker from 'components/LangPicker';
 import UserDropdown from 'components/UserDropdown';
 import { useParams, usePathname } from 'next/navigation';
 import ArrowDown from 'assets/svg/chevron-down.svg';
 import './style.scss';
+import { useTranslation } from 'app/i18n/client';
 
 const NavConfig = [
   {
-    label: 'Đề thi',
+    label: 'J_1',
     route: '/exam',
   },
   {
-    label: 'Cuộc thi',
+    label: 'J_2',
     route: '/contest',
   },
   {
-    label: 'Câu hỏi',
+    label: 'J_3',
     route: '/question',
     children: [
       {
-        label: 'Câu hỏi',
+        label: 'J_3',
         route: '/question',
       },
       {
-        label: 'Tạo  câu hỏi',
+        label: 'J_4',
         route: '/question/question-form',
       },
     ],
   },
   {
-    label: 'Flash card',
+    label: 'J_5',
     route: '/flash-card',
   },
   {
-    label: 'Blog',
+    label: 'J_6',
     route: '/blog',
     children: [
       {
-        label: 'Blogs',
+        label: 'J_6',
         route: '/blog',
       },
       {
-        label: 'Quản lý blog',
+        label: 'J_7',
         route: '/blog/blog-management',
       },
       {
-        label: 'Tạo blog',
+        label: 'J_8',
         route: '/blog/blog-form',
       },
     ],
   },
-  {
-    label: 'Thanh toán',
-    route: '/payment',
-    children: [
-      {
-        label: 'Thanh toán',
-        route: '/payment',
-      },
-      {
-        label: 'Lịch sử thanh toán',
-        route: '/payment/history',
-      },
-    ],
-  },
+  // {
+  //   label: 'Thanh toán',
+  //   route: '/payment',
+  //   children: [
+  //     {
+  //       label: 'Thanh toán',
+  //       route: '/payment',
+  //     },
+  //     {
+  //       label: 'Lịch sử thanh toán',
+  //       route: '/payment/history',
+  //     },
+  //   ],
+  // },
 ];
 const Header = () => {
   const { data } = useSession();
   const { lng } = useParams();
   const pathName = usePathname();
+  const { t } = useTranslation();
 
   return (
     <header className="header h-[6rem] w-full  px-4 flex justify-between items-center shadow-sm">
-      <div>Japanese Example</div>
+      <div>JE</div>
       <nav className="h-full flex items-center">
         {NavConfig.map((item, idx) => (
           <div className={`relative h-full nav `} key={idx}>
@@ -87,7 +89,7 @@ const Header = () => {
               }`}
               href={`/${lng}/customer${item.route}`}
             >
-              {item.label}
+              {t(item.label)}
               {item.children?.length && <ArrowDown className="ml-1" />}
             </Link>
             {item.children?.length && (
@@ -98,7 +100,7 @@ const Header = () => {
                     key={idx}
                     href={`/${lng}/customer${subRoute.route}`}
                   >
-                    {subRoute.label}
+                    {t(subRoute.label)}
                   </Link>
                 ))}
               </div>
