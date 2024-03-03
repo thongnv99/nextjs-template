@@ -1,6 +1,8 @@
 'use client';
+import Badge from 'components/Badge';
 import Checkbox from 'elements/CheckBox';
 import { Formik, FormikProps } from 'formik';
+import { QUESTION_TYPE_TRANSLATE } from 'global/translate';
 import { useSWRWrapper } from 'hooks/swr';
 import { IQuestion, QuestionRes } from 'interfaces';
 import React, { useLayoutEffect, useRef, useState } from 'react';
@@ -69,9 +71,24 @@ const QuestionPicker = (props: QuestionPickerProps) => {
                   key={question.id}
                   className="flex border border-primary-400 rounded-[0.8rem] p-4 justify-between"
                 >
-                  <div
-                    dangerouslySetInnerHTML={{ __html: question.content }}
-                  ></div>
+                  <div className="flex">
+                    <div
+                      dangerouslySetInnerHTML={{ __html: question.content }}
+                    ></div>
+                    <div className="flex">
+                      {question.isSample && (
+                        <Badge
+                          content="Mẫu"
+                          className="bg-green-100 text-green-500 ml-4 -translate-y-[0.8rem] text-[1rem]"
+                        />
+                      )}
+
+                      <Badge
+                        content={QUESTION_TYPE_TRANSLATE[question.type] ?? ''}
+                        className="bg-red-100 text-red-500 ml-4 -translate-y-[0.8rem] text-[1rem]"
+                      />
+                    </div>
+                  </div>
                   <div>
                     <Checkbox
                       selected={values.selected.includes(question.id)}

@@ -30,9 +30,8 @@ export enum LANG {
 }
 
 export enum FLASH_CARD_STATUS {
-  UNREVIEW = 'UNREVIEW',
-  REVIEWED = 'REVIEWED',
-  REVIEW_AGAIN = 'REVIEW_AGAIN',
+  UNLEARNED = 'UNLEARNED',
+  LEARNED = 'LEARNED',
 }
 
 export enum QUESTION_TYPE {

@@ -63,7 +63,7 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
         </div>
       </div>
       <div className="flex justify-center items-center gap-4 mt-8">
-        <div
+        {/* <div
           className={`px-4 py-2 bg-gray-200 cursor-pointer rounded-sm ${
             status === FLASH_CARD_STATUS.REVIEW_AGAIN
               ? '!bg-yellow-500 text-white'
@@ -72,24 +72,24 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
           onClick={() => changeStatus(FLASH_CARD_STATUS.REVIEW_AGAIN)}
         >
           Yêu thích
-        </div>
+        </div> */}
         <div
           className={`px-4 py-2 bg-gray-200 cursor-pointer rounded-sm ${
-            status === FLASH_CARD_STATUS.UNREVIEW
+            status === FLASH_CARD_STATUS.UNLEARNED
               ? '!bg-red-500 text-white'
               : ''
           }`}
-          onClick={() => changeStatus(FLASH_CARD_STATUS.UNREVIEW)}
+          onClick={() => changeStatus(FLASH_CARD_STATUS.UNLEARNED)}
         >
           Chưa thuộc
         </div>
         <div
           className={`px-4 py-2 bg-gray-200 cursor-pointer rounded-sm ${
-            status === FLASH_CARD_STATUS.REVIEWED
+            status === FLASH_CARD_STATUS.LEARNED
               ? '!bg-green-500 text-white'
               : ''
           }`}
-          onClick={() => changeStatus(FLASH_CARD_STATUS.REVIEWED)}
+          onClick={() => changeStatus(FLASH_CARD_STATUS.LEARNED)}
         >
           Đã thuộc
         </div>
