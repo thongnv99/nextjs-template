@@ -20,7 +20,7 @@ import FileText from 'assets/svg/file-text.svg';
 import Badge from 'components/Badge';
 import { useUserInfo } from 'hooks/common';
 
-type Props = { data: IContest; onRefresh(): void };
+type Props = { data: IContest; onRefresh(): void; compact?: boolean };
 
 const ContestItem = (props: Props) => {
   const { data: userInfo } = useUserInfo();
@@ -104,22 +104,24 @@ const ContestItem = (props: Props) => {
                   )}
                 </div>
                 <div className="text-sm flex items-center gap-4 text-gray-500 font-normal">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-[1.6rem] h-[1.6rem]" />{' '}
-                    <div>
-                      {`${formatDateToString(
-                        props.data.startTime
-                          ? new Date(props.data.startTime)
-                          : new Date(),
-                        'dd/MM/yyyy',
-                      )} - ${formatDateToString(
-                        props.data.endTime
-                          ? new Date(props.data.endTime)
-                          : new Date(),
-                        'dd/MM/yyyy',
-                      )}`}
+                  {!props.compact && (
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-[1.6rem] h-[1.6rem]" />{' '}
+                      <div>
+                        {`${formatDateToString(
+                          props.data.startTime
+                            ? new Date(props.data.startTime)
+                            : new Date(),
+                          'dd/MM/yyyy',
+                        )} - ${formatDateToString(
+                          props.data.endTime
+                            ? new Date(props.data.endTime)
+                            : new Date(),
+                          'dd/MM/yyyy',
+                        )}`}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="flex items-center gap-2">
                     <Layer className="w-[1.6rem] h-[1.6rem]" />{' '}
                     <div>{`${props.data.parts.length} phần thi`} </div>
@@ -130,36 +132,38 @@ const ContestItem = (props: Props) => {
                   </div>
                 </div>
               </div>
-              <div className="flex gap-6">
-                <Link
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Thi"
-                  onClick={handleDoExam}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                <FileText
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Lịch sử"
-                  onClick={handleViewHistory}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                {userInfo?.user.role === ROLES.ADMIN && (
-                  <>
-                    <Edit
-                      data-tooltip-id="default-tooltip"
-                      data-tooltip-content="Sửa"
-                      onClick={handleEdit}
-                      className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                    />
-                    <Trash
-                      data-tooltip-id="default-tooltip"
-                      data-tooltip-content="Xóa"
-                      onClick={handleDelete}
-                      className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                    />
-                  </>
-                )}
-              </div>
+              {!props.compact && (
+                <div className="flex gap-6">
+                  <Link
+                    data-tooltip-id="default-tooltip"
+                    data-tooltip-content="Thi"
+                    onClick={handleDoExam}
+                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                  />
+                  <FileText
+                    data-tooltip-id="default-tooltip"
+                    data-tooltip-content="Lịch sử"
+                    onClick={handleViewHistory}
+                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                  />
+                  {userInfo?.user.role === ROLES.ADMIN && (
+                    <>
+                      <Edit
+                        data-tooltip-id="default-tooltip"
+                        data-tooltip-content="Sửa"
+                        onClick={handleEdit}
+                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                      />
+                      <Trash
+                        data-tooltip-id="default-tooltip"
+                        data-tooltip-content="Xóa"
+                        onClick={handleDelete}
+                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                      />
+                    </>
+                  )}
+                </div>
+              )}
             </div>
             <ModalProvider show={modalDelete}>
               <Loader id={componentId.current}>

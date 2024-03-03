@@ -121,13 +121,6 @@ const QuestionMgmt = (props: Props) => {
         {data?.items.map(item => (
           <QuestionItem key={item.id} data={item} onRefresh={handleRefresh} />
         ))}
-        <div className="mt-auto">
-          <PaginationBar
-            page={currPage}
-            onChangePage={setCurrPage}
-            totalPages={data?.pagination.totalPage ?? 0}
-          />
-        </div>
       </div>
       <div></div>
     </Loader>

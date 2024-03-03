@@ -13,9 +13,9 @@ import ModalProvider from 'components/ModalProvider';
 import ExamForm from 'components/ExamForm';
 import PaginationBar from 'components/PaginationBar';
 
-type Props = {};
+type Props = { compact?: boolean };
 
-const ExamMgmt = (props: Props) => {
+const ExamMgmt = ({ compact }: Props) => {
   const componentId = useRef(uuid());
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
     show: false,
@@ -53,13 +53,15 @@ const ExamMgmt = (props: Props) => {
     >
       <div className="px-5 py-6 flex items-center justify-between">
         <div className="text-lg font-semibold">Danh sách đề thi</div>
-        <button
-          type="button"
-          className="btn-primary btn-icon"
-          onClick={handleCreateExam}
-        >
-          <Plus /> Thêm đề thi
-        </button>
+        {!compact && (
+          <button
+            type="button"
+            className="btn-primary btn-icon"
+            onClick={handleCreateExam}
+          >
+            <Plus /> Thêm đề thi
+          </button>
+        )}
       </div>
       {/* <div className="h-[4.4rem] px-5 my-4 flex gap-2">
         <div className="max-w-lg">
@@ -80,15 +82,20 @@ const ExamMgmt = (props: Props) => {
       </div> */}
       <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
-          <ExamItem key={item.id} data={item} onRefresh={handleRefresh} />
+          <ExamItem
+            compact
+            key={item.id}
+            data={item}
+            onRefresh={handleRefresh}
+          />
         ))}
-        <div className="mt-auto">
+        {/* <div className="mt-auto">
           <PaginationBar
             page={currPage}
             onChangePage={setCurrPage}
             totalPages={data?.pagination.totalPage ?? 0}
           />
-        </div>
+        </div> */}
       </div>
 
       <ModalProvider

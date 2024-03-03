@@ -14,7 +14,7 @@ import ContestForm from 'components/ContestForm';
 import PaginationBar from 'components/PaginationBar';
 import { useUserInfo } from 'hooks/common';
 
-const ContestMgmt = () => {
+const ContestMgmt = ({ compact }: { compact?: boolean }) => {
   const { data: userInfo } = useUserInfo();
   const componentId = useRef(uuid());
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
@@ -55,8 +55,10 @@ const ContestMgmt = () => {
       className="h-full w-full border border-gray-200 rounded-lg max-w-screen-lg m-auto flex flex-col shadow-sm"
     >
       <div className="px-5 py-6 flex items-center justify-between">
-        <div className="text-lg font-semibold">Danh sách cuộc thi</div>
-        {userInfo?.user.role === ROLES.ADMIN && (
+        <div className="text-lg font-semibold">
+          {compact ? 'Cuộc thi' : 'Danh sách cuộc thi'}
+        </div>
+        {!compact && userInfo?.user.role === ROLES.ADMIN && (
           <button
             type="button"
             className="btn-primary btn-icon"
@@ -68,15 +70,20 @@ const ContestMgmt = () => {
       </div>
       <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
-          <ContestItem key={item.id} data={item} onRefresh={handleRefresh} />
+          <ContestItem
+            compact
+            key={item.id}
+            data={item}
+            onRefresh={handleRefresh}
+          />
         ))}
-        <div className="mt-auto">
+        {/* <div className="mt-auto">
           <PaginationBar
             page={currPage}
             onChangePage={setCurrPage}
             totalPages={data?.pagination.totalPage ?? 0}
           />
-        </div>
+        </div> */}
       </div>
 
       <ModalProvider

@@ -19,7 +19,7 @@ import Layer from 'assets/svg/3-layers.svg';
 import FileText from 'assets/svg/file-text.svg';
 import Badge from 'components/Badge';
 
-type Props = { data: IExam; onRefresh(): void };
+type Props = { data: IExam; onRefresh(): void; compact?: boolean };
 
 const ExamItem = (props: Props) => {
   const router = useRouter();
@@ -111,36 +111,38 @@ const ExamItem = (props: Props) => {
                   </div>
                 </div>
               </div>
-              <div className="flex gap-6">
-                <Link
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Thi"
-                  onClick={handleDoExam}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                <FileText
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Lịch sử"
-                  onClick={handleViewHistory}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                {!props.data.isSample && (
-                  <>
-                    <Edit
-                      data-tooltip-id="default-tooltip"
-                      data-tooltip-content="Sửa"
-                      onClick={handleEdit}
-                      className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                    />
-                    <Trash
-                      data-tooltip-id="default-tooltip"
-                      data-tooltip-content="Xóa"
-                      onClick={handleDelete}
-                      className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                    />
-                  </>
-                )}
-              </div>
+              {!props.compact && (
+                <div className="flex gap-6">
+                  <Link
+                    data-tooltip-id="default-tooltip"
+                    data-tooltip-content="Thi"
+                    onClick={handleDoExam}
+                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                  />
+                  <FileText
+                    data-tooltip-id="default-tooltip"
+                    data-tooltip-content="Lịch sử"
+                    onClick={handleViewHistory}
+                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                  />
+                  {!props.data.isSample && (
+                    <>
+                      <Edit
+                        data-tooltip-id="default-tooltip"
+                        data-tooltip-content="Sửa"
+                        onClick={handleEdit}
+                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                      />
+                      <Trash
+                        data-tooltip-id="default-tooltip"
+                        data-tooltip-content="Xóa"
+                        onClick={handleDelete}
+                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                      />
+                    </>
+                  )}
+                </div>
+              )}
             </div>
             <ModalProvider show={modalDelete}>
               <Loader id={componentId.current}>

@@ -15,6 +15,7 @@
     "@types/highcharts": "^7.0.0",
     "@types/http-proxy": "^1.17.14",
     "@types/react-window": "^1.8.8",
+    "@types/react-window-infinite-loader": "^1.0.9",
     "accept-language": "^3.0.18",
     "ag-grid-community": "^31.0.0",
     "ag-grid-react": "^31.0.0",

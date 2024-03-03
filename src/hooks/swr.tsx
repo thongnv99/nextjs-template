@@ -2,6 +2,7 @@ import { METHOD } from 'global';
 import { useSession } from 'next-auth/react';
 import useSWRMutation, { SWRMutationConfiguration } from 'swr/mutation';
 import useSWR, { useSWRConfig } from 'swr';
+import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite';
 import { isBlank, uuid } from 'utils/common';
 import { fetcher, replacePlaceholder } from 'utils/restApi';
 import { NotificationConfig, RestError, RestResponse } from 'interfaces';
@@ -157,3 +158,49 @@ export const useMutation = <T = Record<string, unknown>,>(
     },
   );
 };
+
+export function useSWRInfiniteWrapper<T = Record<string, unknown>>(
+  key: string | null | (() => string | null),
+  {
+    url,
+    method,
+    params,
+    ...options
+  }: {
+    url?: string;
+    method?: METHOD;
+    params?: Record<string, unknown>;
+    auth?: boolean;
+    ignoreKeyParse?: boolean;
+  } & Partial<SWRInfiniteConfiguration<T, RestError>>,
+) {
+  const { data: session } = useSession();
+  let keyParse = typeof key === 'string' ? key : key?.();
+
+  return useSWRInfinite<T>(
+    isBlank(keyParse!) ? null : (keyParse as any),
+    () => {
+      return new Promise((resolve, reject) => {
+        fetcher<T>(
+          url ?? (typeof key === 'string' ? key : key?.()) ?? '',
+          method ?? METHOD.GET,
+          params,
+          {
+            Authorization: `Bearer ${session?.token}`,
+          },
+        )
+          .then(data => {
+            if (data.status) {
+              resolve(data.result!);
+            } else {
+              reject(data);
+            }
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    options,
+  );
+}
