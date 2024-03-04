@@ -77,7 +77,7 @@ const Header = () => {
 
   return (
     <header className="header h-[6rem] w-full  px-4 flex justify-between items-center shadow-sm">
-      <div>JE</div>
+      <Link href={`/${lng}/customer/home`}>JE</Link>
       <nav className="h-full flex items-center">
         {NavConfig.map((item, idx) => (
           <div className={`relative h-full nav `} key={idx}>
