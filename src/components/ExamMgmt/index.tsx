@@ -66,7 +66,7 @@ const ExamMgmt = ({ compact }: Props) => {
       <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
           <ExamItem
-            compact
+            compact={compact}
             key={item.id}
             data={item}
             onRefresh={handleRefresh}
