@@ -72,12 +72,6 @@ const UserMgmtPage = () => {
     setEditModal({ show: true, data });
   };
 
-  const handleConfirmDelete = () => {
-    deleteCompetition({ contestId: confirmDeleteModal.data?.id });
-  };
-  const handleCloseDelete = () => {
-    setConfirmDeleteModal({ show: false });
-  };
   //lấy danh sách cuộc thi hiện tại
   const { data, isLoading, mutate } = useSWRWrapper<ContestRes>(
     `/api/v1/admin/users`,
