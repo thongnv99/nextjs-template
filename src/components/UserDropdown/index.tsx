@@ -1,19 +1,24 @@
+'use client';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import UserIcon from 'assets/svg/users.svg';
 import LockIcon from 'assets/svg/lock.svg';
 import LogOut from 'assets/svg/log-out.svg';
+import ArrowDown from 'assets/svg/chevron-down.svg';
 import avatar from 'assets/png/example-avatar.png';
 import Image from 'next/image';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import ModalProvider from 'components/ModalProvider';
 import ChangePassword from 'components/ChangePassword';
 import ProfileModal from 'components/ProfileModal';
+import { useTranslation } from 'app/i18n/client';
+import { ROLES_TRANSLATE } from 'global/translate';
 
-export default function Example() {
+export const UserDropdown = () => {
+  const { data } = useSession();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showProfileForm, setShowProfileForm] = useState(false);
-
+  const { t } = useTranslation();
   const handleShowPassword = () => {
     setShowPasswordForm(true);
   };
@@ -30,12 +35,21 @@ export default function Example() {
     <div className="">
       <Menu as="div" className="relative inline-block text-left">
         <div>
-          <Menu.Button className="inline-flex w-[4rem] h-[4rem] rounded-[50%] justify-center overflow-hidden">
+          <Menu.Button className=" flex gap-2 items-center">
             <Image
               src={avatar}
               alt="avatar"
-              className="w-full h-full object-cover"
+              className="object-cover inline-flex w-[4rem] h-[4rem] rounded-[50%] justify-center overflow-hidden"
             />
+            <div>
+              <div className="font-bold">{`${data?.user.firstName ?? ''} ${
+                data?.user.lastName ?? ''
+              }`}</div>
+              <div className="text-left text-gray-500">
+                {t(ROLES_TRANSLATE[data?.user.role])}
+              </div>
+            </div>
+            <ArrowDown />
           </Menu.Button>
         </div>
         <Transition
@@ -55,7 +69,7 @@ export default function Example() {
                   className={`${'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <UserIcon className="mr-2 h-5 w-5" />
-                  Thông tin tài khoản
+                  {t('J_16')}
                 </button>
               </Menu.Item>
             </div>
@@ -66,7 +80,7 @@ export default function Example() {
                   className={`${'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <LockIcon className="mr-2 h-5 w-5" />
-                  Đổi mật khẩu
+                  {t('J_17')}
                 </button>
               </Menu.Item>
             </div>
@@ -77,7 +91,7 @@ export default function Example() {
                   onClick={() => signOut()}
                 >
                   <LogOut className="mr-2 h-5 w-5" />
-                  Đăng xuất
+                  {t('J_18')}
                 </button>
               </Menu.Item>
             </div>
@@ -92,4 +106,6 @@ export default function Example() {
       </ModalProvider>
     </div>
   );
-}
+};
+
+export default UserDropdown;

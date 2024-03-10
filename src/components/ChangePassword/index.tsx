@@ -1,3 +1,4 @@
+'use client';
 import { Formik } from 'formik';
 import Lock from 'assets/svg/lock.svg';
 import React, { useRef } from 'react';
@@ -9,6 +10,7 @@ import { ACCOUNT_CHANGE_PASSWORD } from 'store/key';
 import { METHOD } from 'global';
 import * as yup from 'yup';
 import { passwordRegex } from 'global/regex';
+import { useTranslation } from 'app/i18n/client';
 
 interface ChangePasswordForm {
   password?: string;
@@ -17,6 +19,7 @@ interface ChangePasswordForm {
 }
 
 const ChangePassword = (props: { onClose?: () => void }) => {
+  const { t } = useTranslation();
   const componentId = useRef();
   const { trigger } = useMutation(ACCOUNT_CHANGE_PASSWORD, {
     url: '/api/v1/users/changePassword',
@@ -24,8 +27,8 @@ const ChangePassword = (props: { onClose?: () => void }) => {
     loading: true,
     componentId: componentId.current,
     notification: {
-      title: 'Đổi mật khẩu',
-      content: 'Đổi mật khẩu thành công',
+      title: 'J_17',
+      content: 'J_32',
     },
     onSuccess() {
       props.onClose?.();
@@ -38,19 +41,19 @@ const ChangePassword = (props: { onClose?: () => void }) => {
   const schema = yup.object().shape({
     password: yup
       .string()
-      .label('Mật khẩu cũ')
+      .label('J_21')
       .required()
-      .matches(passwordRegex, 'Mật khẩu yếu'),
+      .matches(passwordRegex, 'J_22'),
     newPassword: yup
       .string()
-      .label('Mật khẩu mới')
+      .label('J_33')
       .required()
-      .matches(passwordRegex, 'Mật khẩu yếu'),
+      .matches(passwordRegex, 'J_22'),
     confirmNewPassword: yup
       .string()
-      .label('Xác nhận mật khẩu')
+      .label('J_34')
       .required()
-      .oneOf([yup.ref('newPassword')], 'Xác nhận mật khẩu không khớp'),
+      .oneOf([yup.ref('newPassword')], 'J_35'),
   });
 
   return (
@@ -58,7 +61,7 @@ const ChangePassword = (props: { onClose?: () => void }) => {
       id={componentId.current}
       className="flex flex-col w-[35rem] p-4 pt-5 items-center"
     >
-      <div className="text-lg font-bold mb-8">Đổi mật khẩu</div>
+      <div className="text-lg font-bold mb-8">{t('J_17')}</div>
       <Formik
         validationSchema={schema}
         initialValues={{}}
@@ -75,7 +78,7 @@ const ChangePassword = (props: { onClose?: () => void }) => {
           <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
             <div>
               <TextInput
-                label="Mật khẩu cũ"
+                label="J_21"
                 className="mb-1"
                 name="password"
                 type="password"
@@ -87,12 +90,11 @@ const ChangePassword = (props: { onClose?: () => void }) => {
                 leadingIcon={<Lock />}
               />
               <div className="text-sm font-normal text-gray-500">
-                Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 3 thành phần
-                là chữ hoa, chữ thường, số và ký hiệu đặc biệt.
+                {t('J_36')}
               </div>
             </div>
             <TextInput
-              label="Mật khẩu mới"
+              label="J_33"
               name="newPassword"
               type="password"
               onChange={handleChange}
@@ -103,7 +105,7 @@ const ChangePassword = (props: { onClose?: () => void }) => {
               leadingIcon={<Lock />}
             />
             <TextInput
-              label="Xác nhận mật khẩu mới"
+              label="J_34"
               name="confirmNewPassword"
               type="password"
               value={values.confirmNewPassword}
@@ -118,10 +120,10 @@ const ChangePassword = (props: { onClose?: () => void }) => {
             />
             <div className="flex flex-col gap-3 w-full">
               <button type="submit" className="btn-primary ">
-                Xác nhận
+                {t('C_1')}
               </button>
               <button type="button" className="btn " onClick={props.onClose}>
-                Hủy bỏ
+                {t('C_2')}
               </button>
             </div>
           </form>

@@ -1,18 +1,18 @@
+'use client';
 import { Formik, FormikProps } from 'formik';
-import Lock from 'assets/svg/lock.svg';
 import React, { useEffect, useRef } from 'react';
-import TextInput from 'elements/TextInput';
-import { isBlank } from 'utils/common';
-import Loader from 'components/Loader';
-import { useMutation, useSWRWrapper } from 'hooks/swr';
-import { ACCOUNT_PROFILE_INFO, ACCOUNT_UPDATE_PROFILE } from 'store/key';
-import { GENDER, METHOD } from 'global';
-import * as yup from 'yup';
-import { passwordRegex } from 'global/regex';
-import RadioGroup from 'elements/RadioGroup';
-import { RestResponse } from 'interfaces';
 import { User } from 'next-auth';
+import * as yup from 'yup';
+import { GENDER, METHOD } from 'global';
+import { passwordRegex } from 'global/regex';
+import { ACCOUNT_PROFILE_INFO, ACCOUNT_UPDATE_PROFILE } from 'store/key';
+import { useMutation, useSWRWrapper } from 'hooks/swr';
+import { isBlank } from 'utils/common';
 import { formatDateToString, formatStringToDate } from 'utils/datetime';
+import TextInput from 'elements/TextInput';
+import Loader from 'components/Loader';
+import RadioGroup from 'elements/RadioGroup';
+import { useTranslation } from 'app/i18n/client';
 
 interface UpdateProfileForm {
   firstName?: string;
@@ -24,6 +24,7 @@ interface UpdateProfileForm {
 }
 
 const ProfileModal = (props: { onClose?: () => void }) => {
+  const { t } = useTranslation();
   const componentId = useRef();
   const formRef = useRef<FormikProps<UpdateProfileForm>>();
   const { data: userInfo, isLoading } = useSWRWrapper<{ user: User }>(
@@ -42,8 +43,8 @@ const ProfileModal = (props: { onClose?: () => void }) => {
     loading: true,
     componentId: componentId.current,
     notification: {
-      title: 'Cập nhật thông tin tài khoản',
-      content: 'Cập nhật thông tin tài khoản thành công',
+      title: 'J_19',
+      content: 'J_20',
     },
     onSuccess() {
       props.onClose?.();
@@ -80,11 +81,7 @@ const ProfileModal = (props: { onClose?: () => void }) => {
   };
 
   const schema = yup.object().shape({
-    name: yup
-      .string()
-      .label('Mật khẩu cũ')
-      .required()
-      .matches(passwordRegex, 'Mật khẩu yếu'),
+    name: yup.string().label('J_21').required().matches(passwordRegex, 'J_22'),
   });
 
   return (
@@ -93,7 +90,7 @@ const ProfileModal = (props: { onClose?: () => void }) => {
       loading={isLoading}
       className="flex flex-col w-[35rem] p-4 pt-5 items-center"
     >
-      <div className="text-lg font-bold mb-8">Thông tin tài khoản</div>
+      <div className="text-lg font-bold mb-8">{t('J_16')}</div>
       <Formik
         initialValues={
           {
@@ -125,7 +122,7 @@ const ProfileModal = (props: { onClose?: () => void }) => {
         }) => (
           <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
             <TextInput
-              label="Họ"
+              label="J_23"
               className="mb-1"
               name="name"
               type="text"
@@ -136,7 +133,7 @@ const ProfileModal = (props: { onClose?: () => void }) => {
               errorMessage={errors.lastName}
             />
             <TextInput
-              label="Tên"
+              label="J_24"
               className="mb-1"
               name="name"
               type="text"
@@ -147,7 +144,7 @@ const ProfileModal = (props: { onClose?: () => void }) => {
               errorMessage={errors.firstName}
             />
             <TextInput
-              label="Email"
+              label="J_25"
               className="mb-1"
               name="email"
               type="text"
@@ -160,7 +157,7 @@ const ProfileModal = (props: { onClose?: () => void }) => {
               errorMessage={errors.email}
             />
             <TextInput
-              label="Ngày sinh"
+              label="J_26"
               className="mb-1"
               name="dob"
               type="date"
@@ -171,7 +168,7 @@ const ProfileModal = (props: { onClose?: () => void }) => {
               errorMessage={errors.dob}
             />
             <TextInput
-              label="Số điện thoại"
+              label="J_27"
               className="mb-1"
               name="phoneNumber"
               type="text"
@@ -183,15 +180,15 @@ const ProfileModal = (props: { onClose?: () => void }) => {
             />
             <div className="input-container">
               <label className="input-label" htmlFor="">
-                Giới tính
+                {t('J_28')}
               </label>
               <div className="flex-1 items-center flex">
                 <RadioGroup
                   value={values.gender}
                   onChange={value => setFieldValue('gender', value)}
                   options={[
-                    { label: 'Nam', value: GENDER.MALE },
-                    { label: 'Nữ', value: GENDER.FEMALE },
+                    { label: 'J_29', value: GENDER.MALE },
+                    { label: 'J_30', value: GENDER.FEMALE },
                   ]}
                 />
               </div>
@@ -199,10 +196,10 @@ const ProfileModal = (props: { onClose?: () => void }) => {
 
             <div className="flex flex-col gap-3 w-full">
               <button type="submit" className="btn-primary ">
-                Xác nhận
+                {t('C_1')}
               </button>
               <button type="button" className="btn " onClick={props.onClose}>
-                Hủy bỏ
+                {t('C_2')}
               </button>
             </div>
           </form>
