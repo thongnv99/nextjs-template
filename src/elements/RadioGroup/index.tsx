@@ -8,13 +8,14 @@ interface RadioGroupProps {
   onChange?(value: string | number): void;
   options?: { label: string; value: string }[];
   labelClassName?: string;
+  className?: string;
 }
 
 const RadioGroup = (props: RadioGroupProps) => {
   const { t } = useTranslation();
   return (
     <RadioGroupCmp
-      className="flex radio-group w-full"
+      className={`flex radio-group w-full ${props.className ?? ''}`}
       value={props.value}
       onChange={props.onChange}
     >

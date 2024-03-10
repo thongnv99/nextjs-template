@@ -56,6 +56,7 @@ export interface IExam {
   id: string;
   title: string;
   description: string;
+  duration: number;
   isSample: boolean;
   parts: IPart[];
   createdAt: number;
@@ -101,4 +102,16 @@ export interface SubmitExamRes {
   totalScore: number;
   totalQuestionAchieved: number;
   totalScoreAchieved: number;
+  statAnswer?: {
+    total: number;
+    totalCorrect: number;
+    totalIncorrect: number;
+    totalNotAnswer: number;
+  };
+  statScore?: {
+    total: number;
+    totalCorrect: number;
+    totalIncorrect: number;
+    totalNotAnswer: number;
+  };
 }

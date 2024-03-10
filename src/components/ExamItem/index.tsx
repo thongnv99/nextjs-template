@@ -47,7 +47,7 @@ const ExamItem = (props: Props) => {
   };
   const handleDoExam = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/exam/do-exam/${props.data.id}`);
+    router.push(`/${lng}/exam/${props.data.id}`);
   };
   const handleViewHistory = (event: MouseEvent) => {
     event.stopPropagation();
@@ -75,8 +75,8 @@ const ExamItem = (props: Props) => {
     <Disclosure>
       {({ open }) => {
         return (
-          <div className="w-full flex flex-col">
-            <div className="flex items-center justify-between p-4 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
+          <div className="w-full flex flex-col ">
+            <div className=" hover:bg-primary-50 cursor-pointer flex items-center justify-between p-4 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
               <div className="flex flex-col justify-between items-start">
                 <div className="flex">
                   <div

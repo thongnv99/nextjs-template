@@ -64,6 +64,7 @@ const handler = NextAuth({
           }
           return Promise.reject(data);
         } catch (error) {
+          console.log({ error: `${process.env.BASE_API_URL}/api/v1/login` });
           return Promise.reject(error);
         }
       },

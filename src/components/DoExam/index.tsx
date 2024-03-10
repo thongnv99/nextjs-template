@@ -10,15 +10,29 @@ import { Formik } from 'formik';
 import { isBlank, uuid } from 'utils/common';
 import Loader from 'components/Loader';
 import { formatDateToString } from 'utils/datetime';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import ModalProvider from 'components/ModalProvider';
 import ConfirmModal from 'components/ConfirmModal';
+import { differenceInMinutes, subMinutes } from 'date-fns';
+import PercentChart from 'components/PercentChart';
 
 const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const [modalNext, setModalNext] = useState(false);
   const router = useRouter();
   const { lng } = useParams();
+  const search = useSearchParams();
+  const hasSaveSession = search.get('has-save-session') === 'true';
   const [expModal, setExpModal] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', beforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+    };
+  }, []);
+  const beforeUnload = (event: BeforeUnloadEvent) => {
+    event.preventDefault();
+  };
   const { data: examData } = useSWRWrapper<IExam>(
     `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
     {
@@ -70,10 +84,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     );
   }, [props.examId, trigger]);
 
-  const handleSubmit = (values: {
-    parts: IPart[] | undefined;
-    currentPart: number;
-  }) => {
+  const handleSubmit = (values: { parts: IPart[] | undefined }) => {
     submitExam({
       sessionId: exam?.result?.sessionId,
       answersByPart: values.parts?.map((part, idx) => ({
@@ -87,46 +98,102 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   }
 
   if (result) {
+    const resultData = result.result;
     return (
-      <div className=" w-full max-w-screen-lg m-auto">
+      <div className=" w-full max-w-screen-lg rounded-md border border-gray-200 m-auto bg-white">
         <h1 className="text-center text-[3rem]">Kết quả</h1>
-        <div className="mb-8 rounded-md border border-gray-200 p-4 flex flex-col gap-4">
-          <div className="flex">
-            <div className="min-w-[20rem] text-gray-500">Tên đề thi</div>
-            <div>{examData?.title}</div>
-          </div>
-          <div className="flex">
-            <div className="min-w-[20rem] text-gray-500">Thời gian bắt đầu</div>
-            <div>
-              {result?.result?.startTime
-                ? formatDateToString(new Date(result?.result?.startTime))
-                : '--'}
+        <div className="flex">
+          <div className="mb-8  p-4 flex flex-col gap-4">
+            <div className="flex">
+              <div className="min-w-[20rem] text-gray-500">Tên đề thi</div>
+              <div>{examData?.title}</div>
+            </div>
+            <div className="flex">
+              <div className="min-w-[20rem] text-gray-500">
+                Thời gian bắt đầu
+              </div>
+              <div>
+                {resultData?.startTime
+                  ? formatDateToString(
+                      new Date(resultData?.startTime),
+                      'HH:mm:ss dd/MM/yyyy',
+                    )
+                  : '--'}
+              </div>
+            </div>
+            <div className="flex">
+              <div className="min-w-[20rem] text-gray-500">
+                Thời gian kết thúc
+              </div>
+              <div>
+                {resultData?.endTime
+                  ? formatDateToString(
+                      new Date(resultData?.endTime),
+                      'HH:mm:ss dd/MM/yyyy',
+                    )
+                  : '--'}
+              </div>
+            </div>
+            <div className="flex">
+              <div className="min-w-[20rem] text-gray-500">
+                Thời gian làm bài
+              </div>
+              <div>
+                {resultData?.startTime && resultData?.endTime
+                  ? `${differenceInMinutes(
+                      resultData.endTime,
+                      resultData.startTime,
+                    )} phút`
+                  : ''}
+              </div>
+            </div>
+            <div className="flex">
+              <div className="min-w-[20rem] text-gray-500">Đáp án đúng</div>
+              {resultData?.status === 'FINISHED' ? (
+                <div>
+                  <strong className="text-primary-900">
+                    {resultData.statAnswer?.totalCorrect}
+                  </strong>
+                  /{resultData.statAnswer?.total}
+                </div>
+              ) : (
+                <div>Bài thi cần thời gian để xử lý!</div>
+              )}
+            </div>
+            <div className="flex">
+              <div className="min-w-[20rem] text-gray-500">Điểm</div>
+              {resultData?.status === 'FINISHED' ? (
+                <div>
+                  <strong className="text-primary-900">
+                    {resultData.statScore?.totalCorrect}
+                  </strong>
+                  /{resultData.statScore?.total}
+                </div>
+              ) : (
+                <div>Bài thi cần thời gian để xử lý!</div>
+              )}
+            </div>
+            <div className="flex w-full justify-center">
+              <button
+                type="button"
+                className="btn-primary mt-5 w-fit"
+                onClick={() => {
+                  router.push(`/${lng}/exam`);
+                }}
+              >
+                Đồng ý
+              </button>
             </div>
           </div>
-          <div className="flex">
-            <div className="min-w-[20rem] text-gray-500">
-              Thời gian kết thúc
-            </div>
-            <div>
-              {result?.result?.endTime
-                ? formatDateToString(new Date(result?.result?.endTime))
-                : '--'}
-            </div>
-          </div>
-          <div className="flex">
-            <div className="min-w-[20rem] text-gray-500">Điểm</div>
-            <div>Bài thi cần thời gian để xử lý!</div>
-          </div>
-          <div className="flex w-full justify-center">
-            <button
-              type="button"
-              className="btn-primary mt-5 w-fit"
-              onClick={() => {
-                router.push(`/${lng}/exam`);
+          <div>
+            <PercentChart
+              options={{
+                size: 90,
+                borderWidth: 20,
+                percent: 10,
+                padding: 0,
               }}
-            >
-              Đồng ý
-            </button>
+            />
           </div>
         </div>
       </div>
@@ -150,62 +217,44 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
         onSubmit={handleSubmit}
         initialValues={{
           parts: exam?.result?.parts,
-          currentPart: 0,
         }}
       >
         {({ values, setFieldValue, handleSubmit }) => (
           <form onSubmit={handleSubmit} className="w-full flex  gap-8">
             <div className="flex-1 flex flex-col gap-4 overflow-hidden">
-              {values.parts?.[values.currentPart]?.questions.map(
-                (item, idx) => (
-                  <DoQuestion
-                    answer={item.answer}
-                    onChange={answer =>
-                      setFieldValue(
-                        `parts[${values.currentPart}].questions[${idx}].answer`,
-                        answer,
-                      )
-                    }
-                    key={idx}
-                    question={item}
-                    idx={idx + 1}
-                  />
-                ),
-              )}
-
-              {values.currentPart < (values.parts?.length ?? 0) - 1 && (
-                <div className="w-full flex justify-center">
-                  <button
-                    className="btn"
-                    type="button"
-                    disabled={
-                      values.currentPart + 1 > (values.parts?.length ?? 0)
-                    }
-                    onClick={() => {
-                      if (
-                        values.currentPart <=
-                        (values.parts?.length ?? 0) - 1
-                      ) {
-                        setModalNext(true);
+              {values.parts?.map((part, idx) => (
+                <div key={idx} className="flex flex-col gap-4">
+                  {part?.questions.map((item, questionIdx) => (
+                    <DoQuestion
+                      id={item.id}
+                      answer={item.answer}
+                      onChange={answer =>
+                        setFieldValue(
+                          `parts[${idx}].questions[${questionIdx}].answer`,
+                          answer,
+                        )
                       }
+                      key={questionIdx}
+                      question={item}
+                      idx={questionIdx + 1}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div className="min-w-[30rem] border border-gray-200 p-4 rounded-md h-fit sticky top-0 right-0 bg-white">
+              {!hasSaveSession && (
+                <div className="w-full mb-4">
+                  <div>Thời gian còn lại</div>
+                  <TimeViewer
+                    initTime={examData?.duration ?? 0}
+                    ref={timerController}
+                    onExp={() => {
+                      setExpModal(true);
                     }}
-                  >
-                    Phần tiếp theo
-                  </button>
+                  />
                 </div>
               )}
-            </div>
-            <div className="min-w-[30rem] border border-gray-200 p-4 rounded-md h-fit sticky top-0 right-0">
-              <div className="w-full mb-4">
-                <div>Thời gian còn lại</div>
-                <TimeViewer
-                  initTime={values.parts?.[values.currentPart]?.duration ?? 0}
-                  ref={timerController}
-                  onExp={() => {
-                    setExpModal(true);
-                  }}
-                />
-              </div>
               <button className="btn-primary w-full mb-8" type="submit">
                 Nộp bài
               </button>
@@ -218,8 +267,12 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                       <div
                         className={` border ${
                           checkQuestionFinished(item) ? 'bg-gray-200' : ''
-                        } aspect-square border-gray-200 w-full flex items-center justify-center rounded-[50%]`}
+                        } aspect-square cursor-pointer border-gray-200 w-full flex items-center justify-center rounded-[50%]`}
                         key={idx}
+                        onClick={() => {
+                          const element = document.getElementById(item.id);
+                          element?.scrollIntoView({ behavior: 'smooth' });
+                        }}
                       >
                         {idx + 1}
                       </div>
@@ -228,48 +281,15 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 </div>
               ))}
             </div>
-            <ModalProvider show={modalNext} onClose={() => setModalNext(false)}>
-              <ConfirmModal
-                onConfirm={() => {
-                  timerController.current?.setTime(
-                    values.parts?.[values.currentPart + 1]?.duration ?? 0,
-                  );
-                  timerController.current?.startCount();
-                  setFieldValue('currentPart', values.currentPart + 1);
-                  setModalNext(false);
-                }}
-                type="warning"
-                onCancel={() => setModalNext(false)}
-                title="Chuyển phần tiếp theo"
-                content="Sau khi chuyển sang phần tiếp theo bạn sẽ không được quay lại. Bạn có muốn tiếp tục không?"
-              />
-            </ModalProvider>
             <ModalProvider show={expModal} onClose={() => {}}>
               <ConfirmModal
                 onConfirm={() => {
-                  if (values.currentPart < (values.parts?.length ?? 0) - 1) {
-                    timerController.current?.setTime(
-                      values.parts?.[values.currentPart + 1]?.duration ?? 0,
-                    );
-                    timerController.current?.startCount();
-                    setFieldValue('currentPart', values.currentPart + 1);
-                    setExpModal(false);
-                  } else {
-                    handleSubmit();
-                  }
+                  handleSubmit();
                 }}
-                labelConfirm={
-                  values.currentPart < (values.parts?.length ?? 0) - 1
-                    ? 'Xác nhận'
-                    : 'Nộp bài'
-                }
+                labelConfirm={'Nộp bài'}
                 type="warning"
                 title="Hết thời gian"
-                content={
-                  values.currentPart < (values.parts?.length ?? 0) - 1
-                    ? `Thời gian làm bài phần ${values.currentPart + 1} đã hết`
-                    : 'Thời gian làm bài đã hết'
-                }
+                content={'Thời gian làm bài đã hết'}
               />
             </ModalProvider>
           </form>

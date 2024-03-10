@@ -52,7 +52,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
     <Loader
       id={componentId.current}
       loading={isLoading}
-      className="h-full w-full border border-gray-200 rounded-lg max-w-screen-lg m-auto flex flex-col shadow-sm"
+      className="h-full w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
     >
       <div className="px-5 py-6 flex items-center justify-between">
         <div className="text-lg font-semibold">

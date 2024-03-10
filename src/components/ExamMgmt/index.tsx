@@ -12,10 +12,12 @@ import ExamItem from 'components/ExamItem';
 import ModalProvider from 'components/ModalProvider';
 import ExamForm from 'components/ExamForm';
 import PaginationBar from 'components/PaginationBar';
+import { useTranslation } from 'app/i18n/client';
 
 type Props = { compact?: boolean };
 
 const ExamMgmt = ({ compact }: Props) => {
+  const { t } = useTranslation();
   const componentId = useRef(uuid());
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
     show: false,
@@ -52,14 +54,14 @@ const ExamMgmt = ({ compact }: Props) => {
       className="h-full w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
     >
       <div className="px-5 py-6 flex items-center justify-between">
-        <div className="text-lg font-semibold">Danh sách đề thi</div>
+        <div className="text-lg font-semibold">{t('J_39')}</div>
         {!compact && (
           <button
             type="button"
             className="btn-primary btn-icon"
             onClick={handleCreateExam}
           >
-            <Plus /> Thêm đề thi
+            <Plus /> {t('J_40')}
           </button>
         )}
       </div>

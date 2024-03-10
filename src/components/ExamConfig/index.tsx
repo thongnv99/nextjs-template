@@ -25,6 +25,7 @@ interface ExamConfigProps {
 
 interface ExamConfigValues {
   parts: IPart[];
+  duration?: number;
 }
 
 const ExamConfig = (props: ExamConfigProps) => {
@@ -74,6 +75,7 @@ const ExamConfig = (props: ExamConfigProps) => {
         duration: part.duration,
         questions: part.questions.map(item => item.id),
       })),
+      duration: values.duration,
     });
   };
 
@@ -95,11 +97,8 @@ const ExamConfig = (props: ExamConfigProps) => {
     return <Preload />;
   }
   return (
-    <Loader
-      id={componentId.current}
-      className="h-full w-full   max-w-screen-lg m-auto flex flex-col "
-    >
-      <div className="px-0 py-6 flex items-center justify-between">
+    <Loader id={componentId.current} className="h-full w-full flex flex-col ">
+      <div className="px-0 pb-6 flex items-center justify-between">
         <div className="text-lg font-semibold flex gap-1 items-center">
           <div
             className="text-gray-500 cursor-pointer"
@@ -145,10 +144,20 @@ const ExamConfig = (props: ExamConfigProps) => {
             touched,
           }) => (
             <form className="flex flex-col gap-4">
+              <div className="border rounded-2xl transition-all p-6  bg-white">
+                <TextInput
+                  label="Thời gian (phút)"
+                  name={`duration`}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.duration}
+                  type="number"
+                />
+              </div>
               {values.parts.map((part, idx) => (
                 <div
                   key={idx}
-                  className="border rounded-2xl transition-all p-6  "
+                  className="border rounded-2xl transition-all p-6  bg-white"
                 >
                   <div className="mb-8 flex flex-col  ">
                     <div className="flex w-full items-center justify-between">
@@ -168,14 +177,6 @@ const ExamConfig = (props: ExamConfigProps) => {
                     </div>
                   </div>
                   <div className="flex flex-col w-full gap-4">
-                    <TextInput
-                      label="Thời gian (phút)"
-                      name={`parts[${idx}].duration`}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={part.duration}
-                      type="number"
-                    />
                     <div>
                       <div className="flex w-full items-center justify-between">
                         <div>Danh sách câu hỏi</div>

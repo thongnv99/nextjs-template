@@ -9,6 +9,7 @@ import React from 'react';
 
 const DoQuestion = (props: {
   question?: IQuestion;
+  id: string;
   idx?: number;
   answer?: string | string[];
   onChange(answer: string | string[]): void; // array when type = fill blank
@@ -21,7 +22,10 @@ const DoQuestion = (props: {
   };
 
   return (
-    <div className="rounded-md border border-gray-200 p-4">
+    <div
+      id={props.id}
+      className="rounded-md border border-gray-200 p-4 bg-white"
+    >
       <div className="flex mb-4 gap-4">
         <div>Câu {props.idx}:</div>
         <div
@@ -31,7 +35,9 @@ const DoQuestion = (props: {
       <div>
         {props.question?.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
           <RadioGroup
+            className={'flex-col gap-2'}
             value={props.answer as string}
+            labelClassName={`!text-gray-900`}
             onChange={value => props.onChange(String(value))}
             options={props.question?.options?.map(item => ({
               label: item,
