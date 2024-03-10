@@ -148,7 +148,7 @@ const BlogManagement = () => {
   };
 
   const handleCreateClick = () => {
-    router.push(`/${lng}/customer/blog/blog-form`);
+    router.push(`/${lng}/blog/blog-form`);
   };
 
   const columnDefs: Array<ColDef> = [
@@ -183,7 +183,7 @@ const BlogManagement = () => {
           {
             render: EditBtn,
             onClick: (data: IBlog) => {
-              router.push(`/${lng}/customer/blog/blog-form?id=${data.id}`);
+              router.push(`/${lng}/blog/blog-form?id=${data.id}`);
             },
           },
           {

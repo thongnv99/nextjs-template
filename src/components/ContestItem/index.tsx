@@ -45,15 +45,15 @@ const ContestItem = (props: Props) => {
 
   const handleEdit = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/contest/config/${props.data.id}`);
+    router.push(`/${lng}/contest/config/${props.data.id}`);
   };
   const handleDoExam = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/contest/do-contest/${props.data.id}`);
+    router.push(`/${lng}/contest/do-contest/${props.data.id}`);
   };
   const handleViewHistory = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/contest/history/${props.data.id}`);
+    router.push(`/${lng}/contest/history/${props.data.id}`);
   };
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();

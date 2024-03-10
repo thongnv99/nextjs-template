@@ -37,7 +37,7 @@ export default withAuth(
       !req.nextUrl.pathname.startsWith('/_next')
     ) {
       if (req.nextauth.token == null) {
-        return NextResponse.redirect(new URL(`/${lng}/customer`, req.url));
+        return NextResponse.redirect(new URL(`/${lng}`, req.url));
       }
       return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
     }
@@ -49,7 +49,7 @@ export default withAuth(
         return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
       }
     } else if (req.nextUrl.pathname.startsWith(`/${lng}/login`)) {
-      return NextResponse.redirect(new URL(`/${lng}/customer`, req.url));
+      return NextResponse.redirect(new URL(`/${lng}`, req.url));
     }
     console.log(req.nextUrl.pathname);
 

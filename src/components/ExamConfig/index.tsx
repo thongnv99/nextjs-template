@@ -62,7 +62,7 @@ const ExamConfig = (props: ExamConfigProps) => {
           : 'Cập nhật đề thi thành công.',
       },
       onSuccess() {
-        router.push(`/${lng}/customer/${props.isContest ? 'contest' : 'exam'}`);
+        router.push(`/${lng}/${props.isContest ? 'contest' : 'exam'}`);
       },
     },
   );
@@ -104,7 +104,7 @@ const ExamConfig = (props: ExamConfigProps) => {
           <div
             className="text-gray-500 cursor-pointer"
             onClick={() => {
-              router.push(`/${lng}/customer/exam`);
+              router.push(`/${lng}/exam`);
             }}
           >
             {props.isContest ? 'Cuộc thi' : 'Đề thi'}

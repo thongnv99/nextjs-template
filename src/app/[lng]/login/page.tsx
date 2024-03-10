@@ -55,7 +55,7 @@ const Login = () => {
         email: values?.email,
         password: values?.password,
         redirect: false,
-        callbackUrl: `${window.location.origin}/${lng}/customer`,
+        callbackUrl: `${window.location.origin}/${lng}`,
       });
       if (res?.ok) {
         window.location.reload();

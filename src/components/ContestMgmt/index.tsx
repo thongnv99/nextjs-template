@@ -42,7 +42,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
 
   const handleCreateExam = () => {
     setExamModal({ show: true });
-    // router.push(`/${lng}/customer/question/question-form`);
+    // router.push(`/${lng}/question/question-form`);
   };
 
   const handleRefresh = () => {

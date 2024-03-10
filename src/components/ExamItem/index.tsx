@@ -43,15 +43,15 @@ const ExamItem = (props: Props) => {
 
   const handleEdit = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/exam/config/${props.data.id}`);
+    router.push(`/${lng}/exam/config/${props.data.id}`);
   };
   const handleDoExam = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/exam/do-exam/${props.data.id}`);
+    router.push(`/${lng}/exam/do-exam/${props.data.id}`);
   };
   const handleViewHistory = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/exam/history/${props.data.id}`);
+    router.push(`/${lng}/exam/history/${props.data.id}`);
   };
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();

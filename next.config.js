@@ -7,13 +7,13 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/vi/customer',
-        destination: '/vi/customer/home',
+        source: '/vi',
+        destination: '/vi/home',
         permanent: true,
       },
       {
         source: '/vi',
-        destination: '/vi/customer/home',
+        destination: '/vi/home',
         permanent: true,
       },
     ];
@@ -25,7 +25,7 @@ const nextConfig = {
     },
     {
       source: '/vi',// ^(?!.*(?:vi|en)).*$
-      destination: '/vi/customer/exam',
+      destination: '/vi/exam',
     }];
   },
   reactStrictMode: false,

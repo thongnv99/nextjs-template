@@ -40,7 +40,7 @@ const ContestForm = (props: ContestFormProps) => {
       },
       onSuccess(data) {
         props.onClose();
-        router.push(`/${lng}/customer/contest/config/${data?.result?.id}`);
+        router.push(`/${lng}/contest/config/${data?.result?.id}`);
       },
     },
   );

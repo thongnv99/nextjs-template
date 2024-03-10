@@ -122,7 +122,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
               type="button"
               className="btn-primary mt-5 w-fit"
               onClick={() => {
-                router.push(`/${lng}/customer/exam`);
+                router.push(`/${lng}/exam`);
               }}
             >
               Đồng ý

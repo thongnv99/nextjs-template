@@ -73,7 +73,7 @@ const QuestionMgmt = (props: Props) => {
   );
 
   const handleCreateQuestion = () => {
-    router.push(`/${lng}/customer/question/question-form`);
+    router.push(`/${lng}/question/question-form`);
   };
 
   const handleRefresh = () => {

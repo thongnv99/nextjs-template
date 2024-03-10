@@ -45,11 +45,11 @@ const QuestionItem = (props: Props) => {
 
   const handleEdit = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/question/update-question/${props.data.id}`);
+    router.push(`/${lng}/question/update-question/${props.data.id}`);
   };
   const handleCopy = (event: MouseEvent) => {
     event.stopPropagation();
-    router.push(`/${lng}/customer/question/question-form/${props.data.id}`);
+    router.push(`/${lng}/question/question-form/${props.data.id}`);
   };
   const handleDelete = (event: MouseEvent) => {
     event.stopPropagation();
