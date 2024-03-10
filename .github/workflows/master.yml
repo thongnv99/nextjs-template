@@ -34,5 +34,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            cd ~/application/th-japanese-exam-web/
+            cd ~/application/jcce/jcce-web
             sh deploy.sh

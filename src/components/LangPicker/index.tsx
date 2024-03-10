@@ -9,7 +9,7 @@ import JA from 'assets/svg/ja-flag.svg';
 
 const LangConfig = [
   { name: 'Tiếng Việt', value: LANG.VI, icon: <VI /> },
-  { name: 'Tiếng Anh', value: LANG.JA, icon: <JA /> },
+  { name: 'Tiếng Nhật', value: LANG.JA, icon: <JA /> },
 ];
 
 const LangPicker = (props: { isMobile?: boolean }) => {

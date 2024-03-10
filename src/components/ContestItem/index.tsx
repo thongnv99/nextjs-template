@@ -88,13 +88,14 @@ const ContestItem = (props: Props) => {
     <Disclosure>
       {({ open }) => {
         return (
-          <div className="w-full flex flex-col">
+          <div className="w-full flex flex-col cu">
             <div className="flex items-center justify-between p-4 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
               <div className="flex flex-col justify-between items-start">
                 <div className="flex">
                   <div
-                    className="text-base text-left text-gray-900 font-semibold mb-2"
+                    className="text-base text-left text-gray-900 font-semibold mb-2 cursor-pointer"
                     dangerouslySetInnerHTML={{ __html: props.data.title }}
+                    onClick={handleDoExam as any}
                   ></div>
                   {props.data.status === 'PUBLISH' && (
                     <Badge

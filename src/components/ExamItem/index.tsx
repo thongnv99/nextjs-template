@@ -80,8 +80,9 @@ const ExamItem = (props: Props) => {
               <div className="flex flex-col justify-between items-start">
                 <div className="flex">
                   <div
-                    className="text-base text-left text-gray-900 font-semibold mb-2"
+                    className="text-base text-left text-gray-900 font-semibold mb-2 cursor-pointer"
                     dangerouslySetInnerHTML={{ __html: props.data.title }}
+                    onClick={handleDoExam as any}
                   ></div>
                   {props.data.isSample && (
                     <Badge

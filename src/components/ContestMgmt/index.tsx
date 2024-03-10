@@ -71,7 +71,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
       <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
           <ContestItem
-            compact
+            compact={compact}
             key={item.id}
             data={item}
             onRefresh={handleRefresh}

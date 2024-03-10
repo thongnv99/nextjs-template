@@ -8,12 +8,12 @@ const nextConfig = {
     return [
       {
         source: '/vi/customer',
-        destination: '/vi/customer/exam',
+        destination: '/vi/customer/home',
         permanent: true,
       },
       {
         source: '/vi',
-        destination: '/vi/customer/exam',
+        destination: '/vi/customer/home',
         permanent: true,
       },
     ];
