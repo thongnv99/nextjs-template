@@ -11,6 +11,7 @@ const lexend = Lexend({
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
   subsets: ['latin', 'latin-ext', 'vietnamese'],
+  variable: '--font-lexend',
 });
 
 export async function generateStaticParams() {
@@ -21,7 +22,11 @@ const Layout = ({ children, lng }: { children: ReactNode; lng: string }) => {
   // const { i18n } = useTranslation();
 
   return (
-    <html className={lexend.className} lang={lng} dir={dir(lng)}>
+    <html
+      className={`${lexend.className} ${lexend.variable}`}
+      lang={lng}
+      dir={dir(lng)}
+    >
       <head />
       <body suppressHydrationWarning={true}>
         <ClientProvider lng={lng}>{children}</ClientProvider>

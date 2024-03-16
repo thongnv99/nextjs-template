@@ -23,7 +23,7 @@
     "date-fns": "^2.30.0",
     "focus-formik-error": "^1.1.0",
     "formik": "^2.4.1",
-    "highcharts": "^11.3.0",
+    "highcharts": "^11.4.0",
     "highcharts-react-official": "^3.2.1",
     "http-proxy": "^1.18.1",
     "i18next": "^22.5.0",

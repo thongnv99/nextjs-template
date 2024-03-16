@@ -6,33 +6,32 @@ import { DoExamRes, IExam, IPart, IQuestion, SubmitExamRes } from 'interfaces';
 import { METHOD, QUESTION_TYPE } from 'global';
 import TimeViewer, { TimeViewerHandle } from 'components/TimeViewer';
 import Preload from 'components/Preload';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import { isBlank, uuid } from 'utils/common';
 import Loader from 'components/Loader';
-import { formatDateToString } from 'utils/datetime';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import ModalProvider from 'components/ModalProvider';
 import ConfirmModal from 'components/ConfirmModal';
-import { differenceInMinutes, subMinutes } from 'date-fns';
-import PercentChart from 'components/PercentChart';
 import ExamResult from './ExamResult';
 
 const DoExam = (props: { examId: string; isContest?: boolean }) => {
-  const [modalNext, setModalNext] = useState(false);
   const router = useRouter();
   const { lng } = useParams();
   const search = useSearchParams();
   const hasSaveSession = search.get('has-save-session') === 'true';
+  const sessionId = search.get('session');
   const [expModal, setExpModal] = useState(false);
   const [submitModal, setSubmitModal] = useState({
     show: false,
     hasSaveSession: false,
   });
+  const formRef = useRef<FormikProps<{ parts: IPart[] | undefined }>>();
 
   useEffect(() => {
     window.addEventListener('beforeunload', beforeUnload);
     return () => {
       window.removeEventListener('beforeunload', beforeUnload);
+      formRef.current?.handleSubmit();
     };
   }, []);
   const beforeUnload = (event: BeforeUnloadEvent) => {
@@ -90,10 +89,13 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
         : {
             source: 'EXAM',
             examId: props.examId,
-            hasSaveSession: hasSaveSession,
+            hasSaveSession: !isBlank(sessionId) ? true : hasSaveSession,
+            ...(!isBlank(sessionId) && {
+              examHistoryId: sessionId,
+            }),
           },
     );
-  }, [hasSaveSession, props.examId, props.isContest, trigger]);
+  }, [hasSaveSession, props.examId, props.isContest, sessionId, trigger]);
 
   const onSubmit = (values: { parts: IPart[] | undefined }) => {
     submitExam({
@@ -132,8 +134,15 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
       </div>
       <Formik
         onSubmit={onSubmit}
+        innerRef={instance => (formRef.current = (instance as any)!)}
         initialValues={{
-          parts: exam?.result?.parts,
+          parts: exam?.result?.parts.map(part => ({
+            ...part,
+            questions: part.questions.map(item => ({
+              ...item,
+              answer: item.userAnswer,
+            })),
+          })),
         }}
       >
         {({ values, setFieldValue, handleSubmit }) => (
@@ -186,15 +195,15 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 >
                   Nộp bài
                 </button>
-                {/* <button
-                  className="btn-primary w-full"
+                <button
+                  className="btn !bg-primary-50 w-full"
                   type="button"
                   onClick={() => {
                     setSubmitModal({ show: true, hasSaveSession: true });
                   }}
                 >
                   Lưu phiên thi
-                </button> */}
+                </button>
               </div>
               <div className=" flex-1 overflow-y-auto w-full border border-gray-200 bg-white p-4 rounded-md ">
                 {values.parts?.map((part, idx) => (
@@ -234,7 +243,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
             <ModalProvider
               show={submitModal.show}
               onClose={() => {
-                setSubmitModal({ show: false, hasSaveSession: false });
+                setSubmitModal({ show: false, hasSaveSession: true });
               }}
             >
               <ConfirmModal

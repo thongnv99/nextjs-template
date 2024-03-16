@@ -13,7 +13,7 @@ const DoQuestion = (props: {
   inResult?: boolean;
   idx?: number;
   answer?: string | string[];
-  onChange(answer: string | string[]): void; // array when type = fill blank
+  onChange(answer: string | string[] | number): void; // array when type = fill blank
 }) => {
   const getBlankOptions = (content: string) => {
     const el = document.createElement('div');
@@ -35,12 +35,12 @@ const DoQuestion = (props: {
         {props.question?.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
           <RadioGroup
             className={'flex-col gap-2'}
-            value={props.answer as string}
+            value={String(props.answer)}
             labelClassName={`!text-gray-900`}
-            onChange={value => props.onChange(String(value))}
-            options={props.question?.options?.map(item => ({
+            onChange={value => props.onChange(Number(value))}
+            options={props.question?.options?.map((item, idx) => ({
               label: item,
-              value: item,
+              value: String(idx),
             }))}
           />
         )}

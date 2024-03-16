@@ -1,4 +1,7 @@
 .data-grid {
+  * {
+    font-family: var(--font-lexend);
+  }
   &.ag-theme-quartz {
     --ag-border-color: var(--gray-200);
     --ag-odd-row-background-color: transparent;
