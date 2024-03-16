@@ -15,6 +15,7 @@ import ModalProvider from 'components/ModalProvider';
 import ConfirmModal from 'components/ConfirmModal';
 import { differenceInMinutes, subMinutes } from 'date-fns';
 import PercentChart from 'components/PercentChart';
+import ExamResult from './ExamResult';
 
 const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const [modalNext, setModalNext] = useState(false);
@@ -99,105 +100,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
 
   if (result) {
     const resultData = result.result;
-    return (
-      <div className=" w-full max-w-screen-lg rounded-md border border-gray-200 m-auto bg-white">
-        <h1 className="text-center text-[3rem]">Kết quả</h1>
-        <div className="flex">
-          <div className="mb-8  p-4 flex flex-col gap-4">
-            <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">Tên đề thi</div>
-              <div>{examData?.title}</div>
-            </div>
-            <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">
-                Thời gian bắt đầu
-              </div>
-              <div>
-                {resultData?.startTime
-                  ? formatDateToString(
-                      new Date(resultData?.startTime),
-                      'HH:mm:ss dd/MM/yyyy',
-                    )
-                  : '--'}
-              </div>
-            </div>
-            <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">
-                Thời gian kết thúc
-              </div>
-              <div>
-                {resultData?.endTime
-                  ? formatDateToString(
-                      new Date(resultData?.endTime),
-                      'HH:mm:ss dd/MM/yyyy',
-                    )
-                  : '--'}
-              </div>
-            </div>
-            <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">
-                Thời gian làm bài
-              </div>
-              <div>
-                {resultData?.startTime && resultData?.endTime
-                  ? `${differenceInMinutes(
-                      resultData.endTime,
-                      resultData.startTime,
-                    )} phút`
-                  : ''}
-              </div>
-            </div>
-            <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">Đáp án đúng</div>
-              {resultData?.status === 'FINISHED' ? (
-                <div>
-                  <strong className="text-primary-900">
-                    {resultData.statAnswer?.totalCorrect}
-                  </strong>
-                  /{resultData.statAnswer?.total}
-                </div>
-              ) : (
-                <div>Bài thi cần thời gian để xử lý!</div>
-              )}
-            </div>
-            <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">Điểm</div>
-              {resultData?.status === 'FINISHED' ? (
-                <div>
-                  <strong className="text-primary-900">
-                    {resultData.statScore?.totalCorrect}
-                  </strong>
-                  /{resultData.statScore?.total}
-                </div>
-              ) : (
-                <div>Bài thi cần thời gian để xử lý!</div>
-              )}
-            </div>
-            <div className="flex w-full justify-center">
-              <button
-                type="button"
-                className="btn-primary mt-5 w-fit"
-                onClick={() => {
-                  router.push(`/${lng}/exam`);
-                }}
-              >
-                Đồng ý
-              </button>
-            </div>
-          </div>
-          <div>
-            <PercentChart
-              options={{
-                size: 90,
-                borderWidth: 20,
-                percent: 10,
-                padding: 0,
-              }}
-            />
-          </div>
-        </div>
-      </div>
-    );
+    return <ExamResult exam={examData} data={resultData} />;
   }
 
   const checkQuestionFinished = (question: IQuestion) => {

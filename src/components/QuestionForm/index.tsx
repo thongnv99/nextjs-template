@@ -18,7 +18,7 @@ import {
 import Loader from 'components/Loader';
 import { useSWRWrapper } from 'hooks/swr';
 import { IQuestion } from 'interfaces';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const BLANK_DETECT = `<span class="mention" data-mention="[(n)]">[(n)]</span>`;
 
@@ -36,6 +36,7 @@ interface QuestionFormValues {
   score?: number;
   source?: string;
   duration?: number;
+  year?: string;
 }
 
 const QuestionTypeOptions = [
@@ -76,6 +77,7 @@ interface QuestionFormProps {
 const QuestionForm = (props: QuestionFormProps) => {
   const router = useRouter();
   const componentId = useRef(uuid());
+  const { lng } = useParams();
   const { data } = useSWRWrapper<IQuestion>(
     props.questionId ? `/api/v1/questions/${props.questionId}` : null,
     {
@@ -112,6 +114,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         source: data.source,
         content: data.content,
         duration: data.duration,
+        year: data.year,
         answerExplain: data.answerExplain,
         questionCategoryId: data.questionCategoryId?.id,
         options: data.options ?? [],
@@ -144,6 +147,8 @@ const QuestionForm = (props: QuestionFormProps) => {
       payload = {
         type: values.type,
         level: values.level,
+        year: values.year,
+        score: values.score,
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: values.content,
@@ -152,7 +157,9 @@ const QuestionForm = (props: QuestionFormProps) => {
     } else if (values.type === QUESTION_TYPE.MULTIPLE_CHOICE) {
       payload = {
         type: values.type,
+        score: values.score,
         level: values.level,
+        year: values.year,
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: values.content,
@@ -173,7 +180,9 @@ const QuestionForm = (props: QuestionFormProps) => {
       }
       payload = {
         type: values.type,
+        score: values.score,
         level: values.level,
+        year: values.year,
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: container.innerHTML,
@@ -199,7 +208,10 @@ const QuestionForm = (props: QuestionFormProps) => {
 
   const { data: categoryOptions } = useCategoryQuestions();
   return (
-    <Loader id={componentId.current} className="base-container question-form">
+    <Loader
+      id={componentId.current}
+      className="base-container question-form bg-white"
+    >
       <div className="base-top-container">
         <div className="base-title">
           {props.isEdit ? 'Cập nhật câu hỏi' : 'Tạo mới câu hỏi'}
@@ -261,14 +273,13 @@ const QuestionForm = (props: QuestionFormProps) => {
                     type="number"
                   />
                   <TextInput
-                    label="Thời gian làm bài (phút)"
-                    name="duration"
+                    label="Năm"
+                    name="year"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    hasError={touched.duration && !isBlank(errors.duration)}
-                    errorMessage={errors.duration}
-                    value={values.duration}
-                    type="number"
+                    hasError={touched.year && !isBlank(errors.year)}
+                    errorMessage={errors.year}
+                    value={values.year}
                   />
                   <Dropdown
                     options={LevelOptions}
@@ -278,7 +289,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                   />
                   <Dropdown
                     options={categoryOptions?.items.map(item => ({
-                      label: item.name,
+                      label: item.name[lng as 'vi' | 'ja'],
                       value: item.id,
                     }))}
                     placeholder="Phân loại câu hỏi"

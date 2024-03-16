@@ -17,6 +17,7 @@ export const getRoutesConfig = (role: ROLES) => [
     label: 'J_38',
     route: '/user-mgmt',
     icon: User,
+    hide: ![ROLES.ADMIN, ROLES.STAFF].includes(role),
   },
   {
     label: 'J_1',
@@ -32,16 +33,16 @@ export const getRoutesConfig = (role: ROLES) => [
     label: 'J_3',
     route: '/question',
     icon: Question,
-    children: [
-      {
-        label: 'J_3',
-        route: '/question',
-      },
-      {
-        label: 'J_4',
-        route: '/question/question-form',
-      },
-    ],
+    // children: [
+    //   {
+    //     label: 'J_3',
+    //     route: '/question',
+    //   },
+    //   {
+    //     label: 'J_4',
+    //     route: '/question/question-form',
+    //   },
+    // ],
   },
   {
     label: 'J_5',

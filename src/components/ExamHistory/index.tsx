@@ -89,7 +89,7 @@ const ExamHistory = (props: { examId: string }) => {
   return (
     <Loader
       id={componentId.current}
-      className="h-full w-full max-w-screen-lg m-auto border border-gray-200 rounded-lg flex flex-col shadow-sm"
+      className="h-full w-full  bg-white border border-gray-200 rounded-lg flex flex-col shadow-sm"
     >
       <div className="px-5 py-6">
         <div className="text-lg font-semibold">Lịch sử {examData?.title} </div>

@@ -6,15 +6,17 @@ type Props = {
     borderWidth: number;
     padding: number;
     stroke?: string;
-    percent: number;
+    label?: string;
+    value: number;
+    total: number;
   };
 };
 
 const PercentChart = (props: Props) => {
-  const { size, borderWidth, padding, stroke, percent } = props.options;
+  const { size, borderWidth, padding, stroke, total, value } = props.options;
+  const percent = value && total ? (value * 100) / total : 0;
   const circumference = size * 2 * Math.PI;
   const offset = circumference + (percent / 100) * circumference;
-  // style={`stroke-dasharray: ${circumference}, ${circumference}; stroke-dashoffset: ${offset};`}
   return (
     <svg
       className="percent-chart"
@@ -61,6 +63,24 @@ const PercentChart = (props: Props) => {
           fill="freeze"
         />
       </circle>
+
+      <text y="50%" transform="translate(0, 2)">
+        <tspan x="50%" textAnchor="middle" className="text-[3rem] font-bold">
+          <tspan
+            fill={percent < 0.5 ? 'red' : percent < 0.7 ? 'yellow' : 'green'}
+            color="red"
+            className="text-primary"
+          >
+            {value}
+          </tspan>
+          /<tspan>{total}</tspan>
+        </tspan>
+      </text>
+      <text y="60%" transform="translate(0, 2)">
+        <tspan x="50%" textAnchor="middle" className="donut-data">
+          {props.options.label}
+        </tspan>
+      </text>
     </svg>
   );
 };

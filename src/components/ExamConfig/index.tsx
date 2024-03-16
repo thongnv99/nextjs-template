@@ -224,7 +224,7 @@ const ExamConfig = (props: ExamConfigProps) => {
               <div className="w-full flex justify-center m-8">
                 <button
                   type="button"
-                  className="btn btn-icon"
+                  className="btn btn-icon !bg-white"
                   onClick={() => {
                     setFieldValue('parts', [
                       ...values.parts,

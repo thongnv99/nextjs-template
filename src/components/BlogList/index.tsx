@@ -33,8 +33,8 @@ const BlogList = () => {
     method: METHOD.GET,
   });
   return (
-    <div className="h-full w-full flex flex-col">
-      <div className="py-6  flex items-center justify-between w-full max-w-screen-sm m-auto">
+    <div className="h-full w-full flex flex-col bg-white p-6 rounded-lg shadow-md">
+      <div className="py-6  flex items-center justify-between w-full ">
         <div className="text-lg font-semibold">Tất cả</div>
         <Link
           href={'blog/blog-management'}
@@ -43,7 +43,7 @@ const BlogList = () => {
           Quản lý blog
         </Link>
       </div>
-      <div className="flex-1 w-full flex flex-col gap-6  max-w-screen-sm m-auto pb-8">
+      <div className="flex-1 w-full flex flex-col gap-6  overflow-y-auto pb-8">
         {data?.items.map(item => (
           <BlogCard data={item} key={item.id} />
         ))}

@@ -5,7 +5,7 @@ import Edit from 'assets/svg/edit.svg';
 import Copy from 'assets/svg/copy.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
-import { METHOD, QUESTION_TYPE } from 'global';
+import { METHOD, QUESTION_LEVEL, QUESTION_TYPE } from 'global';
 import { formatNumber, uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 import ModalProvider from 'components/ModalProvider';
@@ -15,6 +15,7 @@ import { useMutation } from 'hooks/swr';
 import { useParams, useRouter } from 'next/navigation';
 import './style.scss';
 import Badge from 'components/Badge';
+import { LEVEL_TRANSLATE } from 'global/translate';
 type Props = { data: IQuestion; onRefresh(): void };
 
 const mapQuestionType = {
@@ -64,6 +65,12 @@ const QuestionItem = (props: Props) => {
   const handleCloseDelete = () => {
     setModalDelete(false);
   };
+
+  const mapColor = {
+    [QUESTION_LEVEL.MEDIUM]: 'bg-yellow-100 text-yellow-500',
+    [QUESTION_LEVEL.EASY]: 'bg-green-100 text-green-500',
+    [QUESTION_LEVEL.HARD]: 'bg-red-100 text-red-500',
+  };
   return (
     <Disclosure>
       {({ open }) => {
@@ -82,6 +89,12 @@ const QuestionItem = (props: Props) => {
                       className="bg-primary-100 text-primary-500 ml-4 -translate-y-[0.8rem] text-[1rem]"
                     />
                   )}
+                  <Badge
+                    content={LEVEL_TRANSLATE[props.data.level]}
+                    className={`${
+                      mapColor[props.data.level]
+                    } ml-4 -translate-y-[0.8rem] text-[1rem]`}
+                  />
                 </div>
                 <div className="flex gap-8">
                   <Copy
@@ -138,6 +151,12 @@ const QuestionItem = (props: Props) => {
                       <div className="min-w-[10rem] font-semibold">Điểm</div>
                       <div className="font-normal text-sm text-gray-500">
                         {formatNumber(props.data.score ?? 1)}
+                      </div>
+                    </div>
+                    <div className="flex">
+                      <div className="min-w-[10rem] font-semibold">Năm</div>
+                      <div className="font-normal text-sm text-gray-500">
+                        {props.data.year ?? '--'}
                       </div>
                     </div>
                     <div className="flex">

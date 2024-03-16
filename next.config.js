@@ -3,6 +3,7 @@ const nextConfig = {
   env: {
     BASE_API_URL: process.env.BASE_API_URL,
     FETCH_COUNT: Number(process.env.FETCH_COUNT ?? 20),
+    LOCK_CREATE_EXAM: process.env.LOCK_CREATE_EXAM == 'true',
   },
   async redirects() {
     return [

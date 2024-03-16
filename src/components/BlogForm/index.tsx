@@ -121,7 +121,7 @@ const BlogForm = () => {
   return (
     <Loader
       id={componentId.current}
-      className="p-6 w-full m-auto max-w-screen-lg flex flex-col h-full overflow-y-auto"
+      className="p-6 w-full bg-white m-auto max-w-screen-lg flex flex-col h-full overflow-y-auto"
     >
       <div className="flex justify-between items-center sticky ">
         <div className="text-lg font-semibold">

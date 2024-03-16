@@ -83,7 +83,7 @@ const QuestionMgmt = (props: Props) => {
     <Loader
       id={componentId.current}
       loading={isLoading}
-      className="h-full w-full border border-gray-200 rounded-lg max-w-screen-lg m-auto flex flex-col shadow-sm"
+      className="h-full w-full border bg-white border-gray-200 rounded-lg  flex flex-col shadow-sm"
     >
       <div className="p-5 pb-0 flex items-center justify-between">
         <div className="text-lg font-semibold">Danh sách câu hỏi</div>
@@ -117,7 +117,7 @@ const QuestionMgmt = (props: Props) => {
           />
         </div>
       </div>
-      <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
+      <div className=" px-5  pb-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
           <QuestionItem key={item.id} data={item} onRefresh={handleRefresh} />
         ))}

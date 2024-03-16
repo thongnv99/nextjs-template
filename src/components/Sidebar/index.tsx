@@ -20,6 +20,9 @@ const Sidebar = () => {
   return (
     <nav className="h-full w-full p-4 flex flex-col gap-2">
       {getRoutesConfig(data?.user.role).map((route, idx) => {
+        if (route.hide) {
+          return null;
+        }
         const Icon = route.icon ?? Home;
         const isActive = pathname.startsWith(`/${lng}${route.route}`);
         return (

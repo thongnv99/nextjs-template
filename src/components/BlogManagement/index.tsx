@@ -201,7 +201,7 @@ const BlogManagement = () => {
   return (
     <Loader
       id={componentId.current}
-      className="h-full w-full border border-gray-200 rounded-lg flex flex-col shadow-sm"
+      className="h-full w-full bg-white border border-gray-200 rounded-lg flex flex-col shadow-sm"
     >
       <div className="px-5 py-6 flex justify-between">
         <div className="text-lg font-semibold">Quản lý blog</div>

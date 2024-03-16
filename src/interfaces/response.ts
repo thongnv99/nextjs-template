@@ -33,8 +33,10 @@ export interface PaymentPackageRes {
 
 export interface CategoryQuestionRes {
   id: string;
-  name: string;
-  description: string;
+  name: {
+    vi: string;
+    ja: string;
+  };
 }
 
 export interface PaymentMethodRes {
@@ -113,5 +115,23 @@ export interface SubmitExamRes {
     totalCorrect: number;
     totalIncorrect: number;
     totalNotAnswer: number;
+  };
+  parts: string;
+}
+
+export interface StatsRes {
+  contest: {
+    totalCompleted: number;
+    totalSessionCompleted: number;
+    totalTimeCompleted: number;
+  };
+  exam: {
+    totalCompleted: number;
+    totalSessionCompleted: number;
+    totalTimeCompleted: number;
+  };
+  flashcard: {
+    totalLearned: number;
+    totalUnlearned: number;
   };
 }

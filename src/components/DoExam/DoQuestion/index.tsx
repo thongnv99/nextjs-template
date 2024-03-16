@@ -10,6 +10,7 @@ import React from 'react';
 const DoQuestion = (props: {
   question?: IQuestion;
   id: string;
+  inResult?: boolean;
   idx?: number;
   answer?: string | string[];
   onChange(answer: string | string[]): void; // array when type = fill blank

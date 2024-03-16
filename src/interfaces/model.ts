@@ -43,6 +43,7 @@ export interface IQuestion {
   options?: string[];
   score: number;
   duration?: number;
+  year?: string;
   questionCategoryId?: {
     id: string;
   };
@@ -50,6 +51,8 @@ export interface IQuestion {
   createdAt: number;
   answer?: string | string[];
   blankPositions?: { answer: string }[];
+  userAnswer?: string;
+  status: 'INCORRECT' | 'CORRECT';
 }
 
 export interface IResponseDefault {
