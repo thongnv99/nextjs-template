@@ -23,13 +23,11 @@ const DoQuestion = (props: {
   };
 
   return (
-    <div
-      id={props.id}
-      className="rounded-md border border-gray-200 p-4 bg-white"
-    >
+    <div id={props.id} className="rounded-md  p-4 bg-white">
       <div className="flex mb-4 gap-4">
-        <div>Câu {props.idx}:</div>
+        <div className="whitespace-nowrap">Câu {props.idx}:</div>
         <div
+          className="font-bold"
           dangerouslySetInnerHTML={{ __html: props.question?.content ?? '' }}
         ></div>
       </div>

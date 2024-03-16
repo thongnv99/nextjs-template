@@ -5,7 +5,7 @@ import Edit from 'assets/svg/edit.svg';
 import Link from 'assets/svg/external-link.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IExam, IQuestion } from 'interfaces';
-import { METHOD, QUESTION_TYPE } from 'global';
+import { METHOD, QUESTION_TYPE, ROLES } from 'global';
 import { formatNumber, uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 import ModalProvider from 'components/ModalProvider';
@@ -18,6 +18,7 @@ import HelpCircle from 'assets/svg/help-circle.svg';
 import Layer from 'assets/svg/3-layers.svg';
 import FileText from 'assets/svg/file-text.svg';
 import Badge from 'components/Badge';
+import { useSession } from 'next-auth/react';
 
 type Props = { data: IExam; onRefresh(): void; compact?: boolean };
 
@@ -26,6 +27,7 @@ const ExamItem = (props: Props) => {
   const { lng } = useParams();
   const [modalDelete, setModalDelete] = useState(false);
   const componentId = useRef(uuid());
+  const { data: session } = useSession();
   const { trigger: deleteQuestion } = useMutation('EXAM_DELETE_QUESTION', {
     url: '/api/v1/exams/{questionId}',
     method: METHOD.DELETE,
@@ -126,7 +128,10 @@ const ExamItem = (props: Props) => {
                     onClick={handleViewHistory}
                     className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                   />
-                  {!props.data.isSample && (
+                  {(!props.data.isSample ||
+                    [ROLES.ADMIN, ROLES.STAFF].includes(
+                      session?.user.role,
+                    )) && (
                     <>
                       <Edit
                         data-tooltip-id="default-tooltip"

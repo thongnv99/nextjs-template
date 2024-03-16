@@ -24,11 +24,11 @@ export const getRoutesConfig = (role: ROLES) => [
     route: '/exam',
     icon: Exam,
   },
-  {
-    label: 'J_2',
-    route: '/contest',
-    icon: Contest,
-  },
+  // {
+  //   label: 'J_2',
+  //   route: '/contest',
+  //   icon: Contest,
+  // },
   {
     label: 'J_3',
     route: '/question',
