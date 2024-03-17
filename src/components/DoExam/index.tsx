@@ -181,7 +181,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                       initTime={examData?.duration ?? 0}
                       ref={timerController}
                       onExp={() => {
-                        setExpModal(true);
+                        handleSubmit();
                       }}
                     />
                   </div>
@@ -195,15 +195,17 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 >
                   Nộp bài
                 </button>
-                <button
-                  className="btn !bg-primary-50 w-full"
-                  type="button"
-                  onClick={() => {
-                    setSubmitModal({ show: true, hasSaveSession: true });
-                  }}
-                >
-                  Lưu phiên thi
-                </button>
+                {hasSaveSession && (
+                  <button
+                    className="btn !bg-primary-50 w-full"
+                    type="button"
+                    onClick={() => {
+                      setSubmitModal({ show: true, hasSaveSession: true });
+                    }}
+                  >
+                    Lưu phiên thi
+                  </button>
+                )}
               </div>
               <div className=" flex-1 overflow-y-auto w-full border border-gray-200 bg-white p-4 rounded-md ">
                 {values.parts?.map((part, idx) => (

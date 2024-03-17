@@ -18,3 +18,8 @@ export const LEVEL_TRANSLATE: Record<string, string> = {
   [QUESTION_LEVEL.MEDIUM]: 'Trung bình',
   [QUESTION_LEVEL.HARD]: 'Khó',
 };
+
+export const QUESTION_STATUS_TRANSLATE: Record<string, string> = {
+  CORRECT: 'Đúng',
+  INCORRECT: 'Sai',
+};

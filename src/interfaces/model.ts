@@ -39,7 +39,7 @@ export interface IQuestion {
   content: string;
   isSample?: boolean;
   answerExplain?: string;
-  correctOption?: string;
+  correctOption?: number;
   options?: string[];
   score: number;
   duration?: number;

@@ -63,7 +63,7 @@ const TimeViewer = forwardRef(
     return (
       <div
         className={`w-full justify-center  flex font-bold text-[3rem] gap-2 ${
-          seconds.current < 5 * 60 ? 'text-red-500' : ''
+          seconds.current < 60 ? 'text-red-500' : ''
         }`}
       >
         <div>{Math.floor(seconds.current / 3600)}</div>
