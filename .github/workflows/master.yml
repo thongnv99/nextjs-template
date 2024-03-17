@@ -32,7 +32,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           script: |
-            cd ~/application/jcce/jcce-web
+            cd ~/container/application/jcce/jcce-web
             sh deploy.sh
