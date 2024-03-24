@@ -34,7 +34,7 @@ const ExamMgmt = ({ compact }: Props) => {
       //   type,
       // }),
       page: currPage,
-      limit: 10,
+      limit: 200,
     },
     revalidateOnFocus: false,
   });
@@ -67,7 +67,7 @@ const ExamMgmt = ({ compact }: Props) => {
             </button>
           )}
       </div>
-      <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
+      <div className=" px-5 py-2 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
         {data?.items.map(item => (
           <ExamItem
             compact={compact}

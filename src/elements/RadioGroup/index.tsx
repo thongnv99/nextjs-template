@@ -31,7 +31,7 @@ const RadioGroup = (props: RadioGroupProps) => {
               <div
                 className={` ${
                   checked ? 'checked' : ''
-                } bg-clip-content p-[2px] border-2 radio-input border-solid w-[2rem] aspect-square rounded-full  mr-3`}
+                } bg-clip-content p-[2px] border-2 radio-input border-solid min-w-[2rem] w-[2rem] aspect-square rounded-full  mr-3`}
               ></div>
               <div
                 className={`radio-label  ${props.labelClassName ?? ''}`}

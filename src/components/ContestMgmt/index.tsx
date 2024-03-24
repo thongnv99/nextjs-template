@@ -34,7 +34,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
         //   type,
         // }),
         page: currPage,
-        limit: 10,
+        limit: 200,
       },
       revalidateOnFocus: false,
     },

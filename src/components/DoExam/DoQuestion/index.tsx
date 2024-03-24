@@ -120,11 +120,7 @@ const DoQuestion = (props: {
                       <div className="p-2 bg-primary-50">
                         <div className="   flex gap-2 items-center className='font-bold'">
                           Đáp án:
-                          <strong>
-                            {String.fromCharCode(
-                              65 + props.question!.correctOption!,
-                            )}
-                          </strong>
+                          <strong>{props.question!.correctOption! + 1}</strong>
                         </div>
                       </div>
                       {props.question!.answerExplain && (

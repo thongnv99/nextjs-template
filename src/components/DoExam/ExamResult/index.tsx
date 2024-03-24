@@ -197,9 +197,7 @@ const ExamResult = ({ data, exam }: Props) => {
                         }`}
                                     key={optionIdx}
                                   >
-                                    <div>
-                                      {String.fromCharCode(65 + optionIdx)}:
-                                    </div>
+                                    <div>{optionIdx + 1}:</div>
                                     <div
                                       dangerouslySetInnerHTML={{
                                         __html: option,
@@ -218,9 +216,7 @@ const ExamResult = ({ data, exam }: Props) => {
                                             <div className="  p-2 flex gap-2 items-center">
                                               Đáp án đúng:{' '}
                                               <strong>
-                                                {String.fromCharCode(
-                                                  65 + question.correctOption!,
-                                                )}
+                                                {question.correctOption! + 1}
                                               </strong>
                                               <ArrowRight />
                                               <strong className="uppercase">
@@ -283,90 +279,7 @@ const ExamResult = ({ data, exam }: Props) => {
             );
           }}
         </Disclosure>
-        {/* <h1 className="font-bold">Chi tiết</h1>
-        <div className="p-4">
-          {parts?.map((part, idx) => (
-            <div key={idx} className="flex flex-col ">
-              <h2 className="font-bold">Phần {idx + 1}</h2>
-              {part?.questions.map((question, questionIdx) => (
-                <div key={questionIdx} className="rounded-md  p-4 bg-white">
-                  <div className="flex mb-4 gap-4">
-                    <div className="whitespace-nowrap">
-                      Câu {questionIdx + 1}:
-                    </div>
-                    <div
-                      className="font-bold"
-                      dangerouslySetInnerHTML={{
-                        __html: question?.content ?? '',
-                      }}
-                    ></div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    {question.options?.map((option, optionIdx) => (
-                      <div
-                        className={`flex gap-4 items-center  p-2 rounded-sm
-                        ${
-                          Number(question.userAnswer) === optionIdx &&
-                          question.userAnswer !== question.correctOption
-                            ? 'bg-red-200'
-                            : ''
-                        } 
-                        ${
-                          question.correctOption === optionIdx
-                            ? 'bg-green-200'
-                            : ''
-                        }`}
-                        key={optionIdx}
-                      >
-                        <div>{String.fromCharCode(65 + optionIdx)}:</div>
-                        <div dangerouslySetInnerHTML={{ __html: option }}></div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4">
-                    <div className="bg-primary-200  p-2">
-                      Đáp án đúng:{' '}
-                      <strong>
-                        {String.fromCharCode(65 + question.correctOption!)}
-                      </strong>
-                    </div>
-                    {question.answerExplain && (
-                      <div>
-                        <div>Giải thích đáp án</div>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: question.answerExplain ?? '',
-                          }}
-                        ></div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div> */}
       </div>
-      {/* <div>
-        <div>Giải thích</div>
-        <div>
-          {parts?.map((part, idx) => (
-            <div key={idx} className="flex flex-col gap-4">
-              {part?.questions.map((item, questionIdx) => (
-                <DoQuestion
-                  inResult
-                  id={item.id}
-                  answer={item.answer}
-                  onChange={answer => {}}
-                  key={questionIdx}
-                  question={item}
-                  idx={questionIdx + 1}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-      </div> */}
     </div>
   );
 };

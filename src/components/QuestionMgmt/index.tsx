@@ -67,7 +67,7 @@ const QuestionMgmt = (props: Props) => {
           isSample: sample === 'true',
         }),
         page: currPage,
-        limit: 20,
+        limit: 200,
       },
     },
   );

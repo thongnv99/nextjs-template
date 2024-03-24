@@ -138,9 +138,9 @@ const QuestionItem = (props: Props) => {
               show={open}
               enter="transition-all duration-100 ease-out"
               enterFrom="transform h-0 opacity-0"
-              enterTo="transform h-[14rem] opacity-100"
+              enterTo="transform  opacity-100"
               leave="transition-all duration-100 ease-out"
-              leaveFrom="transform h-[14rem] opacity-100"
+              leaveFrom="transform  opacity-100"
               leaveTo="transform h-0 opacity-0"
               className="overflow-hidden "
             >

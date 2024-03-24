@@ -346,17 +346,26 @@ const QuestionForm = (props: QuestionFormProps) => {
                               setFieldValue('correctOption', String(idx))
                             }
                           />
-                          <div className="uppercase">
-                            {String.fromCharCode(65 + idx)}.
-                          </div>
-                          <TextInput
+                          <div className="uppercase">{idx + 1}.</div>
+                          {/* <TextInput
                             value={item}
                             name={`options[${idx}]`}
                             id={`options[${idx}]`}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             className="flex-1"
-                          />
+                          /> */}
+                          <div className="flex-1 min-h-[10rem] overflow-hidden">
+                            <Editor
+                              data={item}
+                              id={`options[${idx}]`}
+                              key={`options[${idx}]`}
+                              onChange={value =>
+                                setFieldValue(`options[${idx}]`, value)
+                              }
+                              placeholder="Nhập đáp án"
+                            />
+                          </div>
                           <Delete
                             className="text-gray-500 cursor-pointer"
                             onClick={() => {
@@ -397,15 +406,17 @@ const QuestionForm = (props: QuestionFormProps) => {
                 {values.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
                   <div className="question-section">
                     <div className="title">Giải thích đáp án</div>
-                    <TextInput
-                      label="Giải thích đáp án"
-                      type="textarea"
-                      name="answerExplain"
-                      placeholder="Giải thích đáp án"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.answerExplain}
-                    />
+                    <div className="w-full min-h-[10rem]">
+                      <Editor
+                        data={values.answerExplain}
+                        id={`answerExplain`}
+                        key={`answerExplain`}
+                        onChange={value =>
+                          setFieldValue(`answerExplain`, value)
+                        }
+                        placeholder="Giải thích đáp án"
+                      />
+                    </div>
                   </div>
                 )}
               </div>
