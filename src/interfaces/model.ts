@@ -46,6 +46,10 @@ export interface IQuestion {
   year?: string;
   questionCategoryId?: {
     id: string;
+    name?: {
+      vi?: string;
+      ja?: string;
+    };
   };
   source?: string;
   createdAt: number;

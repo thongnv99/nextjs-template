@@ -70,7 +70,6 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
         if (data.result?.status === 'SESSION_PAUSE') {
           router.push(`/${lng}/exam/history/${examData?.id}`);
         }
-        console.log('success', timerController.current);
         setSubmitModal({ show: false, hasSaveSession: hasSaveSession });
       },
     },
@@ -107,15 +106,6 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
       hasSaveSession: submitModal.hasSaveSession,
     });
   };
-  if (isMutating) {
-    return <Preload />;
-  }
-
-  if (result && result.result?.status !== 'SESSION_PAUSE') {
-    const resultData = result.result;
-    return <ExamResult exam={examData} data={resultData} />;
-  }
-
   const checkQuestionFinished = (question: IQuestion) => {
     if (question.type !== QUESTION_TYPE.FILL_IN_THE_BLANK) {
       return !isBlank(question.answer as string);
@@ -124,6 +114,32 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     return (question.answer as string[])?.every(item => !isBlank(item));
   };
 
+  if (isMutating) {
+    return <Preload />;
+  }
+
+  if (result && result.result?.status !== 'SESSION_PAUSE') {
+    const resultData = result.result;
+    return <ExamResult exam={examData} data={resultData} />;
+  }
+  const parts = [] as IPart[];
+  for (let i = 0; i < (exam?.result?.parts.length ?? 0); i++) {
+    const part = exam?.result?.parts?.[i];
+    const startIdx =
+      (parts[i - 1]?.startIdx ?? 0) + (parts[i - 1]?.questions.length ?? 0);
+    if (part) {
+      parts.push({
+        ...part,
+        startIdx,
+        questions: part.questions.map(item => {
+          return {
+            ...item,
+            answer: item.userAnswer,
+          };
+        }),
+      });
+    }
+  }
   return (
     <Loader
       id={componentId.current}
@@ -136,13 +152,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
         onSubmit={onSubmit}
         innerRef={instance => (formRef.current = (instance as any)!)}
         initialValues={{
-          parts: exam?.result?.parts.map(part => ({
-            ...part,
-            questions: part.questions.map(item => ({
-              ...item,
-              answer: item.userAnswer,
-            })),
-          })),
+          parts,
         }}
       >
         {({ values, setFieldValue, handleSubmit }) => (
@@ -151,23 +161,26 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
               {values.parts?.map((part, idx) => (
                 <div
                   key={idx}
-                  className="flex flex-col gap-6 bg-white p-4 border border-gray-200"
+                  className="flex flex-col  bg-white p-4 border border-gray-200"
                 >
-                  <h2 className="font-bold">Phần {idx + 1}</h2>
+                  <h2 className="font-bold mb-6">Phần {idx + 1}</h2>
                   {part?.questions.map((item, questionIdx) => (
-                    <DoQuestion
-                      id={item.id}
-                      answer={item.answer}
-                      onChange={answer =>
-                        setFieldValue(
-                          `parts[${idx}].questions[${questionIdx}].answer`,
-                          answer,
-                        )
-                      }
-                      key={questionIdx}
-                      question={item}
-                      idx={questionIdx + 1}
-                    />
+                    <div key={questionIdx} className="flex flex-col gap-6 pt-6">
+                      <DoQuestion
+                        id={item.id}
+                        answer={item.answer}
+                        onChange={answer =>
+                          setFieldValue(
+                            `parts[${idx}].questions[${questionIdx}].answer`,
+                            answer,
+                          )
+                        }
+                        showAnswer={hasSaveSession}
+                        question={item}
+                        idx={(part.startIdx ?? 0) + questionIdx + 1}
+                      />
+                      <div className="h-[1px] w-full bg-gray-400"></div>
+                    </div>
                   ))}
                 </div>
               ))}
@@ -209,7 +222,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
               </div>
               <div className=" flex-1 overflow-y-auto w-full border border-gray-200 bg-white p-4 rounded-md ">
                 {values.parts?.map((part, idx) => (
-                  <div key={idx}>
+                  <div key={idx} className="mb-4">
                     <h2 className="text-[2rem] mb-2">Phần {idx + 1}</h2>
                     <div className="grid grid-cols-5 gap-4">
                       {part?.questions.map((item, idx) => (
@@ -223,7 +236,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                             element?.scrollIntoView({ behavior: 'smooth' });
                           }}
                         >
-                          {idx + 1}
+                          {(part.startIdx ?? 0) + idx + 1}
                         </div>
                       ))}
                     </div>
@@ -257,7 +270,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 title={
                   submitModal.hasSaveSession
                     ? 'Lưu bài thi'
-                    : 'Hoàn thành bải thi'
+                    : 'Hoàn thành bài thi'
                 }
                 content={
                   submitModal.hasSaveSession

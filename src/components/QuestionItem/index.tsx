@@ -5,7 +5,7 @@ import Edit from 'assets/svg/edit.svg';
 import Copy from 'assets/svg/copy.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
-import { METHOD, QUESTION_LEVEL, QUESTION_TYPE } from 'global';
+import { METHOD, QUESTION_LEVEL, QUESTION_TYPE, ROLES } from 'global';
 import { formatNumber, uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 import ModalProvider from 'components/ModalProvider';
@@ -16,6 +16,7 @@ import { useParams, useRouter } from 'next/navigation';
 import './style.scss';
 import Badge from 'components/Badge';
 import { LEVEL_TRANSLATE } from 'global/translate';
+import { useSession } from 'next-auth/react';
 type Props = { data: IQuestion; onRefresh(): void };
 
 const mapQuestionType = {
@@ -29,6 +30,9 @@ const QuestionItem = (props: Props) => {
   const { lng } = useParams();
   const [modalDelete, setModalDelete] = useState(false);
   const componentId = useRef(uuid());
+
+  const { data: session } = useSession();
+
   const { trigger: deleteQuestion } = useMutation('QUESTION_DELETE_QUESTION', {
     url: '/api/v1/questions/{questionId}',
     method: METHOD.DELETE,
@@ -103,7 +107,10 @@ const QuestionItem = (props: Props) => {
                     onClick={handleCopy}
                     className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                   />
-                  {!props.data.isSample && (
+                  {(!props.data.isSample ||
+                    [ROLES.ADMIN, ROLES.STAFF].includes(
+                      session?.user.role,
+                    )) && (
                     <>
                       <Edit
                         data-tooltip-id="default-tooltip"
@@ -145,6 +152,16 @@ const QuestionItem = (props: Props) => {
                       <div className="min-w-[10rem] font-semibold">Loại</div>
                       <div className="font-normal text-sm text-gray-500">
                         {mapQuestionType[props.data.type]}
+                      </div>
+                    </div>
+                    <div className="flex">
+                      <div className="min-w-[10rem] font-semibold">
+                        Danh mục
+                      </div>
+                      <div className="font-normal text-sm text-gray-500">
+                        {props.data.questionCategoryId?.name?.[
+                          lng as 'vi' | 'ja'
+                        ] ?? '--'}
                       </div>
                     </div>
                     <div className="flex">

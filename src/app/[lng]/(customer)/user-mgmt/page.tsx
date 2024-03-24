@@ -90,6 +90,9 @@ const UserMgmtPage = () => {
       flex: 1,
       field: 'firstName',
       cellClass: 'bold',
+      valueFormatter: params => {
+        return `${params.data.firstName ?? ''} ${params.data.lastName ?? ''}`;
+      },
     },
     {
       headerName: 'Email',
@@ -156,7 +159,7 @@ const UserMgmtPage = () => {
         <div className="text-lg font-semibold flex">
           Quản lý người dùng{' '}
           <Badge
-            content="240 người dùng"
+            content={`${data?.items.length ?? 0} Người dùng`}
             className="bg-green-100 text-green-500 ml-4 -translate-y-[0.8rem] text-[1rem]"
           />
         </div>

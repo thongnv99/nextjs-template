@@ -17,7 +17,7 @@ export const getRoutesConfig = (role: ROLES) => [
     label: 'J_38',
     route: '/user-mgmt',
     icon: User,
-    hide: ![ROLES.ADMIN, ROLES.STAFF].includes(role),
+    hide: ![ROLES.ADMIN].includes(role),
   },
   {
     label: 'J_1',

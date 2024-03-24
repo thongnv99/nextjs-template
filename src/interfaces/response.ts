@@ -77,6 +77,7 @@ export interface IContest {
 export interface IPart {
   duration: number;
   questions: IQuestion[];
+  startIdx?: number;
 }
 
 export type BlogListRes = ArrayResponse<IBlog>;
