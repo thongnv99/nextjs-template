@@ -4441,6 +4441,11 @@ react-dom@^18:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-dynamic-virtual-scroll@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-dynamic-virtual-scroll/-/react-dynamic-virtual-scroll-1.4.0.tgz#2529c3c6243a51314bebe304c33c3e1907c5f967"
+  integrity sha512-agw3/kpcP2L5M/2hf7AKsIwxsJ+9RiVedh8vFTsxqvLVYj2pxzSY087et0kMfWnWfAP+m4ns39be7fsRr3okOg==
+
 react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"

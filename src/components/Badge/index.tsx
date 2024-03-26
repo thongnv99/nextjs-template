@@ -1,3 +1,5 @@
+'use client';
+import { useTranslation } from 'app/i18n/client';
 import React from 'react';
 
 interface BadgeCellProps {
@@ -6,9 +8,10 @@ interface BadgeCellProps {
   content: string;
 }
 const Badge = (props: BadgeCellProps) => {
+  const { t } = useTranslation();
   return (
     <div
-      className={`text-[1.2rem]  h-[2.2rem] flex items-center font-semibold  px-[0.8rem] py-[0.2rem] rounded-[1.6rem]  ${
+      className={`text-[1.2rem]  whitespace-nowrap h-[2.2rem] flex items-center font-semibold  px-[0.8rem] py-[0.2rem] rounded-[1.6rem]  ${
         props.className ?? ''
       }`}
     >
@@ -26,7 +29,7 @@ const Badge = (props: BadgeCellProps) => {
       ) : (
         ''
       )}{' '}
-      {props.content}
+      {t(props.content)}
     </div>
   );
 };

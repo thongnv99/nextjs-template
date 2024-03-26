@@ -4,47 +4,12 @@ import QuestionItem from 'components/QuestionItem';
 import React, { useRef, useState } from 'react';
 import { isBlank, uuid } from 'utils/common';
 import Plus from 'assets/svg/plus.svg';
-import TextInput from 'elements/TextInput';
-import Search from 'assets/svg/search.svg';
 import Dropdown from 'elements/Dropdown';
-import { QUESTION_TYPE } from 'global';
 import { useSWRWrapper } from 'hooks/swr';
 import { QuestionRes } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
-import PaginationBar from 'components/PaginationBar';
-const QuestionTypeOptions = [
-  {
-    label: 'Tất cả',
-    value: '',
-  },
-  {
-    label: 'Trắc nghiệm',
-    value: QUESTION_TYPE.MULTIPLE_CHOICE,
-  },
-  {
-    label: 'Điền vào chỗ trống',
-    value: QUESTION_TYPE.FILL_IN_THE_BLANK,
-  },
-  {
-    label: 'Tự luận',
-    value: QUESTION_TYPE.ESSAY,
-  },
-];
+import { QuestionTypeOptions, SampleOptions } from 'global/options';
 
-const SampleOptions = [
-  {
-    label: 'Tất cả',
-    value: '',
-  },
-  {
-    label: 'Câu hỏi mẫu',
-    value: 'true',
-  },
-  {
-    label: 'Câu hỏi thường',
-    value: 'false',
-  },
-];
 type Props = {};
 
 const QuestionMgmt = (props: Props) => {
