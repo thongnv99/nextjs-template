@@ -1,13 +1,12 @@
+import { useTranslation } from 'app/i18n/client';
 import Loader from 'components/Loader';
 import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
 import { METHOD } from 'global';
 import { useMutation } from 'hooks/swr';
-import { IExam, IFlashCard } from 'interfaces';
+import { IExam } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
-import { FLASH_CARD_QUERY_LIST } from 'store/key';
-import { useSWRConfig } from 'swr';
 import { isBlank, uuid } from 'utils/common';
 
 type ExamFormProps = {
@@ -22,6 +21,7 @@ interface FlashCardInput {
 }
 
 const ExamForm = (props: ExamFormProps) => {
+  const { t } = useTranslation();
   const componentId = useRef(uuid());
   const router = useRouter();
   const { lng } = useParams();
@@ -33,8 +33,8 @@ const ExamForm = (props: ExamFormProps) => {
       componentId: componentId.current,
       loading: true,
       notification: {
-        title: 'Thêm đề thi',
-        content: 'Thêm đề thi thành công.',
+        title: 'J_63',
+        content: 'J_64',
       },
       onSuccess(data) {
         props.onClose();
@@ -48,8 +48,8 @@ const ExamForm = (props: ExamFormProps) => {
     componentId: componentId.current,
     loading: true,
     notification: {
-      title: 'Cập nhật đề thi',
-      content: 'Cập nhật đề thi thành công.',
+      title: 'J_65',
+      content: 'J_66',
     },
     onSuccess() {
       props.onClose();
@@ -69,10 +69,8 @@ const ExamForm = (props: ExamFormProps) => {
   return (
     <Loader id={componentId.current} className="w-screen max-w-screen-md p-6">
       <div className="flex flex-col mb-5">
-        <div className="text-lg font-bold text-gray-900">Đề thi</div>
-        <div className="text-sm font-normal text-gray-500">
-          Nhập tên và mô tả cho đề thi
-        </div>
+        <div className="text-lg font-bold text-gray-900">{t('J_1')}</div>
+        <div className="text-sm font-normal text-gray-500">{t('J_69')}</div>
       </div>
       <Formik
         initialValues={{
@@ -91,10 +89,10 @@ const ExamForm = (props: ExamFormProps) => {
         }) => (
           <form onSubmit={handleSubmit}>
             <TextInput
-              label="Tên"
+              label="J_24"
               name="title"
               className="mb-3"
-              placeholder="Tên đề thi..."
+              placeholder="J_67"
               value={values.title}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -102,9 +100,9 @@ const ExamForm = (props: ExamFormProps) => {
               errorMessage={errors.title}
             />
             <TextInput
-              label="Mô tả"
+              label="J_68"
               name="description"
-              placeholder="Mô tả"
+              placeholder="J_68"
               className="mb-8"
               type="textarea"
               onChange={handleChange}
@@ -119,10 +117,10 @@ const ExamForm = (props: ExamFormProps) => {
                 className="btn flex-1"
                 onClick={props.onClose}
               >
-                Đóng
+                {t('J_61')}
               </button>
               <button type="submit" className="btn-primary flex-1">
-                Xác nhận
+                {t('C_1')}
               </button>
             </div>
           </form>

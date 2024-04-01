@@ -1,5 +1,6 @@
 'use client';
 import { ColDef } from 'ag-grid-community';
+import { useTranslation } from 'app/i18n/client';
 import DataGrid, { DataGridHandle } from 'components/DataGrid';
 import BadgeCell from 'components/DataGrid/BadgeCell';
 import ButtonCell from 'components/DataGrid/ButtonCell';
@@ -12,9 +13,10 @@ import { IExam } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
 import { uuid } from 'utils/common';
-import { dateTimeFormatter, floatFormatter } from 'utils/grid';
+import { dateTimeFormatter } from 'utils/grid';
 
 const ExamHistory = (props: { examId: string }) => {
+  const { t } = useTranslation();
   const { lng } = useParams();
   const router = useRouter();
   const gridRef = useRef<DataGridHandle>();
@@ -41,13 +43,13 @@ const ExamHistory = (props: { examId: string }) => {
 
   const columnDefs: Array<ColDef> = [
     {
-      headerName: 'Thời gian',
+      headerName: 'J_70',
       width: 150,
       field: 'startTime',
       valueFormatter: dateTimeFormatter,
     },
     {
-      headerName: 'Tên',
+      headerName: 'J_24',
       width: 120,
       field: 'userId',
       valueFormatter: params =>
@@ -56,7 +58,7 @@ const ExamHistory = (props: { examId: string }) => {
         }`,
     },
     {
-      headerName: 'Điểm số',
+      headerName: 'J_71',
       flex: 1,
       field: 'statScore',
       minWidth: 120,
@@ -72,7 +74,7 @@ const ExamHistory = (props: { examId: string }) => {
       },
     },
     {
-      headerName: 'Trạng thái',
+      headerName: 'J_72',
       field: 'status',
       cellRenderer: BadgeCell,
       cellRendererParams: {
@@ -100,7 +102,7 @@ const ExamHistory = (props: { examId: string }) => {
                   type="button"
                   onClick={props.onClick}
                 >
-                  Tiếp tục
+                  {t('J_73')}
                 </button>
               );
             },
@@ -132,7 +134,9 @@ const ExamHistory = (props: { examId: string }) => {
       className="h-full w-full  bg-white border border-gray-200 rounded-lg flex flex-col shadow-sm"
     >
       <div className="px-5 py-6">
-        <div className="text-lg font-semibold">Lịch sử {examData?.title} </div>
+        <div className="text-lg font-semibold">
+          {t('J_74')} {examData?.title}{' '}
+        </div>
       </div>
       <div className="h-[20rem]">
         <ExamChart data={data?.result?.items ?? []} />

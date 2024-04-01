@@ -1,44 +1,63 @@
-import { Disclosure, Transition } from '@headlessui/react';
-import React, { useEffect, useRef, useState } from 'react';
+'use client';
+import { Disclosure } from '@headlessui/react';
+import React, { useRef, useState } from 'react';
+import { useMutation } from 'hooks/swr';
+import { useParams, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { IExam } from 'interfaces';
+import { METHOD, ROLES } from 'global';
+import { formatDateToString } from 'utils/datetime';
+import { uuid } from 'utils/common';
+import { useTranslation } from 'app/i18n/client';
 import Trash from 'assets/svg/trash.svg';
 import Edit from 'assets/svg/edit.svg';
 import Link from 'assets/svg/external-link.svg';
-import Chevron from 'assets/svg/chevron-down.svg';
-import { IExam, IQuestion } from 'interfaces';
-import { METHOD, QUESTION_TYPE, ROLES } from 'global';
-import { formatNumber, uuid } from 'utils/common';
-import { formatDateToString } from 'utils/datetime';
-import ModalProvider from 'components/ModalProvider';
-import Loader from 'components/Loader';
-import ConfirmModal from 'components/ConfirmModal';
-import { useMutation } from 'hooks/swr';
-import { useParams, useRouter } from 'next/navigation';
+import Upload from 'assets/svg/upload.svg';
 import Calendar from 'assets/svg/calendar.svg';
 import HelpCircle from 'assets/svg/help-circle.svg';
 import Layer from 'assets/svg/3-layers.svg';
 import FileText from 'assets/svg/file-text.svg';
+import ModalProvider from 'components/ModalProvider';
 import Badge from 'components/Badge';
-import { useSession } from 'next-auth/react';
+import Loader from 'components/Loader';
+import ConfirmModal from 'components/ConfirmModal';
 
 type Props = { data: IExam; onRefresh(): void; compact?: boolean };
 
 const ExamItem = (props: Props) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { lng } = useParams();
   const [modalDelete, setModalDelete] = useState(false);
+  const [modalPublish, setModalPublish] = useState(false);
   const componentId = useRef(uuid());
   const { data: session } = useSession();
-  const { trigger: deleteQuestion } = useMutation('EXAM_DELETE_QUESTION', {
-    url: '/api/v1/exams/{questionId}',
+  const { trigger: deleteExam } = useMutation('EXAM_DELETE_QUESTION', {
+    url: '/api/v1/exams/{examId}',
     method: METHOD.DELETE,
     componentId: componentId.current,
     loading: true,
     notification: {
-      title: 'Xóa đề thi',
-      content: 'Xóa đề thi thành công',
+      title: 'J_48',
+      content: 'J_49',
     },
     onSuccess() {
       handleCloseDelete();
+      props.onRefresh();
+    },
+  });
+
+  const { trigger: updateExam } = useMutation('EXAM_UPDATE_EXAM', {
+    url: '/api/v1/exams/{examId}',
+    method: METHOD.PUT,
+    componentId: componentId.current,
+    loading: true,
+    notification: {
+      title: 'J_50',
+      content: 'J_51',
+    },
+    onSuccess() {
+      handleClosePublish();
       props.onRefresh();
     },
   });
@@ -60,13 +79,28 @@ const ExamItem = (props: Props) => {
     setModalDelete(true);
   };
 
+  const handlePublish = (event: MouseEvent) => {
+    event.stopPropagation();
+    setModalPublish(true);
+  };
+
   const handleConfirmDelete = () => {
-    deleteQuestion({
-      questionId: props.data.id,
+    deleteExam({
+      examId: props.data.id,
     });
   };
   const handleCloseDelete = () => {
     setModalDelete(false);
+  };
+  const handleClosePublish = () => {
+    setModalPublish(false);
+  };
+
+  const handleConfirmPublish = () => {
+    updateExam({
+      examId: props.data.id,
+      isSample: true,
+    });
   };
 
   const questionCount = props.data.parts.reduce(
@@ -106,11 +140,11 @@ const ExamItem = (props: Props) => {
                   </div>
                   <div className="flex items-center gap-2">
                     <Layer className="w-[1.6rem] h-[1.6rem]" />{' '}
-                    <div>{`${props.data.parts.length} phần thi`} </div>
+                    <div>{t('J_52', { count: props.data.parts.length })} </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <HelpCircle className="w-[1.6rem] h-[1.6rem]" />{' '}
-                    <div>{`${questionCount} câu hỏi`} </div>
+                    <div>{t('J_53', { count: questionCount })} </div>
                   </div>
                 </div>
               </div>
@@ -118,13 +152,13 @@ const ExamItem = (props: Props) => {
                 <div className="flex gap-6">
                   <Link
                     data-tooltip-id="default-tooltip"
-                    data-tooltip-content="Thi"
+                    data-tooltip-content={t('J_54')}
                     onClick={handleDoExam}
                     className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                   />
                   <FileText
                     data-tooltip-id="default-tooltip"
-                    data-tooltip-content="Lịch sử"
+                    data-tooltip-content={t('J_55')}
                     onClick={handleViewHistory}
                     className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                   />
@@ -133,15 +167,23 @@ const ExamItem = (props: Props) => {
                       session?.user.role,
                     )) && (
                     <>
+                      {!props.data.isSample && (
+                        <Upload
+                          data-tooltip-id="default-tooltip"
+                          data-tooltip-content={t('J_56')}
+                          onClick={handlePublish}
+                          className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                        />
+                      )}
                       <Edit
                         data-tooltip-id="default-tooltip"
-                        data-tooltip-content="Sửa"
+                        data-tooltip-content={t('J_57')}
                         onClick={handleEdit}
                         className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                       />
                       <Trash
                         data-tooltip-id="default-tooltip"
-                        data-tooltip-content="Xóa"
+                        data-tooltip-content={t('J_58')}
                         onClick={handleDelete}
                         className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
                       />
@@ -153,11 +195,22 @@ const ExamItem = (props: Props) => {
             <ModalProvider show={modalDelete}>
               <Loader id={componentId.current}>
                 <ConfirmModal
-                  title="Xóa đề thi"
-                  content="Đề thi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa câu hỏi này không?"
+                  title="J_48"
+                  content="J_59"
                   onConfirm={handleConfirmDelete}
                   onCancel={handleCloseDelete}
                   type={'warning'}
+                />
+              </Loader>
+            </ModalProvider>
+            <ModalProvider show={modalPublish}>
+              <Loader id={componentId.current}>
+                <ConfirmModal
+                  title="J_50"
+                  content="J_60"
+                  onConfirm={handleConfirmPublish}
+                  onCancel={handleClosePublish}
+                  type={'success'}
                 />
               </Loader>
             </ModalProvider>

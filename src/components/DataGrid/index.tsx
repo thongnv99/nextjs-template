@@ -11,6 +11,7 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Theme
 import './style.scss';
 import { GridApi, GridReadyEvent } from 'ag-grid-community';
+import { useTranslation } from 'app/i18n/client';
 
 interface DataGridProps extends AgGridReactProps {}
 export interface DataGridHandle {
@@ -25,6 +26,7 @@ const DataGrid = forwardRef(
       | Ref<DataGridHandle | null | undefined>
       | null,
   ) => {
+    const { t } = useTranslation();
     const { defaultColDef, onGridReady, ...rest } = props;
     const [gridInit, setGridInit] = useState<boolean>(false);
 
@@ -55,6 +57,11 @@ const DataGrid = forwardRef(
             resizable: false,
             minWidth: 60,
             ...defaultColDef,
+            headerValueGetter: params => {
+              return params.colDef.headerName
+                ? t(params.colDef.headerName)
+                : '';
+            },
           }}
           suppressDragLeaveHidesColumns
           suppressRowHoverHighlight

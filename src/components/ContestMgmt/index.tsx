@@ -20,9 +20,6 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
     show: false,
   });
-  const router = useRouter();
-  const { lng } = useParams();
-  const [type, setType] = useState('');
   const [currPage, setCurrPage] = useState(1);
 
   const { data, isLoading, mutate } = useSWRWrapper<ContestRes>(

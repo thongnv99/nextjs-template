@@ -6,8 +6,10 @@ import ExamMgmt from 'components/ExamMgmt';
 import { useSWRWrapper } from 'hooks/swr';
 import { StatsRes } from 'interfaces';
 import { formatNumber } from 'utils/common';
+import { useTranslation } from 'app/i18n/client';
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const { data } = useSWRWrapper<StatsRes>('/api/v1/users/stats', {
     url: '/api/v1/users/stats',
   });
@@ -19,7 +21,7 @@ const HomePage = () => {
           <div className="h-[1rem] bg-blue-400 w-full"></div>
           <div className="flex flex-col w-full items-center p-2 gap-2">
             <div className="text-base flex gap-2 items-center">
-              Cuộc thi đã tham gia <Info className="w-4 h-4 cursor-pointer" />
+              {t('J_44')} <Info className="w-4 h-4 cursor-pointer" />
             </div>
             <div className="font-bold text-lg">
               {formatNumber(data?.contest.totalCompleted ?? 0)}
@@ -30,7 +32,7 @@ const HomePage = () => {
           <div className="h-[1rem] bg-red-400 w-full"></div>
           <div className="flex flex-col w-full items-center p-2 gap-2">
             <div className="text-base flex gap-2 items-center">
-              Đề thi đã làm <Info className="w-4 h-4 cursor-pointer" />
+              {t('J_45')} <Info className="w-4 h-4 cursor-pointer" />
             </div>
             <div className="font-bold text-lg">
               {formatNumber(data?.exam.totalCompleted)}
@@ -41,11 +43,11 @@ const HomePage = () => {
           <div className="h-[1rem] bg-yellow-400 w-full"></div>
           <div className="flex flex-col w-full items-center p-2 gap-2">
             <div className="text-base flex gap-2 items-center">
-              Câu hỏi
+              {t('J_46')}
               <Info className="w-4 h-4 cursor-pointer" />
             </div>
             <div className="font-bold text-lg">
-              {formatNumber(data?.exam.totalCompleted)}
+              {formatNumber((data?.exam.totalTimeCompleted ?? 0) / 60 / 60)}
             </div>
           </div>
         </div>
@@ -53,7 +55,7 @@ const HomePage = () => {
           <div className="h-[1rem] bg-green-400 w-full"></div>
           <div className="flex flex-col w-full items-center p-2 gap-2">
             <div className="text-base flex gap-2 items-center">
-              Flash Card <Info className="w-4 h-4 cursor-pointer" />
+              {t('J_47')} <Info className="w-4 h-4 cursor-pointer" />
             </div>
             <div className="font-bold text-lg">
               {formatNumber(data?.flashcard.totalLearned)}

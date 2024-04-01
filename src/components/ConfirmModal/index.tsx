@@ -40,7 +40,7 @@ const ConfirmModal = (props: NoticeModalProps) => {
             type="button"
             onClick={props.onCancel}
           >
-            {t('Đóng')}
+            {t('J_61')}
           </button>
         )}
         <button
@@ -48,7 +48,7 @@ const ConfirmModal = (props: NoticeModalProps) => {
           type="button"
           onClick={props.onConfirm}
         >
-          {t(props.labelConfirm ?? 'Đồng ý')}
+          {t(props.labelConfirm ?? 'J_62')}
         </button>
       </div>
     </div>
