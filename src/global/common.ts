@@ -55,3 +55,5 @@ export enum EXAM_STATUS {
   DRAFT = 'DRAFT',
   PUBLISH = 'PUBLISH',
 }
+
+export const FETCH_COUNT = 20;

@@ -72,10 +72,7 @@ export const useMutation = <T = Record<string, unknown>,>(
     notification?: NotificationConfig;
     componentId?: string;
     loading?: boolean;
-  } & SWRMutationConfiguration<
-    RestResponse<T>,
-    RestError & Record<string, unknown>
-  >,
+  } & SWRMutationConfiguration<T, RestError & Record<string, unknown>>,
 ) => {
   const { data: session } = useSession();
   const { mutate } = useSWRConfig();
@@ -85,7 +82,7 @@ export const useMutation = <T = Record<string, unknown>,>(
       key: string,
       { arg: body }: { arg?: Record<string, unknown> | FormData },
     ) => {
-      return new Promise<RestResponse<T>>((resolve, reject) => {
+      return new Promise<T | undefined>((resolve, reject) => {
         if (options.loading) {
           mutate(COMMON_LOADING, {
             componentId: options.componentId,
@@ -100,7 +97,7 @@ export const useMutation = <T = Record<string, unknown>,>(
             Authorization: `Bearer ${session?.token}`,
           },
         )
-          .then(data => resolve(data))
+          .then(data => resolve(data.result))
           .catch(err => reject(err))
           .finally(() => {
             {
@@ -138,7 +135,7 @@ export const useMutation = <T = Record<string, unknown>,>(
         }
       },
       onSuccess(data, key, config) {
-        options.onSuccess?.(data as RestResponse<T>, key, config as any);
+        options.onSuccess?.(data!, key, config as any);
         if (notification && !notification.ignoreSuccess) {
           toast(
             <ToastNotification

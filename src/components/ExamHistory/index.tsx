@@ -35,7 +35,7 @@ const ExamHistory = (props: { examId: string }) => {
     onSuccess(data) {
       gridRef.current?.api?.hideOverlay();
       gridRef.current?.api?.applyTransaction({
-        add: data.result?.items,
+        add: data?.items,
         addIndex: gridRef.current.api.getDisplayedRowCount(),
       });
     },
@@ -139,7 +139,7 @@ const ExamHistory = (props: { examId: string }) => {
         </div>
       </div>
       <div className="h-[20rem]">
-        <ExamChart data={data?.result?.items ?? []} />
+        <ExamChart data={data?.items ?? []} />
       </div>
       <div className="flex-1">
         <DataGrid

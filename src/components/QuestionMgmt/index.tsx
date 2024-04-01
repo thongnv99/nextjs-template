@@ -1,15 +1,25 @@
 'use client';
 import Loader from 'components/Loader';
 import QuestionItem from 'components/QuestionItem';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { isBlank, uuid } from 'utils/common';
 import Plus from 'assets/svg/plus.svg';
 import Dropdown from 'elements/Dropdown';
-import { useSWRWrapper } from 'hooks/swr';
-import { QuestionRes } from 'interfaces';
+import { useMutation, useSWRWrapper } from 'hooks/swr';
+import { IQuestion, Pagination, QuestionRes } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
-import { QuestionTypeOptions, SampleOptions } from 'global/options';
-
+import {
+  QuestionTypeOptions,
+  SampleOptions,
+  YearOptions,
+} from 'global/options';
+import { FETCH_COUNT, METHOD } from 'global';
+import InfiniteLoader from 'react-window-infinite-loader';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import {
+  VariableSizeList as List,
+  ListChildComponentProps,
+} from 'react-window';
 type Props = {};
 
 const QuestionMgmt = (props: Props) => {
@@ -18,36 +28,95 @@ const QuestionMgmt = (props: Props) => {
   const { lng } = useParams();
   const [type, setType] = useState('');
   const [sample, setSample] = useState('');
-  const [currPage, setCurrPage] = useState(1);
+  const [year, setYear] = useState('');
 
-  const { data, isLoading, mutate } = useSWRWrapper<QuestionRes>(
-    `/api/v1/questions?type=${type}&page=${currPage}&isSample=${sample}`,
+  const [data, setData] = useState<IQuestion[]>([]);
+  const loading = useRef(false);
+  const pagination = useRef<Pagination>({
+    page: 0,
+    limit: FETCH_COUNT,
+    totalPage: 1,
+  });
+
+  const { trigger, isMutating } = useMutation<QuestionRes>(
+    '/api/vi/questions',
     {
       url: '/api/v1/questions',
-      params: {
+      method: METHOD.GET,
+      onSuccess(data, key, config) {
+        setData(prev => [...prev, ...data.items]);
+        pagination.current = data.pagination;
+        loading.current = false;
+      },
+    },
+  );
+
+  useEffect(() => {
+    requestData();
+  }, []);
+  useEffect(() => {
+    handleRefresh();
+  }, [sample, type, year]);
+
+  const requestData = () => {
+    const { page, totalPage } = pagination.current;
+    if (page < totalPage) {
+      loading.current = true;
+      trigger({
+        page: page + 1,
+        limit: FETCH_COUNT,
         ...(!isBlank(type) && {
           type,
         }),
         ...(!isBlank(sample) && {
           isSample: sample === 'true',
         }),
-        page: currPage,
-        limit: 200,
-      },
-    },
-  );
+        ...(!isBlank(year) && {
+          year,
+        }),
+      });
+    }
+  };
 
   const handleCreateQuestion = () => {
     router.push(`/${lng}/question/question-form`);
   };
 
   const handleRefresh = () => {
-    mutate();
+    pagination.current = {
+      page: 0,
+      limit: FETCH_COUNT,
+      totalPage: 1,
+    };
+    setData([]);
+    requestData();
   };
+
+  const isItemLoaded = (index: number) => {
+    return data[index] != null;
+  };
+
+  const loadMoreItems = () => {
+    return new Promise<void>(() => {
+      if (!loading.current) {
+        requestData();
+      }
+    });
+  };
+
+  const Row = ({ index, style }: ListChildComponentProps) => {
+    const item = data![index];
+    return (
+      <div style={style} className="py-[2px] flex items-center  px-5">
+        <QuestionItem data={item} onRefresh={handleRefresh} />
+      </div>
+    );
+  };
+
   return (
     <Loader
       id={componentId.current}
-      loading={isLoading}
+      loading={isMutating && !data.length}
       className="h-full w-full border bg-white border-gray-200 rounded-lg  flex flex-col shadow-sm"
     >
       <div className="p-5 pb-0 flex items-center justify-between">
@@ -81,11 +150,51 @@ const QuestionMgmt = (props: Props) => {
             onChange={value => setSample(value)}
           />
         </div>
+        <div className="max-w-lg flex-1">
+          <Dropdown
+            label="Năm"
+            placeholder="Năm"
+            className="w-full"
+            options={YearOptions}
+            selected={year}
+            onChange={value => setYear(value)}
+          />
+        </div>
       </div>
-      <div className=" px-5  pb-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
-        {data?.items.map(item => (
-          <QuestionItem key={item.id} data={item} onRefresh={handleRefresh} />
-        ))}
+      <div className="  pb-5 flex-1 w-full flex flex-col gap-2 ">
+        {data && data.length > 0 ? (
+          <AutoSizer className="list">
+            {({ width, height }) => (
+              <InfiniteLoader
+                isItemLoaded={isItemLoaded}
+                itemCount={Number.MAX_SAFE_INTEGER}
+                loadMoreItems={loadMoreItems}
+                threshold={20}
+              >
+                {({ onItemsRendered, ref }) => (
+                  <List
+                    height={height}
+                    onItemsRendered={onItemsRendered}
+                    ref={list => {
+                      // eslint-disable-next-line
+                      (ref as Function)(list);
+
+                      // listRef.current = list;
+                    }}
+                    itemData={data}
+                    itemSize={() => 88}
+                    itemCount={data.length}
+                    width={width}
+                  >
+                    {Row}
+                  </List>
+                )}
+              </InfiniteLoader>
+            )}
+          </AutoSizer>
+        ) : (
+          <div className="empty">Không có dữ liệu</div>
+        )}
       </div>
       <div></div>
     </Loader>

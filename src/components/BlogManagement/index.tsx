@@ -66,7 +66,7 @@ const BlogManagement = () => {
     onSuccess(data) {
       gridRef.current?.api?.hideOverlay();
       gridRef.current?.api?.applyTransaction({
-        add: data.result?.items,
+        add: data.items,
         addIndex: gridRef.current.api.getDisplayedRowCount(),
       });
     },

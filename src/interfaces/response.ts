@@ -17,10 +17,13 @@ export type RestResponse<T = Record<string, unknown>> = RestError &
 
 export interface ArrayResponse<T> {
   items: T[];
-  pagination: {
-    limit: number;
-    totalPage: number;
-  };
+  pagination: Pagination;
+}
+
+export interface Pagination {
+  limit: number;
+  totalPage: number;
+  page: number;
 }
 
 export interface PaymentPackageRes {
