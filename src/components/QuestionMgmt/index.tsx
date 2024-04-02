@@ -22,7 +22,10 @@ import {
 } from 'react-window';
 import QuestionPicker from 'components/QuestionPicker';
 import ExamPicker from 'components/ExamPicker';
-type Props = {};
+type Props = {
+  inPicker?: boolean;
+  onRowCheckedChange?: (data: IQuestion, value?: boolean) => void;
+};
 
 const QuestionMgmt = (props: Props) => {
   const componentId = useRef(uuid());
@@ -31,6 +34,7 @@ const QuestionMgmt = (props: Props) => {
   const [type, setType] = useState('');
   const [sample, setSample] = useState('');
   const [year, setYear] = useState('');
+  const [mapChecked, setMapChecked] = useState<Record<string, boolean>>({});
 
   const [data, setData] = useState<IQuestion[]>([]);
   const loading = useRef(false);
@@ -110,7 +114,17 @@ const QuestionMgmt = (props: Props) => {
     const item = data![index];
     return (
       <div style={style} className="py-[2px] flex items-center  px-5">
-        <QuestionItem data={item} onRefresh={handleRefresh} />
+        <QuestionItem
+          data={item}
+          checked={mapChecked[item.id]}
+          onRefresh={handleRefresh}
+          showCheckBox={props.inPicker}
+          hideAction={props.inPicker}
+          onRowCheckedChange={(question, value) => {
+            props.onRowCheckedChange?.(question, value);
+            setMapChecked(prev => ({ ...prev, [String(question.id)]: value! }));
+          }}
+        />
       </div>
     );
   };
@@ -119,18 +133,24 @@ const QuestionMgmt = (props: Props) => {
     <Loader
       id={componentId.current}
       loading={isMutating && !data.length}
-      className="h-full w-full border bg-white border-gray-200 rounded-lg  flex flex-col shadow-sm"
+      className={`h-full w-full  bg-white  flex flex-col ${
+        !props.inPicker ? 'border border-gray-200 rounded-lg shadow-sm ' : ''
+      } `}
     >
-      <div className="p-5 pb-0 flex items-center justify-between">
-        <div className="text-lg font-semibold">Danh sách câu hỏi</div>
-        <button
-          type="button"
-          className="btn-primary btn-icon"
-          onClick={handleCreateQuestion}
-        >
-          <Plus /> Thêm câu hỏi
-        </button>
-      </div>
+      {!props.inPicker && (
+        <>
+          <div className="p-5 pb-0 flex items-center justify-between">
+            <div className="text-lg font-semibold">Danh sách câu hỏi</div>
+            <button
+              type="button"
+              className="btn-primary btn-icon"
+              onClick={handleCreateQuestion}
+            >
+              <Plus /> Thêm câu hỏi
+            </button>
+          </div>
+        </>
+      )}
       <div className="px-5 mb-4 flex gap-2">
         <div className="max-w-lg flex-1">
           <Dropdown

@@ -1,5 +1,6 @@
 import { useTranslation } from 'app/i18n/client';
 import Loader from 'components/Loader';
+import Checkbox from 'elements/CheckBox';
 import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
 import { METHOD } from 'global';
@@ -38,7 +39,7 @@ const ExamForm = (props: ExamFormProps) => {
       },
       onSuccess(data) {
         props.onClose();
-        router.push(`/${lng}/exam/config/${(data?.result as any)?.id}`);
+        router.push(`/${lng}/exam/config/${data.id}`);
       },
     },
   );
@@ -76,6 +77,7 @@ const ExamForm = (props: ExamFormProps) => {
         initialValues={{
           title: props.data?.title ?? '',
           description: props.data?.description ?? '',
+          isSample: false,
         }}
         onSubmit={handleSubmit}
       >
@@ -86,6 +88,7 @@ const ExamForm = (props: ExamFormProps) => {
           touched,
           errors,
           handleSubmit,
+          setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
             <TextInput
@@ -103,7 +106,7 @@ const ExamForm = (props: ExamFormProps) => {
               label="J_68"
               name="description"
               placeholder="J_68"
-              className="mb-8"
+              className="mb-3"
               type="textarea"
               onChange={handleChange}
               value={values.description}
@@ -111,6 +114,16 @@ const ExamForm = (props: ExamFormProps) => {
               hasError={touched.description && !isBlank(errors.description)}
               errorMessage={errors.description}
             />
+            {!props.data && (
+              <Checkbox
+                className="mb-8"
+                selected={values.isSample}
+                label="Đề mẫu"
+                onChange={(_, value) => {
+                  setFieldValue('isSample', value);
+                }}
+              />
+            )}
             <div className="flex gap-3">
               <button
                 type="button"

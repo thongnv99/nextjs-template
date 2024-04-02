@@ -49,15 +49,15 @@ const ExamDetail = (props: { examId?: string }) => {
     },
     {
       label: 'Thời gian làm bài',
-      value: `${examData?.duration} phút`,
+      value: `${(examData?.duration ?? 0) / 60 ?? '--'} phút`,
     },
     {
       label: 'Phần thi',
-      value: `${examData?.parts.length} phần`,
+      value: `${examData?.parts.length ?? '--'} phần`,
     },
     {
       label: 'Câu hỏi',
-      value: `${questionCount} câu`,
+      value: `${questionCount ?? '--'} câu`,
     },
   ];
 

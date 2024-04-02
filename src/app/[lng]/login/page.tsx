@@ -40,8 +40,8 @@ const Login = () => {
       url: '/api/v1/loginByGoogle',
       method: METHOD.POST,
       onSuccess(data) {
-        if (data.result?.googleLoginUrl) {
-          router.replace(data.result.googleLoginUrl);
+        if (data?.googleLoginUrl) {
+          router.replace(data.googleLoginUrl);
         }
       },
     },

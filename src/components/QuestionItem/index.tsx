@@ -19,12 +19,16 @@ import './style.scss';
 import Badge from 'components/Badge';
 import { LEVEL_TRANSLATE, QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import { useSession } from 'next-auth/react';
+import Checkbox from 'elements/CheckBox';
 type Props = {
   data: IQuestion;
   onRefresh?: () => void;
   onDelete?: () => void;
+  onRowCheckedChange?: (data: IQuestion, value?: boolean) => void;
   showDelete?: boolean;
   hideAction?: boolean;
+  showCheckBox?: boolean;
+  checked?: boolean;
 };
 
 const mapQuestionType = {
@@ -150,6 +154,16 @@ const QuestionItem = (props: Props) => {
               data-tooltip-id="default-tooltip"
               data-tooltip-content="Xóa"
               className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+            />
+          </div>
+        )}
+        {props.showCheckBox && (
+          <div className="flex gap-8">
+            <Checkbox
+              selected={props.checked}
+              onChange={(_, value) => {
+                props.onRowCheckedChange?.(props.data, value);
+              }}
             />
           </div>
         )}

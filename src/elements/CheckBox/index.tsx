@@ -17,12 +17,15 @@ interface Checkbox {
 const Checkbox = (props: Checkbox) => {
   const { t } = useTranslation();
 
-  const onChange: React.MouseEventHandler<HTMLDivElement> = event => {
-    event.stopPropagation();
-    props.onChange?.(props.name, !Boolean(props.selected));
-  };
   return (
-    <div className={`checkbox ${props.className ?? ''}`} onClick={onChange}>
+    <div
+      className={`checkbox ${props.className ?? ''}`}
+      onClick={event => {
+        event.stopPropagation();
+        console.log('props', props.selected);
+        props.onChange?.(props.name, !Boolean(props.selected));
+      }}
+    >
       <button
         disabled={props.disabled}
         type="button"
