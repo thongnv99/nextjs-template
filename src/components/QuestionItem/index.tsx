@@ -11,6 +11,7 @@ import { formatDateToString } from 'utils/datetime';
 import ModalProvider from 'components/ModalProvider';
 import Loader from 'components/Loader';
 import ConfirmModal from 'components/ConfirmModal';
+import Delete from 'assets/svg/delete.svg';
 import { useMutation } from 'hooks/swr';
 import { useParams, useRouter } from 'next/navigation';
 import ArrowRight from 'assets/svg/arrow-right.svg';
@@ -18,7 +19,13 @@ import './style.scss';
 import Badge from 'components/Badge';
 import { LEVEL_TRANSLATE, QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import { useSession } from 'next-auth/react';
-type Props = { data: IQuestion; onRefresh(): void };
+type Props = {
+  data: IQuestion;
+  onRefresh?: () => void;
+  onDelete?: () => void;
+  showDelete?: boolean;
+  hideAction?: boolean;
+};
 
 const mapQuestionType = {
   [QUESTION_TYPE.ESSAY]: 'Tự luận',
@@ -46,7 +53,7 @@ const QuestionItem = (props: Props) => {
     },
     onSuccess() {
       handleCloseDelete();
-      props.onRefresh();
+      props.onRefresh?.();
     },
   });
 
@@ -108,31 +115,44 @@ const QuestionItem = (props: Props) => {
             dangerouslySetInnerHTML={{ __html: props.data.content }}
           ></div>
         </div>
-        <div className="flex gap-8">
-          <Copy
-            data-tooltip-id="default-tooltip"
-            data-tooltip-content="Nhân bản"
-            onClick={handleCopy}
-            className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-          />
-          {(!props.data.isSample ||
-            [ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role)) && (
-            <>
-              <Edit
-                data-tooltip-id="default-tooltip"
-                data-tooltip-content="Sửa"
-                onClick={handleEdit}
-                className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-              />
-              <Trash
-                onClick={handleDelete}
-                data-tooltip-id="default-tooltip"
-                data-tooltip-content="Xóa"
-                className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-              />
-            </>
-          )}
-        </div>
+        {!props.hideAction && (
+          <div className="flex gap-8">
+            <Copy
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content="Nhân bản"
+              onClick={handleCopy}
+              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+            />
+            {(!props.data.isSample ||
+              [ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role)) && (
+              <>
+                <Edit
+                  data-tooltip-id="default-tooltip"
+                  data-tooltip-content="Sửa"
+                  onClick={handleEdit}
+                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                />
+                <Trash
+                  onClick={handleDelete}
+                  data-tooltip-id="default-tooltip"
+                  data-tooltip-content="Xóa"
+                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                />
+              </>
+            )}
+          </div>
+        )}
+
+        {props.showDelete && (
+          <div className="flex gap-8">
+            <Delete
+              onClick={props.onDelete}
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content="Xóa"
+              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+            />
+          </div>
+        )}
       </div>
       <ModalProvider show={modalDelete} onClose={handleCloseDelete}>
         <Loader id={componentId.current}>
@@ -276,6 +296,15 @@ const QuestionItem = (props: Props) => {
                 }}
               </Disclosure>
             </div>
+          </div>
+          <div className="flex">
+            <button
+              className=" btn-primary mt-8 mx-auto"
+              type="button"
+              onClick={() => setModalDetail(false)}
+            >
+              Đóng
+            </button>
           </div>
         </div>
       </ModalProvider>

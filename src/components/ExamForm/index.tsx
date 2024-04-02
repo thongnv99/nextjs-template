@@ -38,7 +38,7 @@ const ExamForm = (props: ExamFormProps) => {
       },
       onSuccess(data) {
         props.onClose();
-        router.push(`/${lng}/exam/config/${data?.result?.id}`);
+        router.push(`/${lng}/exam/config/${(data?.result as any)?.id}`);
       },
     },
   );

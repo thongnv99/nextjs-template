@@ -18,6 +18,8 @@ import { uuid } from 'utils/common';
 import TextInput from 'elements/TextInput';
 import Close from 'assets/svg/x-circle.svg';
 import ContestForm from 'components/ContestForm';
+import { useDrop } from 'react-dnd';
+import QuestionDnd from './QestionDnd';
 interface ExamConfigProps {
   examId: string;
   isContest?: boolean;
@@ -33,6 +35,7 @@ const ExamConfig = (props: ExamConfigProps) => {
   const { lng } = useParams();
   const componentId = useRef(uuid());
   const formRef = useRef<FormikProps<ExamConfigValues>>();
+  const [, drop] = useDrop(() => ({ accept: 'QuestionDnd' }));
   const [titleModal, setTitleModal] = useState(false);
   const [questionModal, setQuestionModal] = useState<{
     show: boolean;
@@ -191,7 +194,32 @@ const ExamConfig = (props: ExamConfigProps) => {
                         </button>
                       </div>
                       <div className="p-6  flex flex-col gap-4">
-                        {part.questions.map(question => (
+                        {part.questions.map((question, questionIdx) => (
+                          <QuestionDnd
+                            key={question.id}
+                            data={question}
+                            idx={questionIdx}
+                            findItem={id =>
+                              part.questions.findIndex(item => item.id === id)
+                            }
+                            onMove={(fromIdx, toIdx) => {
+                              const fromValue = { ...part.questions[fromIdx] };
+                              const copy = [...part.questions];
+                              copy.splice(fromIdx, 1); // xóa phần tử from
+                              copy.splice(toIdx, 0, fromValue); //chèn phần  tử from vào toIdx
+                              setFieldValue(`parts[${idx}].questions`, copy);
+                            }}
+                            onDelete={() => {
+                              setFieldValue(
+                                `parts[${idx}].questions`,
+                                part.questions.filter(
+                                  item => item.id !== question.id,
+                                ),
+                              );
+                            }}
+                          />
+                        ))}
+                        {/* {part.questions.map(question => (
                           <div
                             key={question.id}
                             className="flex items-center border border-primary-400 rounded-[0.8rem] p-4 justify-between"
@@ -215,7 +243,7 @@ const ExamConfig = (props: ExamConfigProps) => {
                               />
                             </div>
                           </div>
-                        ))}
+                        ))} */}
                       </div>
                     </div>
                   </div>
