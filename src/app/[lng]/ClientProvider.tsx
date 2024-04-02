@@ -7,6 +7,8 @@ import { TRIGGER_SESSION_TIMEOUT } from 'store/key';
 import { SWRConfig, mutate } from 'swr';
 import { Tooltip } from 'react-tooltip';
 import { setYupLocale } from 'utils/validator';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import 'react-tooltip/dist/react-tooltip.css';
 type Props = {
   children?: React.ReactNode;
@@ -31,7 +33,9 @@ export const ClientProvider = ({ children, lng }: Props) => {
         },
       }}
     >
-      {status === 'loading' ? <Preload /> : children}
+      <DndProvider backend={HTML5Backend}>
+        {status === 'loading' ? <Preload /> : children}
+      </DndProvider>
       <Tooltip id="default-tooltip" />
     </SWRConfig>
   );

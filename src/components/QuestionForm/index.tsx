@@ -19,6 +19,8 @@ import Loader from 'components/Loader';
 import { useSWRWrapper } from 'hooks/swr';
 import { IQuestion } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
+import OptionItem from './OptionItem';
+import { useDrop } from 'react-dnd';
 
 const BLANK_DETECT = `<span class="mention" data-mention="[(n)]">[(n)]</span>`;
 
@@ -26,7 +28,7 @@ interface QuestionFormValues {
   title?: string;
   content?: string;
   answerExplain?: string;
-  options: string[];
+  options: { id: string; value: string }[];
   blanks: Record<string, string>;
   blankPositions: string[];
   correctOption?: string;
@@ -104,7 +106,7 @@ const QuestionForm = (props: QuestionFormProps) => {
   });
   const optionsRef = useRef<HTMLDivElement | null>(null);
   const formRef = useRef<FormikProps<QuestionFormValues>>();
-
+  const [, drop] = useDrop(() => ({ accept: 'OptionItem' }));
   useEffect(() => {
     if (data) {
       const values: QuestionFormValues = {
@@ -117,7 +119,10 @@ const QuestionForm = (props: QuestionFormProps) => {
         year: data.year,
         answerExplain: data.answerExplain,
         questionCategoryId: data.questionCategoryId?.id,
-        options: data.options ?? [],
+        options: (data.options ?? []).map((item, idx) => ({
+          id: uuid(),
+          value: item,
+        })),
         blanks: {},
         correctOption: String(data.correctOption),
         blankPositions: [],
@@ -143,6 +148,7 @@ const QuestionForm = (props: QuestionFormProps) => {
 
   const handleSubmit = (values: QuestionFormValues) => {
     let payload = {} as Record<string, unknown>;
+
     if (values.type === QUESTION_TYPE.ESSAY) {
       payload = {
         type: values.type,
@@ -164,7 +170,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         source: 'QUESTION',
         content: values.content,
         correctOption: values.correctOption,
-        options: values.options,
+        options: values.options.map(option => option.value),
       };
     } else {
       const container = document.createElement('div');
@@ -242,7 +248,12 @@ const QuestionForm = (props: QuestionFormProps) => {
           initialValues={{
             level: QUESTION_LEVEL.EASY,
             type: QUESTION_TYPE.MULTIPLE_CHOICE,
-            options: ['', '', '', ''],
+            options: [
+              { id: '1', value: '' },
+              { id: '2', value: '' },
+              { id: '3', value: '' },
+              { id: '4', value: '' },
+            ],
             content: '',
             correctOption: '0',
             blanks: {},
@@ -337,51 +348,50 @@ const QuestionForm = (props: QuestionFormProps) => {
                 {values.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
                   <div className="question-section">
                     <div className="title">Đáp án</div>
-                    <div ref={optionsRef} className="flex flex-col gap-4  mb-4">
-                      {values.options.map((item, idx) => (
-                        <div className="flex items-center gap-2" key={idx}>
-                          <Checkbox
-                            selected={values.correctOption === String(idx)}
-                            onChange={(_, value) =>
-                              setFieldValue('correctOption', String(idx))
+                    <div ref={drop} className="flex flex-col gap-4  mb-4">
+                      {values.options.map((option, idx) => (
+                        <OptionItem
+                          key={option.id}
+                          id={option.id}
+                          idx={idx}
+                          value={option.value}
+                          checked={values.correctOption === String(idx)}
+                          onChange={value =>
+                            setFieldValue(`options[${idx}].value`, value)
+                          }
+                          onChangeChecked={value =>
+                            setFieldValue('correctOption', String(idx))
+                          }
+                          onDelete={() => {
+                            const cpyOptions = [...values.options];
+                            cpyOptions.splice(idx, 1);
+                            setFieldValue('options', cpyOptions);
+                          }}
+                          findItem={id =>
+                            values.options.findIndex(item => item.id === id)
+                          }
+                          onMove={(fromIdx, toIdx) => {
+                            const fromValue = { ...values.options[fromIdx] };
+                            const copy = [...values.options];
+                            copy.splice(fromIdx, 1); // xóa phần tử from
+                            copy.splice(toIdx, 0, fromValue); //chèn phần  tử from vào toIdx
+                            if (values.correctOption === String(fromIdx)) {
+                              // move luôn cả đáp án đúng
+                              setFieldValue('correctOption', String(toIdx));
                             }
-                          />
-                          <div className="uppercase">{idx + 1}.</div>
-                          {/* <TextInput
-                            value={item}
-                            name={`options[${idx}]`}
-                            id={`options[${idx}]`}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            className="flex-1"
-                          /> */}
-                          <div className="flex-1 min-h-[10rem] overflow-hidden">
-                            <Editor
-                              data={item}
-                              id={`options[${idx}]`}
-                              key={`options[${idx}]`}
-                              onChange={value =>
-                                setFieldValue(`options[${idx}]`, value)
-                              }
-                              placeholder="Nhập đáp án"
-                            />
-                          </div>
-                          <Delete
-                            className="text-gray-500 cursor-pointer"
-                            onClick={() => {
-                              const cpyOptions = [...values.options];
-                              cpyOptions.splice(idx, 1);
-                              setFieldValue('options', cpyOptions);
-                            }}
-                          />
-                        </div>
+                            setFieldValue('options', copy);
+                          }}
+                        />
                       ))}
                     </div>
                     <div className="flex items-center gap-2 mb-4">
                       <button
                         type="button"
                         onClick={() => {
-                          setFieldValue('options', [...values.options, '']);
+                          setFieldValue('options', [
+                            ...values.options,
+                            { id: uuid(), value: '' },
+                          ]);
                           setTimeout(() => {
                             const inputs =
                               optionsRef.current?.getElementsByTagName('input');
