@@ -20,6 +20,8 @@ import {
   VariableSizeList as List,
   ListChildComponentProps,
 } from 'react-window';
+import QuestionPicker from 'components/QuestionPicker';
+import ExamPicker from 'components/ExamPicker';
 type Props = {};
 
 const QuestionMgmt = (props: Props) => {
@@ -159,6 +161,9 @@ const QuestionMgmt = (props: Props) => {
             selected={year}
             onChange={value => setYear(value)}
           />
+        </div>
+        <div className="max-w-lg flex-1">
+          <ExamPicker label="Đề thi" placeholder="Đề thi" className="w-full" />
         </div>
       </div>
       <div className="  pb-5 flex-1 w-full flex flex-col gap-2 ">
