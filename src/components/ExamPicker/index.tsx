@@ -1,14 +1,14 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 import CheckIcon from 'assets/svg/check-icon.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { useSWRWrapper } from 'hooks/swr';
 import { ExamRes, IExam, QuestionRes } from 'interfaces';
-
+import Clear from 'assets/svg/x.svg';
 type ExamPickerProps = {
   placeholder?: string;
   selected?: string;
-  onChange?: (value: IExam) => void;
+  onChange?: (value?: IExam) => void;
   label?: string;
   hasError?: boolean;
   errorMessage?: string;
@@ -16,7 +16,7 @@ type ExamPickerProps = {
 };
 
 export default function ExamPicker(props: ExamPickerProps) {
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState<IExam>();
   const [query, setQuery] = useState('');
   const { label, hasError, errorMessage, className } = props;
   const { data, isLoading, mutate } = useSWRWrapper<ExamRes>(`/api/v1/exams`, {
@@ -27,6 +27,10 @@ export default function ExamPicker(props: ExamPickerProps) {
     },
     revalidateOnFocus: false,
   });
+
+  useEffect(() => {
+    props.onChange?.(selected);
+  }, [selected, props.onChange]);
 
   const filteredExam =
     query === ''
@@ -51,13 +55,22 @@ export default function ExamPicker(props: ExamPickerProps) {
       )}
       <Combobox value={selected} onChange={setSelected}>
         <div className="relative flex-1 w-full">
-          <div className="dropdown-button relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+          <div className="dropdown-button flex gap-2 relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
-              className="w-full outline-none border-none text-sm leading-5 text-gray-900 "
-              displayValue={(exam: IExam) => exam.title}
+              className="flex-1 outline-none border-none text-sm leading-5 text-gray-900 "
+              value={selected?.title}
+              placeholder={props.placeholder}
               onChange={event => setQuery(event.target.value)}
             />
-            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+            {/* {selected && (
+              <button
+                className="flex items-center"
+                onClick={() => setSelected(null)}
+              >
+                <Clear />
+              </button>
+            )} */}
+            <Combobox.Button className="flex items-center">
               <Chevron className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </Combobox.Button>
           </div>

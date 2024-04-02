@@ -6,7 +6,7 @@ import { isBlank, uuid } from 'utils/common';
 import Plus from 'assets/svg/plus.svg';
 import Dropdown from 'elements/Dropdown';
 import { useMutation, useSWRWrapper } from 'hooks/swr';
-import { IQuestion, Pagination, QuestionRes } from 'interfaces';
+import { IExam, IQuestion, Pagination, QuestionRes } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import {
   QuestionTypeOptions,
@@ -31,6 +31,7 @@ const QuestionMgmt = (props: Props) => {
   const [type, setType] = useState('');
   const [sample, setSample] = useState('');
   const [year, setYear] = useState('');
+  const [exam, setExam] = useState<IExam>();
 
   const [data, setData] = useState<IQuestion[]>([]);
   const loading = useRef(false);
@@ -58,7 +59,7 @@ const QuestionMgmt = (props: Props) => {
   }, []);
   useEffect(() => {
     handleRefresh();
-  }, [sample, type, year]);
+  }, [sample, type, year, exam]);
 
   const requestData = () => {
     const { page, totalPage } = pagination.current;
@@ -75,6 +76,10 @@ const QuestionMgmt = (props: Props) => {
         }),
         ...(!isBlank(year) && {
           year,
+        }),
+        ...(exam && {
+          source: 'EXAM',
+          examId: exam.id,
         }),
       });
     }
@@ -163,7 +168,12 @@ const QuestionMgmt = (props: Props) => {
           />
         </div>
         <div className="max-w-lg flex-1">
-          <ExamPicker label="Đề thi" placeholder="Đề thi" className="w-full" />
+          <ExamPicker
+            label="Đề thi"
+            placeholder="Chọn đề thi"
+            className="w-full"
+            onChange={setExam}
+          />
         </div>
       </div>
       <div className="  pb-5 flex-1 w-full flex flex-col gap-2 ">
