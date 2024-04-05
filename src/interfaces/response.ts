@@ -62,6 +62,7 @@ export interface IExam {
   title: string;
   description: string;
   duration: number;
+  order?: number;
   isSample: boolean;
   parts: IPart[];
   createdAt: number;
@@ -76,6 +77,7 @@ export interface IContest {
   endTime: number;
   status: string;
   createdAt: number;
+  order?: number;
   parts: IPart[];
 }
 export interface IPart {

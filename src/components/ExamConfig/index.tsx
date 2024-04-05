@@ -28,6 +28,7 @@ interface ExamConfigProps {
 interface ExamConfigValues {
   parts: IPart[];
   duration?: number;
+  order?: number;
 }
 
 const ExamConfig = (props: ExamConfigProps) => {
@@ -79,6 +80,7 @@ const ExamConfig = (props: ExamConfigProps) => {
         questions: part.questions.map(item => item.id),
       })),
       duration: Number(values.duration ?? 0) * 60,
+      order: Number(values.order),
     });
   };
 
@@ -135,6 +137,7 @@ const ExamConfig = (props: ExamConfigProps) => {
             {
               parts: exam.parts ?? [],
               duration: (exam.duration ?? 0) / 60,
+              order: exam.order,
             } as ExamConfigValues
           }
         >
@@ -147,13 +150,21 @@ const ExamConfig = (props: ExamConfigProps) => {
             touched,
           }) => (
             <form className="flex flex-col gap-4">
-              <div className="border rounded-2xl transition-all p-6  bg-white">
+              <div className="border rounded-2xl transition-all p-6  bg-white flex flex-col gap-4">
                 <TextInput
                   label="Thời gian (phút)"
                   name={`duration`}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.duration}
+                  type="number"
+                />
+                <TextInput
+                  label="Thứ tự"
+                  name={`order`}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.order}
                   type="number"
                 />
               </div>
