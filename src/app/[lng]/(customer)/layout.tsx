@@ -10,7 +10,9 @@ const CustomerLayout = (props: { children: React.ReactNode }) => {
     <div className="h-full w-full flex flex-col">
       <Header />
       <div className=" w-full flex-1 flex overflow-hidden">
-        {['do-exam', 'do-contest'].every(item => !pathname.includes(item)) && (
+        {['do-exam', 'do-contest', 'blog'].every(
+          item => !pathname.includes(item),
+        ) && (
           <div className=" bg-white w-[28rem] h-full border-r border-r-gray-200">
             <Sidebar />
           </div>

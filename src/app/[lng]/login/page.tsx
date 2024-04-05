@@ -166,6 +166,15 @@ const Login = () => {
                   đăng ký ngay?
                 </Link>
               </div>
+              <button
+                type="button"
+                className="btn flex items-center justify-center"
+                onClick={() => {
+                  router.push(`/${lng}/blog`);
+                }}
+              >
+                Blog
+              </button>
             </form>
           )}
         </Formik>

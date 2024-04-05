@@ -27,7 +27,7 @@ const BlogCard = ({ data }: { data: IBlog }) => {
   );
 };
 
-const BlogList = () => {
+const BlogList = ({ inDetail }: { inDetail?: boolean }) => {
   const { data } = useSWRWrapper<BlogListRes>('/api/v1/posts', {
     url: '/api/v1/posts',
     method: METHOD.GET,

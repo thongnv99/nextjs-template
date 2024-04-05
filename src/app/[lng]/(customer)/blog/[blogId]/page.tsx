@@ -1,5 +1,6 @@
 'use client';
 import BlogDetail from 'components/BlogDetail';
+import BlogList from 'components/BlogList';
 import Preload from 'components/Preload';
 import { useBlog } from 'hooks/common';
 import React from 'react';
@@ -23,7 +24,14 @@ const BlogDetailPage = (props: BlogDetailProps) => {
     return <div>Đã có lỗi xảy ra</div>;
   }
 
-  return <BlogDetail data={data} />;
+  return (
+    <div className="flex items-start h-full">
+      {/* <div className="w-[30%] h-full">
+        <BlogList inDetail />
+      </div> */}
+      <BlogDetail data={data} />
+    </div>
+  );
 };
 
 export default BlogDetailPage;

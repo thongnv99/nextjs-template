@@ -30,6 +30,7 @@ export default withAuth(
       `/${lng}/${ROUTES.REGISTER}`,
       `/${lng}/${ROUTES.FORGOT_PASSWORD}`,
       `/${lng}/${ROUTES.RESET_PASSWORD}`,
+      `/${lng}/blog`,
     ];
     // Redirect if lng in path is not supported
     if (

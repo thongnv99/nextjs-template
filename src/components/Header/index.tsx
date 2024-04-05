@@ -7,10 +7,12 @@ import UserDropdown from 'components/UserDropdown';
 import Logo from 'assets/svg/logo.svg';
 import { useTranslation } from 'app/i18n/client';
 import './style.scss';
+import { useSession } from 'next-auth/react';
 
 const Header = () => {
   const { lng } = useParams();
   const router = useRouter();
+  const { status } = useSession();
   return (
     <header className="header h-[6rem] w-full  px-4 flex justify-between items-center border-b border-b-gray-200">
       <div
@@ -25,9 +27,20 @@ const Header = () => {
         <div className="mr-4 h-fit">
           <LanguagePicker />
         </div>
-        <div className="pl-4 flex items-center justify-center">
-          <UserDropdown />
-        </div>
+        {status === 'authenticated' ? (
+          <div className="pl-4 flex items-center justify-center">
+            <UserDropdown />
+          </div>
+        ) : (
+          <div className="pl-4">
+            <Link
+              href={`/${lng}/login`}
+              className="btn-primary !h-[3rem] flex items-center"
+            >
+              Đăng nhập
+            </Link>
+          </div>
+        )}
       </div>
     </header>
   );
