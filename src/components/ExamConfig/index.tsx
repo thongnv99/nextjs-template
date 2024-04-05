@@ -78,7 +78,7 @@ const ExamConfig = (props: ExamConfigProps) => {
         duration: part.duration,
         questions: part.questions.map(item => item.id),
       })),
-      duration: values.duration,
+      duration: Number(values.duration ?? 0) * 60,
     });
   };
 
@@ -86,7 +86,6 @@ const ExamConfig = (props: ExamConfigProps) => {
     const idx = questionModal.currentPart;
     if (idx != null && idx >= 0) {
       const part = formRef.current?.values.parts?.[idx];
-      console.log(part);
       if (part) {
         formRef.current?.setFieldValue(`parts[${idx}].questions`, [
           ...part.questions,
@@ -135,6 +134,7 @@ const ExamConfig = (props: ExamConfigProps) => {
           initialValues={
             {
               parts: exam.parts ?? [],
+              duration: (exam.duration ?? 0) / 60,
             } as ExamConfigValues
           }
         >

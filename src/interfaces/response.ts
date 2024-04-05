@@ -71,6 +71,7 @@ export interface IContest {
   id: string;
   title: string;
   description: string;
+  duration: number;
   startTime: number;
   endTime: number;
   status: string;
