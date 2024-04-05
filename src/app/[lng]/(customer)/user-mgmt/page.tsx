@@ -18,7 +18,7 @@ import TrashIcon from 'assets/svg/lock.svg';
 import EditIcon from 'assets/svg/edit-2.svg';
 import ButtonCell from 'components/DataGrid/ButtonCell';
 import ConfirmModal from 'components/ConfirmModal';
-import { uuid } from 'utils/common';
+import { formatNumber, uuid } from 'utils/common';
 import { METHOD } from 'global';
 import { useMutation } from 'hooks/swr';
 import Badge from 'components/Badge';
@@ -87,7 +87,8 @@ const UserMgmtPage = () => {
   const columnDefs: Array<ColDef> = [
     {
       headerName: 'Tên',
-      flex: 1,
+      minWidth: 180,
+
       field: 'firstName',
       cellClass: 'bold',
       valueFormatter: params => {
@@ -97,24 +98,53 @@ const UserMgmtPage = () => {
     {
       headerName: 'Email',
       field: 'email',
+      minWidth: 280,
     },
     {
       headerName: 'Ngày sinh',
       field: 'dob',
+      minWidth: 80,
     },
     {
       headerName: 'Số điện thoại',
       field: 'phoneNumber',
+      minWidth: 80,
     },
     {
       headerName: 'Giới tính',
       field: 'gender',
+      valueFormatter: params => {
+        return params.value === 'MALE' ? 'Nam' : 'Nữ';
+      },
+    },
+    {
+      headerName: 'Số cuột thi tham gia',
+      field: 'contest.totalCompleted',
+      cellClass: 'text-right',
+    },
+    {
+      headerName: 'Số đề thi đã làm',
+      field: 'exam.totalCompleted',
+      cellClass: 'text-right',
+    },
+    {
+      headerName: 'Số giờ đã học',
+      field: 'exam.totalTimeCompleted',
+      cellClass: 'text-right',
+      valueFormatter: params => {
+        return formatNumber(Number(params.value || 0) / 60 / 60, 2);
+      },
+    },
+    {
+      headerName: 'Số flashcard đã học',
+      field: 'flashcard.totalLearned',
+      cellClass: 'text-right',
     },
     {
       headerName: 'Trạng thái',
-      flex: 1,
       field: 'statusInfo.status',
       cellRenderer: BadgeCell,
+      minWidth: 120,
       cellRendererParams: {
         dot: true,
         colorClass: {
@@ -126,17 +156,14 @@ const UserMgmtPage = () => {
     },
     {
       headerName: '',
-      flex: 1,
+      pinned: 'right',
+      maxWidth: 60,
       cellRenderer: ButtonCell,
       cellRendererParams: {
         buttons: [
           {
             render: Trash,
             onClick: handleShowConfirmDelete,
-          },
-          {
-            render: Edit,
-            onClick: handleShowEditModal,
           },
         ],
       },
@@ -153,7 +180,7 @@ const UserMgmtPage = () => {
   return (
     <Loader
       id={componentId.current}
-      className="h-full w-full border border-gray-200 rounded-lg  m-auto flex flex-col shadow-sm "
+      className="h-full w-full border bg-white border-gray-200 rounded-lg  m-auto flex flex-col shadow-sm "
     >
       <div className="flex justify-between p-5 ">
         <div className="text-lg font-semibold flex">

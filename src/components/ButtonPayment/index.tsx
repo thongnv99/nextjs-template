@@ -40,7 +40,7 @@ const ButtonPayment = (props: { price: number }) => {
       paymentMethodId: '657426ae8a4cb7ec76676a43',
     });
 
-    const paymentCode = res.result?.paymentCode;
+    const paymentCode = res?.paymentCode;
 
     if (bankInfo) {
       try {
@@ -59,7 +59,7 @@ const ButtonPayment = (props: { price: number }) => {
   };
 
   const handleConfirmPaid = () => {
-    confirmPaid({ id: paymentCodeRes?.result?.id });
+    confirmPaid({ id: paymentCodeRes?.id });
   };
 
   return (
@@ -123,7 +123,7 @@ const ButtonPayment = (props: { price: number }) => {
                   <div className="flex items-center justify-between w-full">
                     <div>Nội dung</div>
                     <div className="text-gray-800 font-bold">
-                      {paymentCodeRes?.result?.paymentCode}
+                      {paymentCodeRes?.paymentCode}
                     </div>
                   </div>
                   <div className="text-green-700 text-[1.4rem]">

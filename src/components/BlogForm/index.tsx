@@ -40,8 +40,8 @@ const BlogForm = () => {
     loading: true,
     componentId: componentId.current,
     onSuccess(data) {
-      if (data.result) {
-        formRef.current?.setValues(data.result);
+      if (data) {
+        formRef.current?.setValues(data);
       }
     },
   });

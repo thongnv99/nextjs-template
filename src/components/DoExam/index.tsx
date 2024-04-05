@@ -67,7 +67,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
         content: 'Nộp bài thành công',
       },
       onSuccess(data) {
-        if (data.result?.status === 'SESSION_PAUSE') {
+        if (data?.status === 'SESSION_PAUSE') {
           router.push(`/${lng}/exam/history/${examData?.id}`);
         }
         setSubmitModal({ show: false, hasSaveSession: hasSaveSession });
@@ -98,7 +98,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
 
   const onSubmit = (values: { parts: IPart[] | undefined }) => {
     submitExam({
-      sessionId: exam?.result?.sessionId,
+      sessionId: exam?.sessionId,
       answersByPart: values.parts?.map((part, idx) => ({
         part: idx,
         answers: part.questions.map(question => question.answer ?? ''),
@@ -118,13 +118,13 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     return <Preload />;
   }
 
-  if (result && result.result?.status !== 'SESSION_PAUSE') {
-    const resultData = result.result;
+  if (result && result?.status !== 'SESSION_PAUSE') {
+    const resultData = result;
     return <ExamResult exam={examData} data={resultData} />;
   }
   const parts = [] as IPart[];
-  for (let i = 0; i < (exam?.result?.parts.length ?? 0); i++) {
-    const part = exam?.result?.parts?.[i];
+  for (let i = 0; i < (exam?.parts.length ?? 0); i++) {
+    const part = exam?.parts?.[i];
     const startIdx =
       (parts[i - 1]?.startIdx ?? 0) + (parts[i - 1]?.questions.length ?? 0);
     if (part) {
@@ -191,7 +191,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                   <div className="w-full mb-4">
                     <div>Thời gian còn lại</div>
                     <TimeViewer
-                      initTime={examData?.duration ?? 0}
+                      initTime={(examData?.duration ?? 0) / 60}
                       ref={timerController}
                       onExp={() => {
                         handleSubmit();
