@@ -10,6 +10,7 @@ import { useCategoryQuestions } from 'hooks/common';
 import Checkbox from 'elements/CheckBox';
 import Delete from 'assets/svg/delete.svg';
 import Plus from 'assets/svg/plus-square.svg';
+import Close from 'assets/svg/x.svg';
 import Editor from 'components/Editor';
 import {
   useCreateQuestionMutation,
@@ -39,6 +40,8 @@ interface QuestionFormValues {
   source?: string;
   duration?: number;
   year?: string;
+  tags: string[];
+  tagText?: string;
 }
 
 const QuestionTypeOptions = [
@@ -126,6 +129,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         blanks: {},
         correctOption: String(data.correctOption),
         blankPositions: [],
+        tags: data.tags?.split('|') ?? [],
       };
       if (values.type === QUESTION_TYPE.FILL_IN_THE_BLANK) {
         const container = document.createElement('div');
@@ -156,6 +160,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         year: values.year,
         score: values.score,
         questionCategoryId: values.questionCategoryId,
+        tags: values.tags.join('|'),
         source: 'QUESTION',
         content: values.content,
         answer: 'Tự chấm',
@@ -166,6 +171,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         score: values.score,
         level: values.level,
         year: values.year,
+        tags: values.tags.join('|'),
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: values.content,
@@ -189,6 +195,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         score: values.score,
         level: values.level,
         year: values.year,
+        tags: values.tags.join('|'),
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: container.innerHTML,
@@ -212,7 +219,6 @@ const QuestionForm = (props: QuestionFormProps) => {
     formRef.current?.submitForm();
   };
 
-  const { data: categoryOptions } = useCategoryQuestions();
   return (
     <Loader
       id={componentId.current}
@@ -258,6 +264,7 @@ const QuestionForm = (props: QuestionFormProps) => {
             correctOption: '0',
             blanks: {},
             blankPositions: ['', '', ''],
+            tags: [] as string[],
           }}
         >
           {({
@@ -283,34 +290,63 @@ const QuestionForm = (props: QuestionFormProps) => {
                     value={values.score}
                     type="number"
                   />
-                  <TextInput
-                    label="Năm"
-                    name="year"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    hasError={touched.year && !isBlank(errors.year)}
-                    errorMessage={errors.year}
-                    value={values.year}
-                  />
                   <Dropdown
                     options={LevelOptions}
                     selected={values.level}
                     label="Level"
                     onChange={value => setFieldValue('level', value)}
                   />
-                  <Dropdown
-                    options={categoryOptions?.items.map(item => ({
-                      label: item.name[lng as 'vi' | 'ja'],
-                      value: item.id,
-                    }))}
-                    placeholder="Phân loại câu hỏi"
-                    selected={values.questionCategoryId}
-                    label="Phân loại"
-                    initial
-                    onChange={value =>
-                      setFieldValue('questionCategoryId', value)
-                    }
-                  />
+                  <div className="flex flex-col gap-4">
+                    <div className="input-label">Tags</div>
+                    {values.tags.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {values.tags.map((tag, idx) => (
+                          <div
+                            key={idx}
+                            className=" bg-primary-200 rounded-[4px] px-2 flex gap-1 items-center"
+                          >
+                            {tag}
+                            <Close
+                              onClick={() => {
+                                const copy = [...values.tags];
+                                copy.splice(idx, 1);
+                                setFieldValue('tags', copy);
+                              }}
+                              className="cursor-pointer"
+                              height={14}
+                              width={14}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="font-normal">Chưa có tags</div>
+                    )}
+                    <div className="flex gap-2 w-full  justify-between">
+                      <div className="flex-1">
+                        <TextInput
+                          name="tagText"
+                          onChange={handleChange}
+                          value={values.tagText}
+                          placeholder="Nhập nội dung để thêm tag"
+                        />
+                      </div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          if (!isBlank(values.tagText)) {
+                            setFieldValue('tags', [
+                              ...values.tags,
+                              values.tagText,
+                            ]);
+                            setFieldValue('tagText', '');
+                          }
+                        }}
+                      >
+                        <Plus className="h-[4.2rem] w-[4.2rem] " />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="flex-1 flex flex-col gap-4 pb-4 overflow-x-hidden">

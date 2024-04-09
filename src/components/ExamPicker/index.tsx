@@ -8,7 +8,7 @@ import Clear from 'assets/svg/x.svg';
 type ExamPickerProps = {
   placeholder?: string;
   selected?: string;
-  onChange?: (value?: IExam) => void;
+  onChange?: (value?: IExam | null) => void;
   label?: string;
   hasError?: boolean;
   errorMessage?: string;
@@ -16,7 +16,7 @@ type ExamPickerProps = {
 };
 
 export default function ExamPicker(props: ExamPickerProps) {
-  const [selected, setSelected] = useState<IExam>();
+  const [selected, setSelected] = useState<IExam | null>(null);
   const [query, setQuery] = useState('');
   const { label, hasError, errorMessage, className } = props;
   const { data, isLoading, mutate } = useSWRWrapper<ExamRes>(`/api/v1/exams`, {
@@ -29,6 +29,11 @@ export default function ExamPicker(props: ExamPickerProps) {
   });
 
   useEffect(() => {
+    if (selected) {
+      setQuery(selected.title);
+    } else {
+      setQuery('');
+    }
     props.onChange?.(selected);
   }, [selected, props.onChange]);
 
@@ -58,18 +63,18 @@ export default function ExamPicker(props: ExamPickerProps) {
           <div className="dropdown-button flex gap-2 relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
               className="flex-1 outline-none border-none text-sm leading-5 text-gray-900 "
-              value={selected?.title}
+              value={query}
               placeholder={props.placeholder}
               onChange={event => setQuery(event.target.value)}
             />
-            {/* {selected && (
+            {selected && (
               <button
                 className="flex items-center"
                 onClick={() => setSelected(null)}
               >
                 <Clear />
               </button>
-            )} */}
+            )}
             <Combobox.Button className="flex items-center">
               <Chevron className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </Combobox.Button>
@@ -79,7 +84,6 @@ export default function ExamPicker(props: ExamPickerProps) {
             leave="transition ease-in duration-100"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
-            afterLeave={() => setQuery('')}
           >
             <Combobox.Options className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
               {filteredExam?.length === 0 && query !== '' ? (

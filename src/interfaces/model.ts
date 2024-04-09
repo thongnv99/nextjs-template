@@ -57,6 +57,7 @@ export interface IQuestion {
   blankPositions?: { answer: string }[];
   userAnswer?: string;
   status: 'INCORRECT' | 'CORRECT';
+  tags: string;
 }
 
 export interface IResponseDefault {

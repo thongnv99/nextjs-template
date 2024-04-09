@@ -108,10 +108,13 @@ const QuestionItem = (props: Props) => {
               content={mapQuestionType[props.data.type]}
               className={`bg-green-100 text-green-500 text-[1rem]`}
             />
-            <Badge
-              content={props.data.year ?? '--'}
-              className={`bg-red-100 text-red-500 text-[1rem]`}
-            />
+            {props.data.tags?.split('|').map((tag, idx) => (
+              <Badge
+                key={idx}
+                content={tag ?? '--'}
+                className={`bg-red-100 text-red-500 text-[1rem]`}
+              />
+            ))}
           </div>
           <div
             onClick={() => setModalDetail(true)}
@@ -194,13 +197,6 @@ const QuestionItem = (props: Props) => {
                 </div>
               </div>
               <div className="flex">
-                <div className="min-w-[10rem] font-semibold">Danh mục</div>
-                <div className="font-normal text-sm text-gray-500">
-                  {props.data.questionCategoryId?.name?.[lng as 'vi' | 'ja'] ??
-                    '--'}
-                </div>
-              </div>
-              <div className="flex">
                 <div className="min-w-[10rem] font-semibold">Điểm</div>
                 <div className="font-normal text-sm text-gray-500">
                   {formatNumber(props.data.score ?? 1)}
@@ -219,6 +215,18 @@ const QuestionItem = (props: Props) => {
                     new Date(props.data.createdAt),
                     'dd/MM/yyyy HH:mm:ss',
                   )}
+                </div>
+              </div>
+              <div className="flex">
+                <div className="min-w-[10rem] font-semibold">Tags</div>
+                <div className="flex flex-wrap gap-2">
+                  {props.data.tags?.split('|').map((tag, idx) => (
+                    <Badge
+                      key={idx}
+                      content={tag ?? '--'}
+                      className={`bg-red-100 text-red-500 text-[1rem]`}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
