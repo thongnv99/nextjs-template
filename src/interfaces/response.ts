@@ -84,6 +84,7 @@ export interface IPart {
   duration: number;
   questions: IQuestion[];
   startIdx?: number;
+  name?: string;
 }
 
 export type BlogListRes = ArrayResponse<IBlog>;

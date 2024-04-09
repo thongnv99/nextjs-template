@@ -78,6 +78,7 @@ const ExamConfig = (props: ExamConfigProps) => {
       parts: values.parts.map(part => ({
         duration: part.duration,
         questions: part.questions.map(item => item.id),
+        name: part.name,
       })),
       duration: Number(values.duration ?? 0) * 60,
       order: Number(values.order),
@@ -171,11 +172,12 @@ const ExamConfig = (props: ExamConfigProps) => {
               {values.parts.map((part, idx) => (
                 <div
                   key={idx}
-                  className="border rounded-2xl transition-all p-6  bg-white"
+                  className="border rounded-2xl transition-all p-6 flex flex-col gap-4 bg-white"
                 >
-                  <div className="mb-8 flex flex-col  ">
+                  <div className=" flex flex-col  ">
                     <div className="flex w-full items-center justify-between">
                       <div className="text-lg">Phần {idx + 1}</div>
+
                       <div
                         data-tooltip-id="default-tooltip"
                         data-tooltip-content="Xóa phần thi"
@@ -189,6 +191,15 @@ const ExamConfig = (props: ExamConfigProps) => {
                         <Close />
                       </div>
                     </div>
+                  </div>
+                  <div>
+                    <TextInput
+                      label="Tên"
+                      name={`parts[${idx}].name`}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={part.name}
+                    />
                   </div>
                   <div className="flex flex-col w-full gap-4">
                     <div>

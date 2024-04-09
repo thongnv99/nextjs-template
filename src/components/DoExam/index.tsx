@@ -163,7 +163,9 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                   key={idx}
                   className="flex flex-col  bg-white p-4 border border-gray-200"
                 >
-                  <h2 className="font-bold mb-6">Phần {idx + 1}</h2>
+                  <h2 className="font-bold mb-6">{`Phần ${idx + 1}: ${
+                    part.name ?? ''
+                  }`}</h2>
                   {part?.questions.map((item, questionIdx) => (
                     <div key={questionIdx} className="flex flex-col gap-6 pt-6">
                       <DoQuestion
