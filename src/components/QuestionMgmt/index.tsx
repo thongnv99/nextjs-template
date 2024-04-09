@@ -34,7 +34,7 @@ const QuestionMgmt = (props: Props) => {
   const [type, setType] = useState('');
   const [sample, setSample] = useState('');
   const [year, setYear] = useState('');
-  const [exam, setExam] = useState<IExam>();
+  const [exam, setExam] = useState<IExam | null>();
   const [mapChecked, setMapChecked] = useState<Record<string, boolean>>({});
 
   const [data, setData] = useState<IQuestion[]>([]);

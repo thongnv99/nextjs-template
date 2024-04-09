@@ -5,28 +5,10 @@ const nextConfig = {
     FETCH_COUNT: Number(process.env.FETCH_COUNT ?? 20),
     LOCK_CREATE_EXAM: process.env.LOCK_CREATE_EXAM == 'true',
   },
-  async redirects() {
-    return [
-      {
-        source: '/vi',
-        destination: '/vi/home',
-        permanent: true,
-      },
-      {
-        source: '/vi',
-        destination: '/vi/home',
-        permanent: true,
-      },
-    ];
-  },
   rewrites() {
     return [{
       source: '/',// ^(?!.*(?:vi|en)).*$
       destination: '/vi',
-    },
-    {
-      source: '/vi',// ^(?!.*(?:vi|en)).*$
-      destination: '/vi/exam',
     }];
   },
   reactStrictMode: false,

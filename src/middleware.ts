@@ -44,15 +44,23 @@ export default withAuth(
     }
 
     if (req.nextauth.token == null) {
-      if (PUBLIC_ROUTE.some(route => req.nextUrl.pathname.startsWith(route))) {
+      console.log('/vi', req.nextUrl.pathname);
+      if (
+        req.nextUrl.pathname === '/' ||
+        req.nextUrl.pathname === '/vi' ||
+        req.nextUrl.pathname === '/en'
+      ) {
+        return NextResponse.redirect(new URL(`/${lng}/blog`, req.url));
+      } else if (
+        PUBLIC_ROUTE.some(route => req.nextUrl.pathname.startsWith(route))
+      ) {
         return NextResponse.next();
       } else {
         return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
       }
     } else if (req.nextUrl.pathname.startsWith(`/${lng}/login`)) {
-      return NextResponse.redirect(new URL(`/${lng}`, req.url));
+      return NextResponse.redirect(new URL(`/${lng}/home`, req.url));
     }
-    console.log(req.nextUrl.pathname);
 
     return NextResponse.next();
   },

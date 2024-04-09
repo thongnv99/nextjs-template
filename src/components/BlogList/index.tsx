@@ -2,6 +2,7 @@
 import { METHOD } from 'global';
 import { useSWRWrapper } from 'hooks/swr';
 import { BlogListRes, IBlog } from 'interfaces';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 import { encodeUrl } from 'utils/common';
@@ -32,16 +33,19 @@ const BlogList = ({ inDetail }: { inDetail?: boolean }) => {
     url: '/api/v1/posts',
     method: METHOD.GET,
   });
+  const { status } = useSession();
   return (
     <div className="h-full w-full flex flex-col bg-white p-6 rounded-lg shadow-md">
       <div className="py-6  flex items-center justify-between w-full ">
         <div className="text-lg font-semibold">Tất cả</div>
-        <Link
-          href={'blog/blog-management'}
-          className="text-sm text-blue-500 font-semibold"
-        >
-          Quản lý blog
-        </Link>
+        {status === 'authenticated' && (
+          <Link
+            href={'/blog/blog-management'}
+            className="text-sm text-blue-500 font-semibold"
+          >
+            Quản lý blog
+          </Link>
+        )}
       </div>
       <div className="flex-1 w-full flex flex-col gap-6  overflow-y-auto pb-8">
         {data?.items.map(item => (
