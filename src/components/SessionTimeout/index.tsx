@@ -38,7 +38,10 @@ const SessionTimeout = () => {
   const handleConfirm = () => {
     setShow(false);
     mutate(TRIGGER_SESSION_TIMEOUT, null);
-    signOut();
+    signOut({
+      redirect: true,
+      callbackUrl: `${window.origin}/${lng}/login`,
+    });
   };
 
   return (

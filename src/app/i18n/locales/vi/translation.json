@@ -205,5 +205,16 @@
   "J_197": "",
   "J_198": "",
   "J_199": "",
+  "1001": "Không tìm thấy user",
+  "1002": "Sai tên đăng nhập hoặc mật khẩu",
+  "1003": "Email đã được đăng ký",
+  "1004": "Số điện thoại đã được đăng ký",
+  "1005": "Tài khoản của bạn đang bị khóa",
+  "1006": "Tài khoản của bạn đang bị khóa",
+  "1007": "Không có quyền truy cập",
+  "1008": "Phiên làm việc hết hạn",
+  "1009": "Feedback không tồn tại",
+  "1010": "Email đã được xác thực",
+  "1011": "Email chưa được xác thực. Vui lòng kiểm tra email và làm theo hướng dẫn",
   "title": "Xin chào!"
 }

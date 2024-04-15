@@ -22,6 +22,9 @@ declare module 'next-auth' {
     loginMethod: 'NORMAL' | 'GOOGLE';
     dob?: string; // dd/MM/yyyy
     gender?: 'MALE' | 'FEMALE';
+    verifyInfo: {
+      email?: boolean;
+    };
   }
 
   interface OutgoingResponse {

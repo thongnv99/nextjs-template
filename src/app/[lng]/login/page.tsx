@@ -1,12 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { redirect, useParams, useRouter } from 'next/navigation';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { METHOD, ROUTES } from 'global';
-import { isBlank } from 'utils/common';
+import { isBlank, uuid } from 'utils/common';
 import TextInput from 'elements/TextInput';
 import Loader from 'components/Loader';
 import Mail from 'assets/svg/mail.svg';
@@ -14,6 +14,9 @@ import Lock from 'assets/svg/lock.svg';
 import GoogleIcon from 'assets/svg/google.svg';
 import { useMutation } from 'hooks/swr';
 import { LOGIN_BY_GOOGLE } from 'store/key';
+import { useTranslation } from 'app/i18n/client';
+import ModalProvider from 'components/ModalProvider';
+import NoticeModal from 'components/NoticeModal';
 
 interface LoginForm {
   email: string;
@@ -22,10 +25,31 @@ interface LoginForm {
 }
 
 const Login = () => {
+  const { t } = useTranslation();
   const { lng } = useParams();
   const router = useRouter();
+  const componentId = useRef(uuid());
+  const [successModal, setSuccessModal] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>();
+
+  const { trigger: requestRegister } = useMutation(
+    '/api/v1/users/requestVerifyEmail',
+    {
+      method: METHOD.POST,
+      url: '/api/v1/users/requestVerifyEmail',
+      loading: true,
+      componentId: componentId.current,
+      onSuccess() {
+        handleShowSuccess();
+      },
+      onError(error) {
+        setErrorMessage(error.message);
+      },
+    },
+  );
+
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -60,6 +84,7 @@ const Login = () => {
       if (res?.ok) {
         window.location.reload();
       } else {
+        console.log({ res });
         setErrorMessage(res?.error);
       }
     } catch (error) {
@@ -76,7 +101,16 @@ const Login = () => {
 
     setLoading(false);
   };
-
+  const handleShowSuccess = () => {
+    setSuccessModal(true);
+  };
+  const requestVerifyEmail = () => {
+    console.log('1');
+    requestRegister();
+  };
+  const handleHiddenSuccess = () => {
+    setSuccessModal(false);
+  };
   return (
     <Loader
       loading={loading}
@@ -89,9 +123,19 @@ const Login = () => {
       <div className=" z-[1] flex-1 px-[3.2rem] max-w-[50rem] shadow-sm rounded-lg bg-white border-gray-400 p-7">
         <div className="mb-[4.8rem] text-[4.8rem] text-center">Đăng nhập</div>
         {!isBlank(errorMessage!) && (
-          <div className="mb-[4.8rem] text-[1.6rem] text-center text-red-600">
-            {errorMessage}
-          </div>
+          <>
+            <div className="mb-[4.8rem] text-[1.6rem] text-center text-red-600">
+              {t(errorMessage ?? '')}
+              {errorMessage === '1011' && (
+                <div
+                  className="text-[1.4rem] text-primary-500 cursor-pointer"
+                  onClick={requestVerifyEmail}
+                >
+                  Không nhận được email?
+                </div>
+              )}
+            </div>
+          </>
         )}
         <Formik
           onSubmit={handleLogin}
@@ -179,6 +223,14 @@ const Login = () => {
           )}
         </Formik>
       </div>
+      <ModalProvider show={successModal} onClose={handleHiddenSuccess}>
+        <NoticeModal
+          onConfirm={handleHiddenSuccess}
+          title="Xác thực thành công"
+          content="Email được xác thực thành công."
+          type="success"
+        />
+      </ModalProvider>
     </Loader>
   );
 };

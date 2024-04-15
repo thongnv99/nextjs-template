@@ -31,6 +31,7 @@ export default withAuth(
       `/${lng}/${ROUTES.FORGOT_PASSWORD}`,
       `/${lng}/${ROUTES.RESET_PASSWORD}`,
       `/${lng}/blog`,
+      `/${lng}/verify-email`,
     ];
     // Redirect if lng in path is not supported
     if (
@@ -58,7 +59,12 @@ export default withAuth(
       } else {
         return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
       }
-    } else if (req.nextUrl.pathname.startsWith(`/${lng}/login`)) {
+    } else if (
+      req.nextUrl.pathname.startsWith(`/${lng}/login`) ||
+      req.nextUrl.pathname === '/' ||
+      req.nextUrl.pathname === '/vi' ||
+      req.nextUrl.pathname === '/en'
+    ) {
       return NextResponse.redirect(new URL(`/${lng}/home`, req.url));
     }
 

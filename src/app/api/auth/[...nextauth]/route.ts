@@ -60,11 +60,20 @@ const handler = NextAuth({
           );
           const data: any = await response.json();
           if (data.status) {
+            console.log({ data: JSON.stringify(data) });
+            if (!data.result.user.verifyInfo.email) {
+              return Promise.reject(new Error('1011'));
+            }
             return data.result;
           }
-          return Promise.reject(data);
+          console.log({ data });
+          return Promise.reject(new Error(data.code));
         } catch (error) {
-          console.log({ error: `${process.env.BASE_API_URL}/api/v1/login` });
+          console.log({
+            error: `${process.env.BASE_API_URL}/api/v1/login ${JSON.stringify(
+              error,
+            )}`,
+          });
           return Promise.reject(error);
         }
       },
