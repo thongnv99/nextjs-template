@@ -39,7 +39,7 @@ export interface IQuestion {
   content: string;
   isSample?: boolean;
   answerExplain?: string;
-  correctOption?: number;
+  correctOption?: string;
   options?: string[];
   score: number;
   duration?: number;
@@ -58,6 +58,7 @@ export interface IQuestion {
   userAnswer?: string;
   status: 'INCORRECT' | 'CORRECT';
   tags: string;
+  isMultiChoice?: boolean;
 }
 
 export interface IResponseDefault {

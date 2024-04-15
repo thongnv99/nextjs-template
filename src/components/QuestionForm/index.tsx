@@ -33,6 +33,7 @@ interface QuestionFormValues {
   blanks: Record<string, string>;
   blankPositions: string[];
   correctOption?: string;
+  correctOptions: string[];
   questionCategoryId?: string;
   type: QUESTION_TYPE;
   level: QUESTION_LEVEL;
@@ -42,6 +43,7 @@ interface QuestionFormValues {
   year?: string;
   tags: string[];
   tagText?: string;
+  isMultiChoice?: boolean;
 }
 
 const QuestionTypeOptions = [
@@ -129,6 +131,8 @@ const QuestionForm = (props: QuestionFormProps) => {
         blanks: {},
         correctOption: String(data.correctOption),
         blankPositions: [],
+        correctOptions: String(data.correctOption).split(','),
+        isMultiChoice: data.isMultiChoice,
         tags: data.tags?.split('|') ?? [],
       };
       if (values.type === QUESTION_TYPE.FILL_IN_THE_BLANK) {
@@ -175,7 +179,10 @@ const QuestionForm = (props: QuestionFormProps) => {
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: values.content,
-        correctOption: values.correctOption,
+        correctOption: values.isMultiChoice
+          ? values.correctOptions.join(',')
+          : values.correctOption,
+        isMultiChoice: values.isMultiChoice,
         options: values.options.map(option => option.value),
       };
     } else {
@@ -265,6 +272,7 @@ const QuestionForm = (props: QuestionFormProps) => {
             blanks: {},
             blankPositions: ['', '', ''],
             tags: [] as string[],
+            correctOptions: ['0'],
           }}
         >
           {({
@@ -384,6 +392,14 @@ const QuestionForm = (props: QuestionFormProps) => {
                 {values.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
                   <div className="question-section">
                     <div className="title">Đáp án</div>
+                    <div className="mb-2">
+                      <Checkbox
+                        label="Nhiều đáp án đúng"
+                        name="isMultiChoice"
+                        selected={values.isMultiChoice}
+                        onChange={(name, value) => setFieldValue(name!, value)}
+                      />
+                    </div>
                     <div ref={drop} className="flex flex-col gap-4  mb-4">
                       {values.options.map((option, idx) => (
                         <OptionItem
@@ -391,13 +407,40 @@ const QuestionForm = (props: QuestionFormProps) => {
                           id={option.id}
                           idx={idx}
                           value={option.value}
-                          checked={values.correctOption === String(idx)}
-                          onChange={value =>
-                            setFieldValue(`options[${idx}].value`, value)
+                          checked={
+                            values.isMultiChoice
+                              ? values.correctOptions?.includes(String(idx))
+                              : values.correctOption === String(idx)
                           }
-                          onChangeChecked={value =>
-                            setFieldValue('correctOption', String(idx))
-                          }
+                          onChange={value => {
+                            setFieldValue(`options[${idx}].value`, value);
+                          }}
+                          onChangeChecked={value => {
+                            if (values.isMultiChoice) {
+                              if (
+                                value &&
+                                !values.correctOptions?.includes(String(idx))
+                              ) {
+                                setFieldValue('correctOptions', [
+                                  ...values.correctOptions,
+                                  String(idx),
+                                ]);
+                              } else if (
+                                !value &&
+                                values.correctOptions?.includes(String(idx)) &&
+                                values.correctOptions.length > 1
+                              ) {
+                                setFieldValue(
+                                  'correctOptions',
+                                  values.correctOptions.filter(
+                                    item => item !== String(idx),
+                                  ),
+                                );
+                              }
+                            } else {
+                              setFieldValue('correctOption', String(idx));
+                            }
+                          }}
                           onDelete={() => {
                             const cpyOptions = [...values.options];
                             cpyOptions.splice(idx, 1);

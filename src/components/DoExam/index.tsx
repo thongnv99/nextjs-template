@@ -101,7 +101,13 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
       sessionId: exam?.sessionId,
       answersByPart: values.parts?.map((part, idx) => ({
         part: idx,
-        answers: part.questions.map(question => question.answer ?? ''),
+        answers: part.questions.map(question =>
+          question.answer
+            ? Array.isArray(question.answer)
+              ? question.answer.join(',')
+              : question.answer
+            : '',
+        ),
       })),
       hasSaveSession: submitModal.hasSaveSession,
     });

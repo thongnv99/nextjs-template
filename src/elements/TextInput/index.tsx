@@ -8,7 +8,7 @@ import './style.scss';
 interface TextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string;
-  inputClass?:string;
+  inputClass?: string;
   hasError?: boolean;
   errorMessage?: string;
   leadingIcon?: React.ReactNode;
@@ -22,6 +22,7 @@ const TextInput = (props: TextInputProps) => {
     hasError,
     errorMessage,
     leadingIcon,
+    placeholder,
     helpIcon,
     className,
     inputClass,
@@ -43,10 +44,15 @@ const TextInput = (props: TextInputProps) => {
       <div className={`input-section ${inputClass ?? ''}`}>
         {props.leadingIcon && <div className="leading-icon">{leadingIcon}</div>}
         {props.type === 'textarea' ? (
-          <textarea {...rest} value={rest.value ?? ''} />
+          <textarea
+            {...rest}
+            value={rest.value ?? ''}
+            placeholder={t(placeholder ?? '') as string}
+          />
         ) : (
           <input
             {...rest}
+            placeholder={t(placeholder ?? '') as string}
             value={rest.value ?? ''}
             type={props.type === 'password' && show ? 'text' : props.type}
           />

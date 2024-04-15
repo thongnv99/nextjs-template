@@ -191,7 +191,7 @@ const ExamResult = ({ data, exam }: Props) => {
                             : ''
                         } 
                         ${
-                          question.correctOption === optionIdx
+                          question.correctOption?.includes(String(optionIdx))
                             ? 'bg-green-200'
                             : ''
                         }`}
@@ -216,7 +216,10 @@ const ExamResult = ({ data, exam }: Props) => {
                                             <div className="  p-2 flex gap-2 items-center">
                                               Đáp án đúng:{' '}
                                               <strong>
-                                                {question.correctOption! + 1}
+                                                {question!.correctOption
+                                                  ?.split(',')
+                                                  .map(item => Number(item) + 1)
+                                                  .join(', ')}
                                               </strong>
                                               <ArrowRight />
                                               <strong className="uppercase">

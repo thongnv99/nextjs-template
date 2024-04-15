@@ -10,6 +10,7 @@ import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
 import React from 'react';
 import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
+import Checkbox from 'elements/CheckBox';
 
 const DoQuestion = (props: {
   question?: IQuestion;
@@ -38,16 +39,48 @@ const DoQuestion = (props: {
       </div>
       <div>
         {props.question?.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
-          <RadioGroup
-            className={'flex-col gap-2'}
-            value={String(props.answer)}
-            labelClassName={`!text-gray-900`}
-            onChange={value => props.onChange(Number(value))}
-            options={props.question?.options?.map((item, idx) => ({
-              label: item,
-              value: String(idx),
-            }))}
-          />
+          <>
+            {props.question.isMultiChoice ? (
+              <>
+                {props.question.options?.map((question, idx) => {
+                  return (
+                    <Checkbox
+                      selected={props.answer?.includes(String(idx))}
+                      onChange={(_, value) => {
+                        console.log(value, props.answer);
+                        if (value) {
+                          props.onChange([
+                            ...(props.answer ? (props.answer as string[]) : []),
+                            String(idx),
+                          ]);
+                        } else {
+                          props.onChange(
+                            ((props.answer as string[]) ?? []).filter(
+                              item => item !== String(idx),
+                            ),
+                          );
+                        }
+                      }}
+                      innerHtml
+                      key={idx}
+                      label={question}
+                    />
+                  );
+                })}
+              </>
+            ) : (
+              <RadioGroup
+                className={'flex-col gap-2'}
+                value={String(props.answer)}
+                labelClassName={`!text-gray-900`}
+                onChange={value => props.onChange(Number(value))}
+                options={props.question?.options?.map((item, idx) => ({
+                  label: item,
+                  value: String(idx),
+                }))}
+              />
+            )}
+          </>
         )}
 
         {props.question?.type === QUESTION_TYPE.ESSAY && (
@@ -120,7 +153,12 @@ const DoQuestion = (props: {
                       <div className="p-2 bg-primary-50">
                         <div className="   flex gap-2 items-center className='font-bold'">
                           Đáp án:
-                          <strong>{props.question!.correctOption! + 1}</strong>
+                          <strong>
+                            {props
+                              .question!.correctOption?.split(',')
+                              .map(item => Number(item) + 1)
+                              .join(', ')}
+                          </strong>
                         </div>
                       </div>
                       {props.question!.answerExplain && (

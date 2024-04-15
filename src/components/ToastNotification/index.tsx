@@ -1,7 +1,9 @@
+'use client';
 import React from 'react';
 import SuccessIcon from 'assets/svg/notice-success.svg';
 import WaringIcon from 'assets/svg/notice-warning.svg';
 import ErrorIcon from 'assets/svg/notice-error.svg';
+import { useTranslation } from 'app/i18n/client';
 interface ToastNotificationProps {
   type: 'success' | 'error' | 'warning';
   content?: string;
@@ -14,13 +16,16 @@ const MapIcon = {
 };
 
 const ToastNotification = (props: ToastNotificationProps) => {
+  const { t } = useTranslation();
   return (
     <div className="flex gap-3">
       <div>{MapIcon[props.type]}</div>
       <div className="flex flex-col h-full justify-between">
-        <div className="text-base font-bold text-gray-900">{props.title}</div>
+        <div className="text-base font-bold text-gray-900">
+          {t(props.title ?? '')}
+        </div>
         <div className="text-base font-normal text-gray-500 text-ellipsis">
-          {props.content}
+          {t(props.content ?? '')}
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ interface Checkbox {
   name?: string;
   className?: string;
   disabled?: boolean;
+  innerHtml?: boolean;
   onChange?: (name?: string, value?: boolean) => void;
 }
 
@@ -33,9 +34,15 @@ const Checkbox = (props: Checkbox) => {
       >
         {props.selected && <Checked />}
       </button>
-      {!isBlank(props.label) && (
-        <div className="label text-medium">{t(props.label!)}</div>
-      )}
+      {!isBlank(props.label) &&
+        (props.innerHtml ? (
+          <div
+            className="label text-medium"
+            dangerouslySetInnerHTML={{ __html: props.label ?? '' }}
+          ></div>
+        ) : (
+          <div className="label text-medium">{t(props.label!)}</div>
+        ))}
     </div>
   );
 };
