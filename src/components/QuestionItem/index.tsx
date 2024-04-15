@@ -6,7 +6,7 @@ import Copy from 'assets/svg/copy.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
 import { METHOD, QUESTION_LEVEL, QUESTION_TYPE, ROLES } from 'global';
-import { formatNumber, uuid } from 'utils/common';
+import { formatNumber, isBlank, uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 import ModalProvider from 'components/ModalProvider';
 import Loader from 'components/Loader';
@@ -108,13 +108,16 @@ const QuestionItem = (props: Props) => {
               content={mapQuestionType[props.data.type]}
               className={`bg-green-100 text-green-500 text-[1rem]`}
             />
-            {props.data.tags?.split('|').map((tag, idx) => (
-              <Badge
-                key={idx}
-                content={tag ?? '--'}
-                className={`bg-red-100 text-red-500 text-[1rem]`}
-              />
-            ))}
+            {props.data.tags &&
+              props.data.tags
+                ?.split('|')
+                .map((tag, idx) => (
+                  <Badge
+                    key={idx}
+                    content={tag ?? '--'}
+                    className={`bg-red-100 text-red-500 text-[1rem]`}
+                  />
+                ))}
           </div>
           <div
             onClick={() => setModalDetail(true)}
@@ -220,13 +223,18 @@ const QuestionItem = (props: Props) => {
               <div className="flex">
                 <div className="min-w-[10rem] font-semibold">Tags</div>
                 <div className="flex flex-wrap gap-2">
-                  {props.data.tags?.split('|').map((tag, idx) => (
-                    <Badge
-                      key={idx}
-                      content={tag ?? '--'}
-                      className={`bg-red-100 text-red-500 text-[1rem]`}
-                    />
-                  ))}
+                  {props.data.tags
+                    ?.split('|')
+                    .map(
+                      (tag, idx) =>
+                        !isBlank(tag) && (
+                          <Badge
+                            key={idx}
+                            content={tag ?? '--'}
+                            className={`bg-red-100 text-red-500 text-[1rem]`}
+                          />
+                        ),
+                    )}
                 </div>
               </div>
             </div>
@@ -243,30 +251,28 @@ const QuestionItem = (props: Props) => {
               ></div>
             </div>
             <div className="flex flex-col gap-2">
-              {question.options?.map((option, optionIdx) => (
-                <div
-                  className={`flex gap-4 items-center  p-2 rounded-sm
-                        ${
-                          Number(question.userAnswer) === optionIdx &&
-                          question.userAnswer !== question.correctOption
-                            ? 'bg-red-200'
-                            : ''
-                        } 
-                        ${
-                          question.correctOption === optionIdx
-                            ? 'bg-green-200'
-                            : ''
-                        }`}
-                  key={optionIdx}
-                >
-                  <div>{optionIdx + 1}:</div>
+              {question.options?.map((option, optionIdx) => {
+                return (
                   <div
-                    dangerouslySetInnerHTML={{
-                      __html: option,
-                    }}
-                  ></div>
-                </div>
-              ))}
+                    className={`flex gap-4 items-center  p-2 rounded-sm
+                          ${
+                            String(question.correctOption)?.includes(
+                              String(optionIdx),
+                            )
+                              ? 'bg-green-200'
+                              : ''
+                          }`}
+                    key={optionIdx}
+                  >
+                    <div>{optionIdx + 1}:</div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: option,
+                      }}
+                    ></div>
+                  </div>
+                );
+              })}
             </div>
             <div className="mt-4">
               <Disclosure>

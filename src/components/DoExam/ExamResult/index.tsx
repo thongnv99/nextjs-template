@@ -164,115 +164,124 @@ const ExamResult = ({ data, exam }: Props) => {
                       {parts?.map((part, idx) => (
                         <div key={idx} className="flex flex-col ">
                           <h2 className="font-bold">Phần {idx + 1}</h2>
-                          {part?.questions.map((question, questionIdx) => (
-                            <div
-                              key={questionIdx}
-                              className=" px-4 py-8 bg-white border-b border-b-gray-400"
-                            >
-                              <div className="flex mb-4 gap-4">
-                                <div className="whitespace-nowrap">
-                                  Câu {questionIdx + 1}:
-                                </div>
-                                <div
-                                  className="font-bold"
-                                  dangerouslySetInnerHTML={{
-                                    __html: question?.content ?? '',
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex flex-col gap-2">
-                                {question.options?.map((option, optionIdx) => (
-                                  <div
-                                    className={`flex gap-4 items-center  p-2 rounded-sm
-                        ${
-                          Number(question.userAnswer) === optionIdx &&
-                          question.userAnswer !== question.correctOption
-                            ? 'bg-red-200'
-                            : ''
-                        } 
-                        ${
-                          question.correctOption?.includes(String(optionIdx))
-                            ? 'bg-green-200'
-                            : ''
-                        }`}
-                                    key={optionIdx}
-                                  >
-                                    <div>{optionIdx + 1}:</div>
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: option,
-                                      }}
-                                    ></div>
+                          {part?.questions.map((question, questionIdx) => {
+                            console.log({ corr: question.correctOption });
+                            return (
+                              <div
+                                key={questionIdx}
+                                className=" px-4 py-8 bg-white border-b border-b-gray-400"
+                              >
+                                <div className="flex mb-4 gap-4">
+                                  <div className="whitespace-nowrap">
+                                    Câu {questionIdx + 1}:
                                   </div>
-                                ))}
-                              </div>
-                              <div className="mt-4">
-                                <Disclosure>
-                                  {({ open }) => {
-                                    return (
-                                      <div className="w-full flex flex-col question-item">
-                                        <Disclosure.Button>
-                                          <div className="flex items-center justify-between transition duration-75 bg-primary-200">
-                                            <div className="  p-2 flex gap-2 items-center">
-                                              Đáp án đúng:{' '}
-                                              <strong>
-                                                {question!.correctOption
-                                                  ?.split(',')
-                                                  .map(item => Number(item) + 1)
-                                                  .join(', ')}
-                                              </strong>
-                                              <ArrowRight />
-                                              <strong className="uppercase">
-                                                {
-                                                  QUESTION_STATUS_TRANSLATE[
-                                                    question.status
-                                                  ]
-                                                }
-                                              </strong>
-                                            </div>
-                                            {question.answerExplain && (
-                                              <div className="flex gap-8">
-                                                <Chevron
-                                                  className={`${
-                                                    open ? 'rotate-180' : ''
-                                                  } w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transform transition duration-75`}
-                                                />
-                                              </div>
-                                            )}
-                                          </div>
-                                        </Disclosure.Button>
-                                        <Transition
-                                          show={open}
-                                          enter="transition-all duration-100 ease-out"
-                                          enterFrom="transform h-0 opacity-0"
-                                          enterTo="transform  opacity-100"
-                                          leave="transition-all duration-100 ease-out"
-                                          leaveFrom="transform  opacity-100"
-                                          leaveTo="transform h-0 opacity-0"
-                                          className="overflow-hidden "
-                                        >
-                                          <Disclosure.Panel static>
-                                            {question.answerExplain && (
-                                              <div className="p-2 bg-primary-50">
-                                                <div>Giải thích đáp án</div>
-                                                <div
-                                                  dangerouslySetInnerHTML={{
-                                                    __html:
-                                                      question.answerExplain ??
-                                                      '',
-                                                  }}
-                                                ></div>
-                                              </div>
-                                            )}
-                                          </Disclosure.Panel>
-                                        </Transition>
+                                  <div
+                                    className="font-bold"
+                                    dangerouslySetInnerHTML={{
+                                      __html: question?.content ?? '',
+                                    }}
+                                  ></div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                  {question.options?.map(
+                                    (option, optionIdx) => (
+                                      <div
+                                        className={`flex gap-4 items-center  p-2 rounded-sm
+                          ${
+                            Number(question.userAnswer) === optionIdx &&
+                            !question.correctOption?.includes(
+                              String(question.userAnswer),
+                            )
+                              ? 'bg-red-200'
+                              : ''
+                          } 
+                          ${
+                            question.correctOption?.includes(String(optionIdx))
+                              ? 'bg-green-200'
+                              : ''
+                          }`}
+                                        key={optionIdx}
+                                      >
+                                        <div>{optionIdx + 1}:</div>
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html: option,
+                                          }}
+                                        ></div>
                                       </div>
-                                    );
-                                  }}
-                                </Disclosure>
+                                    ),
+                                  )}
+                                </div>
+                                <div className="mt-4">
+                                  <Disclosure>
+                                    {({ open }) => {
+                                      return (
+                                        <div className="w-full flex flex-col question-item">
+                                          <Disclosure.Button>
+                                            <div className="flex items-center justify-between transition duration-75 bg-primary-200">
+                                              <div className="  p-2 flex gap-2 items-center">
+                                                Đáp án đúng:{' '}
+                                                <strong>
+                                                  {question!.correctOption
+                                                    ?.split(',')
+                                                    .map(
+                                                      item => Number(item) + 1,
+                                                    )
+                                                    .join(', ')}
+                                                </strong>
+                                                <ArrowRight />
+                                                <strong className="uppercase">
+                                                  {
+                                                    QUESTION_STATUS_TRANSLATE[
+                                                      question.status
+                                                    ]
+                                                  }
+                                                </strong>
+                                              </div>
+                                              {question.answerExplain && (
+                                                <div className="flex gap-8">
+                                                  <Chevron
+                                                    className={`${
+                                                      open ? 'rotate-180' : ''
+                                                    } w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transform transition duration-75`}
+                                                  />
+                                                </div>
+                                              )}
+                                            </div>
+                                          </Disclosure.Button>
+                                          <Transition
+                                            show={open}
+                                            enter="transition-all duration-100 ease-out"
+                                            enterFrom="transform h-0 opacity-0"
+                                            enterTo="transform  opacity-100"
+                                            leave="transition-all duration-100 ease-out"
+                                            leaveFrom="transform  opacity-100"
+                                            leaveTo="transform h-0 opacity-0"
+                                            className="overflow-hidden "
+                                          >
+                                            <Disclosure.Panel static>
+                                              {question.answerExplain && (
+                                                <div className="p-2 bg-primary-50">
+                                                  <div>Giải thích đáp án</div>
+                                                  <div
+                                                    dangerouslySetInnerHTML={{
+                                                      __html:
+                                                        question.answerExplain ??
+                                                        '',
+                                                    }}
+                                                  ></div>
+                                                </div>
+                                              )}
+                                            </Disclosure.Panel>
+                                          </Transition>
+                                        </div>
+                                      );
+                                    }}
+                                  </Disclosure>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       ))}
                     </div>

@@ -48,7 +48,7 @@ const Register = () => {
     onSuccess(data) {
       console.log(data);
       requestVerifyEmail({
-        email: data.user.email,
+        email: (data.user as Record<string, unknown>).email,
       });
     },
     onError(error) {

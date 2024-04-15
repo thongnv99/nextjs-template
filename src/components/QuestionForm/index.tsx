@@ -11,7 +11,7 @@ import Checkbox from 'elements/CheckBox';
 import Delete from 'assets/svg/delete.svg';
 import Plus from 'assets/svg/plus-square.svg';
 import Close from 'assets/svg/x.svg';
-import Editor from 'components/Editor';
+const Editor = dynamic(() => import('components/Editor'), { ssr: false });
 import {
   useCreateQuestionMutation,
   useUpdateQuestionMutation,
@@ -22,6 +22,7 @@ import { IQuestion } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import OptionItem from './OptionItem';
 import { useDrop } from 'react-dnd';
+import dynamic from 'next/dynamic';
 
 const BLANK_DETECT = `<span class="mention" data-mention="[(n)]">[(n)]</span>`;
 
@@ -168,6 +169,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         source: 'QUESTION',
         content: values.content,
         answer: 'Tự chấm',
+        answerExplain: values.answerExplain,
       };
     } else if (values.type === QUESTION_TYPE.MULTIPLE_CHOICE) {
       payload = {
@@ -183,6 +185,7 @@ const QuestionForm = (props: QuestionFormProps) => {
           ? values.correctOptions.join(',')
           : values.correctOption,
         isMultiChoice: values.isMultiChoice,
+        answerExplain: values.answerExplain,
         options: values.options.map(option => option.value),
       };
     } else {
@@ -206,6 +209,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: container.innerHTML,
+        answerExplain: values.answerExplain,
         blankPositions: blankPositions ?? [],
       };
     }
