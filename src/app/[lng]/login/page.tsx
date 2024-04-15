@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { redirect, useParams, useRouter } from 'next/navigation';
 import * as yup from 'yup';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import { METHOD, ROUTES } from 'global';
 import { isBlank, uuid } from 'utils/common';
 import TextInput from 'elements/TextInput';
@@ -30,7 +30,7 @@ const Login = () => {
   const router = useRouter();
   const componentId = useRef(uuid());
   const [successModal, setSuccessModal] = useState(false);
-
+  const formRef = useRef<FormikProps<LoginForm>>();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>();
 
@@ -105,11 +105,13 @@ const Login = () => {
     setSuccessModal(true);
   };
   const requestVerifyEmail = () => {
-    console.log('1');
-    requestRegister();
+    requestRegister({
+      email: formRef.current?.values.email,
+    });
   };
   const handleHiddenSuccess = () => {
     setSuccessModal(false);
+    setErrorMessage('');
   };
   return (
     <Loader
@@ -140,6 +142,7 @@ const Login = () => {
         <Formik
           onSubmit={handleLogin}
           validationSchema={schema}
+          innerRef={instance => (formRef.current = instance!)}
           initialValues={{ email: '', password: '' }}
         >
           {({
@@ -226,8 +229,8 @@ const Login = () => {
       <ModalProvider show={successModal} onClose={handleHiddenSuccess}>
         <NoticeModal
           onConfirm={handleHiddenSuccess}
-          title="Xác thực thành công"
-          content="Email được xác thực thành công."
+          title="Gửi yêu cầu thành công"
+          content="Email xác thực đã được gửi đến hòm thư của bạn. Vui lòng kiểm tra email và làm theo hướng dẫn!"
           type="success"
         />
       </ModalProvider>

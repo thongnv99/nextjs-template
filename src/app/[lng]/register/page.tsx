@@ -45,13 +45,32 @@ const Register = () => {
     url: '/api/v1/register',
     loading: true,
     componentId: componentId.current,
-    onSuccess() {
-      handleShowSuccess();
+    onSuccess(data) {
+      console.log(data);
+      requestVerifyEmail({
+        email: data.user.email,
+      });
     },
     onError(error) {
       setErrorMessage(error.message);
     },
   });
+
+  const { trigger: requestVerifyEmail } = useMutation(
+    '/api/v1/users/requestVerifyEmail',
+    {
+      method: METHOD.POST,
+      url: '/api/v1/users/requestVerifyEmail',
+      loading: true,
+      componentId: componentId.current,
+      onSuccess() {
+        handleShowSuccess();
+      },
+      onError(error) {
+        setErrorMessage(error.message);
+      },
+    },
+  );
   const schema = yup.object().shape({
     firstName: yup.string().label('Tên').required(),
     lastName: yup.string().label('Họ').required(),
