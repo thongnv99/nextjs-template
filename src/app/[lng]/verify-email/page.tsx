@@ -42,7 +42,8 @@ const ResetPassword = () => {
     loading.current = !loading.current;
     setErrorMessage(null);
     const code = search.get('code');
-    requestRegister({ code });
+    const userId = search.get('userId');
+    requestRegister({ code, userId });
   };
 
   const handleShowSuccess = () => {
