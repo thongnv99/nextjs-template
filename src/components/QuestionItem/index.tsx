@@ -283,7 +283,12 @@ const QuestionItem = (props: Props) => {
                         <div className="flex items-center justify-between transition duration-75 bg-primary-200">
                           <div className="  p-2 flex gap-2 items-center">
                             Đáp án đúng:{' '}
-                            <strong>{question.correctOption! + 1}</strong>
+                            <strong>
+                              {String(question!.correctOption)
+                                ?.split(',')
+                                .map(item => Number(item) + 1)
+                                .join(', ')}
+                            </strong>
                           </div>
                           {question.answerExplain && (
                             <div className="flex gap-8">

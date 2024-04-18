@@ -18,7 +18,7 @@ const CustomerLayout = (props: { children: React.ReactNode }) => {
           </div>
         )}
         <div className="flex-1 bg-[#F9FAFB] h-full  p-8 overflow-y-auto overflow-x-hidden">
-          <div className="h-full ">{props.children}</div>
+          <div>{props.children}</div>
         </div>
       </div>
     </div>

@@ -103,7 +103,7 @@ const ExamConfig = (props: ExamConfigProps) => {
   }
   return (
     <Loader id={componentId.current} className="h-full w-full flex flex-col ">
-      <div className="px-0 pb-6 flex items-center justify-between">
+      <div className="px-0 pb-6 flex items-center justify-between sticky top-[-40px] pt-4 bg-[#F9FAFB]">
         <div className="text-lg font-semibold flex gap-1 items-center">
           <div
             className="text-gray-500 cursor-pointer"

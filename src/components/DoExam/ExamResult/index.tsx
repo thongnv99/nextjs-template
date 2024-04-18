@@ -188,10 +188,10 @@ const ExamResult = ({ data, exam }: Props) => {
                                       <div
                                         className={`flex gap-4 items-center  p-2 rounded-sm
                           ${
-                            Number(question.userAnswer) === optionIdx &&
-                            !question.correctOption?.includes(
-                              String(question.userAnswer),
-                            )
+                            String(question.userAnswer).includes(
+                              String(optionIdx),
+                            ) &&
+                            !question.correctOption?.includes(String(optionIdx))
                               ? 'bg-red-200'
                               : ''
                           } 
@@ -222,7 +222,9 @@ const ExamResult = ({ data, exam }: Props) => {
                                               <div className="  p-2 flex gap-2 items-center">
                                                 Đáp án đúng:{' '}
                                                 <strong>
-                                                  {question!.correctOption
+                                                  {String(
+                                                    question!.correctOption,
+                                                  )
                                                     ?.split(',')
                                                     .map(
                                                       item => Number(item) + 1,

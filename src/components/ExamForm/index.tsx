@@ -60,8 +60,9 @@ const ExamForm = (props: ExamFormProps) => {
   const handleSubmit = (values: FlashCardInput) => {
     if (props.data) {
       updateExam({
-        ...values,
         examId: props.data.id,
+        title: values.title,
+        description: values.description,
       });
     } else {
       createExam(values as unknown as Record<string, unknown>);
