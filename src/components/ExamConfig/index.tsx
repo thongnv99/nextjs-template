@@ -10,7 +10,6 @@ import { useParams, useRouter } from 'next/navigation';
 import ModalProvider from 'components/ModalProvider';
 import ExamForm from 'components/ExamForm';
 import { Formik, FormikProps } from 'formik';
-import Delete from 'assets/svg/delete.svg';
 import Plus from 'assets/svg/plus-circle.svg';
 import QuestionPicker from 'components/QuestionPicker';
 import { METHOD } from 'global';
@@ -20,6 +19,8 @@ import Close from 'assets/svg/x-circle.svg';
 import ContestForm from 'components/ContestForm';
 import { useDrop } from 'react-dnd';
 import QuestionDnd from './QestionDnd';
+import ExamPicker from 'components/ExamPicker';
+import SelectExamForm from './SelectExamForm';
 interface ExamConfigProps {
   examId: string;
   isContest?: boolean;
@@ -35,6 +36,7 @@ const ExamConfig = (props: ExamConfigProps) => {
   const router = useRouter();
   const { lng } = useParams();
   const componentId = useRef(uuid());
+  const [modalCopy, setModalCopy] = useState<{ show: boolean; data?: IExam }>();
   const formRef = useRef<FormikProps<ExamConfigValues>>();
   const [, drop] = useDrop(() => ({ accept: 'QuestionDnd' }));
   const [titleModal, setTitleModal] = useState(false);
@@ -42,6 +44,23 @@ const ExamConfig = (props: ExamConfigProps) => {
     show: boolean;
     currentPart?: number;
   }>({ show: false });
+
+  const { trigger } = useMutation<IExam>('exam/copy/detail', {
+    url: '/api/v1/exams/{examId}',
+    method: METHOD.GET,
+    loading: true,
+    componentId: componentId.current,
+    onSuccess(data) {
+      if (data) {
+        formRef.current?.setValues({
+          parts: data.parts ?? [],
+          duration: (data.duration ?? 0) / 60,
+          order: data.order,
+        });
+      }
+    },
+  });
+
   const {
     data: exam,
     isLoading,
@@ -241,37 +260,23 @@ const ExamConfig = (props: ExamConfigProps) => {
                             }}
                           />
                         ))}
-                        {/* {part.questions.map(question => (
-                          <div
-                            key={question.id}
-                            className="flex items-center border border-primary-400 rounded-[0.8rem] p-4 justify-between"
-                          >
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: question.content,
-                              }}
-                            ></div>
-                            <div>
-                              <Delete
-                                className="h-4 w-4 cursor-pointer text-gray-500 hover:text-gray-900"
-                                onClick={() => {
-                                  setFieldValue(
-                                    `parts[${idx}].questions`,
-                                    part.questions.filter(
-                                      item => item.id !== question.id,
-                                    ),
-                                  );
-                                }}
-                              />
-                            </div>
-                          </div>
-                        ))} */}
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
-              <div className="w-full flex justify-center m-8">
+              <div className="w-full flex justify-center m-8 gap-8">
+                {values.parts.length === 0 && (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setModalCopy({ show: true });
+                    }}
+                  >
+                    Nhân bản để thi
+                  </button>
+                )}
                 <button
                   type="button"
                   className="btn btn-icon !bg-white"
@@ -311,6 +316,20 @@ const ExamConfig = (props: ExamConfigProps) => {
         <QuestionPicker
           onSelect={handleSelectQuestion}
           onClose={() => setQuestionModal({ show: false })}
+        />
+      </ModalProvider>
+      <ModalProvider
+        show={modalCopy?.show || false}
+        onClose={() => setModalCopy({ show: false })}
+      >
+        <SelectExamForm
+          onClose={() => setModalCopy({ show: false })}
+          onSelect={exam => {
+            if (exam) {
+              setModalCopy({ show: false, data: exam });
+              trigger({ examId: exam.id });
+            }
+          }}
         />
       </ModalProvider>
     </Loader>

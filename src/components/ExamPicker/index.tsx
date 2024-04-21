@@ -35,7 +35,7 @@ export default function ExamPicker(props: ExamPickerProps) {
       setQuery('');
     }
     props.onChange?.(selected);
-  }, [selected, props.onChange]);
+  }, [selected]);
 
   const filteredExam =
     query === ''
