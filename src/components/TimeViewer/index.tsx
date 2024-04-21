@@ -62,7 +62,7 @@ const TimeViewer = forwardRef(
 
     return (
       <div
-        className={`w-full justify-center  flex font-bold text-[3rem] gap-2 ${
+        className={`w-full justify-center  flex font-bold text-[2rem] md:text-[3rem] gap-2 ${
           seconds.current < 60 ? 'text-red-500' : ''
         }`}
       >

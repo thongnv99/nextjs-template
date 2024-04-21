@@ -8,6 +8,8 @@ import Logo from 'assets/svg/logo.svg';
 import { useTranslation } from 'app/i18n/client';
 import './style.scss';
 import { useSession } from 'next-auth/react';
+import Menu from 'assets/svg/menu-2.svg';
+import { toggleMenu } from 'utils/common';
 
 const Header = () => {
   const { lng } = useParams();
@@ -23,7 +25,7 @@ const Header = () => {
       >
         <Logo className="h-full w-auto" />
       </div>
-      <div className="flex items-center  divide-x">
+      <div className=" md:flex hidden items-center  divide-x">
         <div className="mr-4 h-fit">
           <LanguagePicker />
         </div>
@@ -41,6 +43,12 @@ const Header = () => {
             </Link>
           </div>
         )}
+      </div>
+      <div
+        onClick={toggleMenu}
+        className="cursor-pointer flex md:hidden items-center justify-center "
+      >
+        <Menu />
       </div>
     </header>
   );

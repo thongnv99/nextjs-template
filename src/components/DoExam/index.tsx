@@ -16,6 +16,8 @@ import Preload from 'components/Preload';
 import { Formik, FormikProps } from 'formik';
 import { isBlank, uuid } from 'utils/common';
 import Loader from 'components/Loader';
+import ChevronDown from 'assets/svg/chevron-down.svg';
+import ChevronUp from 'assets/svg/chevron-up.svg';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import ModalProvider from 'components/ModalProvider';
 import ConfirmModal from 'components/ConfirmModal';
@@ -30,6 +32,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const hasSaveSession = search.get('has-save-session') === 'true';
   const sessionId = search.get('session');
   const [expModal, setExpModal] = useState(false);
+  const [expandTime, setExpandTime] = useState(true);
   const [submitModal, setSubmitModal] = useState({
     show: false,
     hasSaveSession: false,
@@ -125,20 +128,20 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   };
 
   const onSubmit = (values: { parts: IPart[] | undefined }) => {
-    submitExam({
-      sessionId: joinExamData?.sessionId,
-      answersByPart: values.parts?.map((part, idx) => ({
-        part: idx,
-        answers: part.questions.map(question =>
-          question.answer != null
-            ? Array.isArray(question.answer)
-              ? question.answer.join(',')
-              : String(question.answer)
-            : '',
-        ),
-      })),
-      hasSaveSession: submitModal.hasSaveSession,
-    });
+    // submitExam({
+    //   sessionId: joinExamData?.sessionId,
+    //   answersByPart: values.parts?.map((part, idx) => ({
+    //     part: idx,
+    //     answers: part.questions.map(question =>
+    //       question.answer != null
+    //         ? Array.isArray(question.answer)
+    //           ? question.answer.join(',')
+    //           : String(question.answer)
+    //         : '',
+    //     ),
+    //   })),
+    //   hasSaveSession: submitModal.hasSaveSession,
+    // });
   };
   const checkQuestionFinished = (question: IQuestion) => {
     if (question.type !== QUESTION_TYPE.FILL_IN_THE_BLANK) {
@@ -238,7 +241,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
       id={componentId.current}
       className=" w-full max-w-screen-lg m-auto pb-6"
     >
-      <div className="mb-8">
+      <div className=" md:block hidden mb-8">
         <h1 className="text-center text-[3rem]">{examData?.title}</h1>
       </div>
       <Formik
@@ -249,7 +252,10 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
         }}
       >
         {({ values, setFieldValue, handleSubmit }) => (
-          <form onSubmit={handleSubmit} className="w-full flex  gap-8">
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col-reverse md:flex-row gap-2 md:gap-8"
+          >
             <div className="flex-1 flex flex-col gap-4 overflow-hidden">
               {values.parts?.map((part, idx) => (
                 <div
@@ -280,11 +286,19 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 </div>
               ))}
             </div>
-            <div className="min-w-[30rem] sticky h-screen pb-[12rem] top-0 right-0  flex flex-col gap-4">
-              <div className=" w-full border border-gray-200 bg-white p-4 rounded-md flex flex-col gap-8">
+            <div className=" md:min-w-[30rem] sticky md:h-screen pb-2 md:pb-[12rem] top-0 right-0  flex flex-col gap-4">
+              <div className=" w-full border border-gray-200 bg-white p-4 rounded-md flex flex-col ">
                 {!hasSaveSession && (
-                  <div className="w-full mb-4">
-                    <div>Thời gian còn lại</div>
+                  <div className="w-full mb-2 md:mb-4 relative">
+                    <div className="md:block hidden">Thời gian còn lại</div>
+                    {expandTime && (
+                      <div className=" block md:hidden mb-2">
+                        <h1 className="text-center text-[2rem] md:text-[3rem]">
+                          {examData?.title}
+                        </h1>
+                      </div>
+                    )}
+
                     <TimeViewer
                       initTime={(examData?.duration ?? 0) / 60}
                       ref={timerController}
@@ -294,16 +308,26 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                     />
                   </div>
                 )}
-                <button
-                  className="btn-primary w-full"
-                  type="button"
+                <div
+                  className="block md:hidden absolute right-0 top-0"
                   onClick={() => {
-                    setSubmitModal({ show: true, hasSaveSession: false });
+                    setExpandTime(!expandTime);
                   }}
                 >
-                  Nộp bài
-                </button>
-                {hasSaveSession && (
+                  {expandTime ? <ChevronDown /> : <ChevronUp />}
+                </div>
+                {expandTime && (
+                  <button
+                    className="btn-primary w-full"
+                    type="button"
+                    onClick={() => {
+                      setSubmitModal({ show: true, hasSaveSession: false });
+                    }}
+                  >
+                    Nộp bài
+                  </button>
+                )}
+                {hasSaveSession && expandTime && (
                   <button
                     className="btn !bg-primary-50 w-full"
                     type="button"
@@ -315,29 +339,31 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                   </button>
                 )}
               </div>
-              <div className=" flex-1 overflow-y-auto w-full border border-gray-200 bg-white p-4 rounded-md ">
-                {values.parts?.map((part, idx) => (
-                  <div key={idx} className="mb-4">
-                    <h2 className="text-[2rem] mb-2">Phần {idx + 1}</h2>
-                    <div className="grid grid-cols-5 gap-4">
-                      {part?.questions.map((item, idx) => (
-                        <div
-                          className={` border ${
-                            checkQuestionFinished(item) ? 'bg-gray-200' : ''
-                          } aspect-square cursor-pointer border-gray-200 w-full flex items-center justify-center rounded-[50%]`}
-                          key={idx}
-                          onClick={() => {
-                            const element = document.getElementById(item.id);
-                            element?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                        >
-                          {(part.startIdx ?? 0) + idx + 1}
-                        </div>
-                      ))}
+              {expandTime && (
+                <div className=" max-h-[70vh] flex-1 overflow-y-auto w-full border border-gray-200 bg-white p-4 rounded-md ">
+                  {values.parts?.map((part, idx) => (
+                    <div key={idx} className="mb-4">
+                      <h2 className="text-[2rem] mb-2">Phần {idx + 1}</h2>
+                      <div className="grid grid-cols-5 gap-4">
+                        {part?.questions.map((item, idx) => (
+                          <div
+                            className={` border ${
+                              checkQuestionFinished(item) ? 'bg-gray-200' : ''
+                            } aspect-square cursor-pointer border-gray-200 w-full flex items-center justify-center rounded-[50%]`}
+                            key={idx}
+                            onClick={() => {
+                              const element = document.getElementById(item.id);
+                              element?.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                          >
+                            {(part.startIdx ?? 0) + idx + 1}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
             <ModalProvider show={expModal} onClose={() => {}}>
               <ConfirmModal

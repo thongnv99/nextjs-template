@@ -6,6 +6,7 @@ import ArrowDown from 'assets/svg/chevron-down.svg';
 import React from 'react';
 import { useSession } from 'next-auth/react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
+import { toggleMenu } from 'utils/common';
 
 const Sidebar = () => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const Sidebar = () => {
 
   const handleClick = (route: string) => {
     router.push(`/${lng}${route}`);
+    toggleMenu();
   };
   return (
     <nav className="h-full w-full p-4 flex flex-col gap-2">
@@ -41,11 +43,11 @@ const Sidebar = () => {
               <Icon />
             </div>
             <div className="font-semibold">{t(route.label)}</div>
-            {route.children && (
+            {/* {route.children && (
               <div className="ml-auto">
                 <ArrowDown />
               </div>
-            )}
+            )} */}
           </div>
         );
       })}

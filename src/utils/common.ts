@@ -152,3 +152,10 @@ export const encodeUrl = (blog?: IBlog, lng?: LANG) => {
 export const decodeUrl = (url: string) => {
   return url.split('-').pop();
 };
+
+export const toggleMenu = () => {
+  if (window.innerWidth < 768) {
+    const menu = document.getElementById('sidebar');
+    menu?.classList.toggle('show');
+  }
+};
