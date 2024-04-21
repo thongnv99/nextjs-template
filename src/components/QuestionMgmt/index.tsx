@@ -25,6 +25,7 @@ import ExamPicker from 'components/ExamPicker';
 import { Formik } from 'formik';
 import TextInput from 'elements/TextInput';
 import useSWR from 'swr';
+import EmptyData from 'components/EmptyData';
 type Props = {
   inPicker?: boolean;
   onRowCheckedChange?: (data: IQuestion, value?: boolean) => void;
@@ -273,10 +274,9 @@ const QuestionMgmt = (props: Props) => {
             )}
           </AutoSizer>
         ) : (
-          <div className="empty">Không có dữ liệu</div>
+          <EmptyData type="empty" onClick={handleRefresh} />
         )}
       </div>
-      <div></div>
     </Loader>
   );
 };

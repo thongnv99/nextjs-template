@@ -25,11 +25,11 @@ export const SampleOptions = [
     value: '',
   },
   {
-    label: 'Câu hỏi mẫu',
+    label: 'Mẫu',
     value: 'true',
   },
   {
-    label: 'Câu hỏi thường',
+    label: 'Thường',
     value: 'false',
   },
 ];

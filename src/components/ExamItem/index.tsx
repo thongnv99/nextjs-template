@@ -108,108 +108,100 @@ const ExamItem = (props: Props) => {
     0,
   );
   return (
-    <Disclosure>
-      {({ open }) => {
-        return (
-          <div className="w-full flex flex-col ">
-            <div className=" hover:bg-primary-50 cursor-pointer flex items-center justify-between p-4 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
-              <div className="flex flex-col justify-between items-start">
-                <div className="flex">
-                  <div
-                    className="text-base text-left text-gray-900 font-semibold mb-2 cursor-pointer"
-                    dangerouslySetInnerHTML={{ __html: props.data.title }}
-                    onClick={handleDoExam as any}
-                  ></div>
-                  {props.data.isSample && (
-                    <Badge
-                      content="Mẫu"
-                      className="bg-primary-100 text-primary-500 ml-4 -translate-y-[0.8rem] text-[1rem]"
-                    />
-                  )}
-                </div>
-                <div className="text-sm flex items-center gap-4 text-gray-500 font-normal">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-[1.6rem] h-[1.6rem]" />{' '}
-                    <div>
-                      {' '}
-                      {formatDateToString(
-                        new Date(props.data.createdAt),
-                        'dd/MM/yyyy',
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Layer className="w-[1.6rem] h-[1.6rem]" />{' '}
-                    <div>{t('J_52', { count: props.data.parts.length })} </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <HelpCircle className="w-[1.6rem] h-[1.6rem]" />{' '}
-                    <div>{t('J_53', { count: questionCount })} </div>
-                  </div>
-                </div>
-              </div>
-              {!props.compact && (
-                <div className="flex gap-6">
-                  <Link
-                    data-tooltip-id="default-tooltip"
-                    data-tooltip-content={t('J_54')}
-                    onClick={handleDoExam}
-                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                  />
-                  <FileText
-                    data-tooltip-id="default-tooltip"
-                    data-tooltip-content={t('J_55')}
-                    onClick={handleViewHistory}
-                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                  />
-                  {(!props.data.isSample ||
-                    [ROLES.ADMIN, ROLES.STAFF].includes(
-                      session?.user.role,
-                    )) && (
-                    <>
-                      <Edit
-                        data-tooltip-id="default-tooltip"
-                        data-tooltip-content={t('J_57')}
-                        onClick={handleEdit}
-                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                      />
-                      <Trash
-                        data-tooltip-id="default-tooltip"
-                        data-tooltip-content={t('J_58')}
-                        onClick={handleDelete}
-                        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                      />
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
-            <ModalProvider show={modalDelete}>
-              <Loader id={componentId.current}>
-                <ConfirmModal
-                  title="J_48"
-                  content="J_59"
-                  onConfirm={handleConfirmDelete}
-                  onCancel={handleCloseDelete}
-                  type={'warning'}
-                />
-              </Loader>
-            </ModalProvider>
-            <ModalProvider show={modalPublish}>
-              <Loader id={componentId.current}>
-                <ConfirmModal
-                  title="J_50"
-                  content="J_60"
-                  onConfirm={handleConfirmPublish}
-                  onCancel={handleClosePublish}
-                  type={'success'}
-                />
-              </Loader>
-            </ModalProvider>
+    <div className="w-full flex flex-col ">
+      <div className=" hover:bg-primary-50 cursor-pointer flex items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
+        <div className="flex flex-col justify-between items-start">
+          <div className="flex">
+            <div
+              className="text-base text-left text-gray-900 font-semibold  cursor-pointer"
+              dangerouslySetInnerHTML={{ __html: props.data.title }}
+              onClick={handleDoExam as any}
+            ></div>
+            {props.data.isSample && (
+              <Badge
+                content="Mẫu"
+                className="bg-primary-100 text-primary-500 ml-4  text-[1rem]"
+              />
+            )}
           </div>
-        );
-      }}
-    </Disclosure>
+          <div className="text-sm flex items-center gap-4 text-gray-500 font-normal">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-[1.6rem] h-[1.6rem]" />{' '}
+              <div>
+                {' '}
+                {formatDateToString(
+                  new Date(props.data.createdAt),
+                  'dd/MM/yyyy',
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Layer className="w-[1.6rem] h-[1.6rem]" />{' '}
+              <div>{t('J_52', { count: props.data.parts.length })} </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <HelpCircle className="w-[1.6rem] h-[1.6rem]" />{' '}
+              <div>{t('J_53', { count: questionCount })} </div>
+            </div>
+          </div>
+        </div>
+        {!props.compact && (
+          <div className="flex gap-6">
+            <Link
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={t('J_54')}
+              onClick={handleDoExam}
+              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+            />
+            <FileText
+              data-tooltip-id="default-tooltip"
+              data-tooltip-content={t('J_55')}
+              onClick={handleViewHistory}
+              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+            />
+            {(!props.data.isSample ||
+              [ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role)) && (
+              <>
+                <Edit
+                  data-tooltip-id="default-tooltip"
+                  data-tooltip-content={t('J_57')}
+                  onClick={handleEdit}
+                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                />
+                <Trash
+                  data-tooltip-id="default-tooltip"
+                  data-tooltip-content={t('J_58')}
+                  onClick={handleDelete}
+                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+                />
+              </>
+            )}
+          </div>
+        )}
+      </div>
+      <ModalProvider show={modalDelete}>
+        <Loader id={componentId.current}>
+          <ConfirmModal
+            title="J_48"
+            content="J_59"
+            onConfirm={handleConfirmDelete}
+            onCancel={handleCloseDelete}
+            type={'warning'}
+          />
+        </Loader>
+      </ModalProvider>
+      <ModalProvider show={modalPublish}>
+        <Loader id={componentId.current}>
+          <ConfirmModal
+            title="J_50"
+            content="J_60"
+            onConfirm={handleConfirmPublish}
+            onCancel={handleClosePublish}
+            type={'success'}
+          />
+        </Loader>
+      </ModalProvider>
+    </div>
   );
 };
 
