@@ -5,21 +5,19 @@ import Loader from 'components/Loader';
 import React, { useRef } from 'react';
 import InfoUser from 'components/InfoUser';
 import { uuid } from 'utils/common';
-import InfoUserPoint from 'components/InfoUser/Point';
-import ExamSummaryChart from 'components/ExamSummaryChart';
-import TextInput from 'elements/TextInput';
-import Search from 'assets/svg/search.svg';
-import Filter from 'assets/svg/Filters lines.svg';
+import PointCell from 'components/InfoUser/Point';
 import ActionIcon from 'components/InfoUser/ActionIcon';
-import GroupButton from 'components/GroupButton';
 import { useMutation } from 'hooks/swr';
 import { METHOD } from 'global';
 import { dateTimeFormatter } from 'utils/grid';
-import { differenceInMinutes, subMinutes } from 'date-fns';
+import { differenceInMinutes } from 'date-fns';
+import { useTranslation } from 'app/i18n/client';
+import { CONTEST_HISTORY_STATUS_TRANSLATE } from 'global/translate';
 
 const CompetitionHistory = (props: { params: { contestId: string } }) => {
   const gridRef = useRef<DataGridHandle>();
   const componentId = useRef(uuid());
+  const { t } = useTranslation();
   const { trigger: requestData } = useMutation<{
     items: Record<string, unknown>[];
   }>('/api/v1/examHistories', {
@@ -34,26 +32,13 @@ const CompetitionHistory = (props: { params: { contestId: string } }) => {
     },
   });
 
-  const data1: [string, number][] = [
-    ['Trung bình', 60],
-    ['Khá', 30],
-    ['Giỏi', 10],
-  ];
-  const data2: [string, number][] = [
-    ['Đúng ', 60],
-    ['Sai', 30],
-    ['Không trả lời', 10],
-  ];
-
-  // function refreshData() {
-  //   gridRef.current?.api?.updateGridOptions({ rowData: [] });
-  // }
-  const columnDefs: Array<ColDef> = [
+  const columnDefs: Array<ColDef | ColGroupDef> = [
     {
       headerName: 'Tên ',
       flex: 1,
       field: 'name',
       cellClass: 'bold',
+      minWidth: 300,
       cellRenderer: InfoUser,
       cellRendererParams: (params: any) => {
         return {
@@ -65,10 +50,25 @@ const CompetitionHistory = (props: { params: { contestId: string } }) => {
       },
     },
     {
+      headerName: 'Thời gian bắt đầu',
+      flex: 1,
+      field: 'startTime',
+      valueFormatter: dateTimeFormatter,
+      minWidth: 200,
+    },
+    {
+      headerName: 'Thời gian kết thúc',
+      flex: 1,
+      field: 'endTime',
+      valueFormatter: dateTimeFormatter,
+      minWidth: 200,
+    },
+    {
       headerName: 'Điểm số',
       flex: 1,
+      minWidth: 200,
       field: 'score',
-      cellRenderer: InfoUserPoint,
+      cellRenderer: PointCell,
       cellRendererParams: (params: any) => {
         return {
           point: params?.data.score,
@@ -76,15 +76,50 @@ const CompetitionHistory = (props: { params: { contestId: string } }) => {
       },
     },
     {
-      headerName: 'Thời gian thi',
+      headerName: 'Câu hỏi',
+      children: [
+        {
+          headerName: 'Trả lời đúng',
+          field: 'statAnswer.totalCorrect',
+          cellClass: 'text-right',
+          maxWidth: 120,
+        },
+        {
+          headerName: 'Trả lời sai',
+          field: 'statAnswer.totalIncorrect',
+          cellClass: 'text-right',
+          maxWidth: 120,
+        },
+        {
+          headerName: 'Không trả lời',
+          field: 'statAnswer.totalNotAnswer',
+          cellClass: 'text-right',
+          maxWidth: 120,
+        },
+        {
+          headerName: 'Tổng',
+          field: 'statAnswer.total',
+          cellClass: 'text-right',
+          maxWidth: 120,
+        },
+      ],
+    },
+    {
+      headerName: 'Trạng thái',
       flex: 1,
-      field: 'startTime',
-      valueFormatter: dateTimeFormatter,
+      field: 'status',
+      valueFormatter: params => {
+        return t(
+          CONTEST_HISTORY_STATUS_TRANSLATE[params.value] ?? params.value,
+        ) as string;
+      },
+      minWidth: 200,
     },
     {
       headerName: 'Thời gian làm bài',
       flex: 1,
       field: 'forTime',
+      minWidth: 200,
       valueFormatter: params => {
         const startTime = params.data.startTime;
         const endTime = params.data.endTime;
@@ -117,32 +152,18 @@ const CompetitionHistory = (props: { params: { contestId: string } }) => {
   return (
     <Loader
       id={componentId.current}
-      className="h-full w-full border border-gray-200 rounded-lg flex flex-col shadow-sm p-1"
+      className="h-full w-full border bg-white border-gray-200 rounded-lg flex flex-col shadow-sm p-1"
     >
       <div className="px-5 py-3 text-lg font-semibold gap-x-3 flex items-center">
         Lịch sử cuộc thi{' '}
-        <span className="text-[1.2rem] text-[var(--brand-800)] bg-[var(--gray-50)] rounded-full px-[1rem]">
+        {/* <span className="text-[1.2rem] text-[var(--brand-800)] bg-[var(--gray-50)] rounded-full px-[1rem]">
           240 người tham gia
-        </span>
+        </span> */}
       </div>
-      <div className="flex  justify-evenly">
+      {/* <div className="flex  justify-evenly">
         <ExamSummaryChart data={data1} />
         <ExamSummaryChart data={data2} />
-      </div>
-      <div className="w-full my-4 flex justify-between">
-        <GroupButton />
-        <div className="flex gap-x-1">
-          <TextInput
-            leadingIcon={<Search />}
-            placeholder="Search"
-            inputClass="!py-2"
-          />
-          <button className="btn flex items-center gap-x-2" type="button">
-            <Filter />
-            Filter
-          </button>
-        </div>
-      </div>
+      </div> */}
       <div className="flex-1">
         <DataGrid
           ref={gridRef}

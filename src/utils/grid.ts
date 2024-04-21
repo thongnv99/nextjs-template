@@ -1,5 +1,5 @@
 import { ValueFormatterParams } from 'ag-grid-community';
-import { formatNumber } from './common';
+import { formatNumber, isBlank } from './common';
 import { formatDateToString } from './datetime';
 
 export const floatFormatter = (params: ValueFormatterParams) => {
@@ -11,6 +11,9 @@ export const integerFormatter = (params: ValueFormatterParams) => {
 };
 
 export const dateTimeFormatter = (params: ValueFormatterParams) => {
+  if (isBlank(params.value)) {
+    return '';
+  }
   return (
     formatDateToString(new Date(params.value), 'HH:mm:ss dd/MM/yyyy') ?? ''
   );

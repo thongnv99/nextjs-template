@@ -57,3 +57,11 @@ export enum EXAM_STATUS {
 }
 
 export const FETCH_COUNT = 20;
+
+export enum CONTEST_HISTORY_STATUS {
+  MARK_PENDING = 'MARK_PENDING',
+  DOING = 'DOING',
+  FINISHED = 'FINISHED',
+  OVERTIME = 'OVERTIME',
+  CHEAT = 'CHEAT',
+}

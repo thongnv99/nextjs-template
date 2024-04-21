@@ -5,13 +5,13 @@ import Loader from 'components/Loader';
 import React, { useRef } from 'react';
 import InfoUser from 'components/InfoUser';
 import { uuid } from 'utils/common';
-import InfoUserPoint from 'components/InfoUser/Point';
-import ExamSummaryChart from 'components/ExamSummaryChart';;
+import PointCell from 'components/InfoUser/Point';
+import ExamSummaryChart from 'components/ExamSummaryChart';
 import TextInput from 'elements/TextInput';
 import Search from 'assets/svg/search.svg';
-import Filter from 'assets/svg/Filters lines.svg'
-import ActionIcon from 'components/InfoUser/ActionIcon'
-import GroupButton from 'components/GroupButton'
+import Filter from 'assets/svg/Filters lines.svg';
+import ActionIcon from 'components/InfoUser/ActionIcon';
+import GroupButton from 'components/GroupButton';
 const CompetitionHistory = () => {
   const gridRef = useRef<DataGridHandle>();
   const componentId = useRef(uuid());
@@ -20,21 +20,43 @@ const CompetitionHistory = () => {
     ['Trung bình', 60],
     ['Khá', 30],
     ['Giỏi', 10],
-   
   ];
   const data2: [string, number][] = [
     ['Đúng ', 60],
     ['Sai', 30],
     ['Không trả lời', 10],
-   
   ];
 
   const rowData = [
     // Example data, replace with your actual data
-    { name: "Phạm Văn Thành",email:'phamvanthanh@gmail.com', point: 50, forTime: '60 p', sinceTime: '21:10:30 21/11/2023' },
-    { name: 'Nguyễn văn Thông',email:'nguyenvanthong@gmail.com', point: 70, forTime: '60 p', sinceTime: '21:10:30 21/11/2023' },
-    { name: 'Nguyễn Duy Trinh',email:'trinhcos2xx@gmail.com', point: 100, forTime: '60 p', sinceTime: '21:10:30 21/11/2023' },
-    { name: 'Phí Minh Phương',email:'pmp@gmail.com', point: 100, forTime: '60 p', sinceTime: '21:10:30 21/11/2023' },
+    {
+      name: 'Phạm Văn Thành',
+      email: 'phamvanthanh@gmail.com',
+      point: 50,
+      forTime: '60 p',
+      sinceTime: '21:10:30 21/11/2023',
+    },
+    {
+      name: 'Nguyễn văn Thông',
+      email: 'nguyenvanthong@gmail.com',
+      point: 70,
+      forTime: '60 p',
+      sinceTime: '21:10:30 21/11/2023',
+    },
+    {
+      name: 'Nguyễn Duy Trinh',
+      email: 'trinhcos2xx@gmail.com',
+      point: 100,
+      forTime: '60 p',
+      sinceTime: '21:10:30 21/11/2023',
+    },
+    {
+      name: 'Phí Minh Phương',
+      email: 'pmp@gmail.com',
+      point: 100,
+      forTime: '60 p',
+      sinceTime: '21:10:30 21/11/2023',
+    },
     // ... add more rows as needed
   ];
 
@@ -48,23 +70,23 @@ const CompetitionHistory = () => {
       field: 'name',
       cellClass: 'bold',
       cellRenderer: InfoUser,
-      cellRendererParams:(params:any)=>{
+      cellRendererParams: (params: any) => {
         return {
-        name:params?.data.name,
-        email:params?.data.email
-        }
-      }
+          name: params?.data.name,
+          email: params?.data.email,
+        };
+      },
     },
     {
       headerName: 'Điểm số',
       flex: 1,
       field: 'point',
-      cellRenderer:InfoUserPoint,
-      cellRendererParams: (params:any)=>{
+      cellRenderer: PointCell,
+      cellRendererParams: (params: any) => {
         return {
-          point:params?.data.point
-        }
-      }
+          point: params?.data.point,
+        };
+      },
     },
     {
       headerName: 'Thời gian làm bài',
@@ -78,9 +100,9 @@ const CompetitionHistory = () => {
     },
     {
       headerName: '',
-      flex:0.1,
-      cellRenderer:ActionIcon,
-      cellRendererParams:{}
+      flex: 0.1,
+      cellRenderer: ActionIcon,
+      cellRendererParams: {},
     },
   ];
 
@@ -94,18 +116,27 @@ const CompetitionHistory = () => {
       className="h-full w-full border border-gray-200 rounded-lg flex flex-col shadow-sm p-1"
     >
       <div className="px-5 py-3 text-lg font-semibold gap-x-3 flex items-center">
-        Lịch sử cuộc thi <span className="text-[1.2rem] text-[var(--brand-800)] bg-[var(--gray-50)] rounded-full px-[1rem]">240 người tham gia</span>
+        Lịch sử cuộc thi{' '}
+        <span className="text-[1.2rem] text-[var(--brand-800)] bg-[var(--gray-50)] rounded-full px-[1rem]">
+          240 người tham gia
+        </span>
       </div>
       <div className="flex  justify-evenly">
-
-        <ExamSummaryChart data={data1}/>
+        <ExamSummaryChart data={data1} />
         <ExamSummaryChart data={data2} />
       </div>
       <div className="w-full my-4 flex justify-between">
-        <GroupButton/>
+        <GroupButton />
         <div className="flex gap-x-1">
-          <TextInput leadingIcon={<Search />} placeholder="Search" inputClass="!py-2" />
-            <button className="btn flex items-center gap-x-2" type="button"><Filter/>Filter</button>
+          <TextInput
+            leadingIcon={<Search />}
+            placeholder="Search"
+            inputClass="!py-2"
+          />
+          <button className="btn flex items-center gap-x-2" type="button">
+            <Filter />
+            Filter
+          </button>
         </div>
       </div>
       <div className="flex-1">

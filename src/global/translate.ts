@@ -1,4 +1,9 @@
-import { QUESTION_LEVEL, QUESTION_TYPE, ROLES } from './common';
+import {
+  CONTEST_HISTORY_STATUS,
+  QUESTION_LEVEL,
+  QUESTION_TYPE,
+  ROLES,
+} from './common';
 
 export const QUESTION_TYPE_TRANSLATE: Record<string, string> = {
   [QUESTION_TYPE.ESSAY]: 'J_9',
@@ -22,4 +27,12 @@ export const LEVEL_TRANSLATE: Record<string, string> = {
 export const QUESTION_STATUS_TRANSLATE: Record<string, string> = {
   CORRECT: 'Đúng',
   INCORRECT: 'Sai',
+};
+
+export const CONTEST_HISTORY_STATUS_TRANSLATE: Record<string, string> = {
+  [CONTEST_HISTORY_STATUS.DOING]: 'Đang làm bài',
+  [CONTEST_HISTORY_STATUS.MARK_PENDING]: 'Chờ chấm điểm',
+  [CONTEST_HISTORY_STATUS.OVERTIME]: 'Quá thời gian',
+  [CONTEST_HISTORY_STATUS.CHEAT]: 'Phát hiện gian lận',
+  [CONTEST_HISTORY_STATUS.FINISHED]: 'Hoàn thành',
 };

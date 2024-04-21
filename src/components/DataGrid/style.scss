@@ -6,6 +6,8 @@
     --ag-border-color: var(--gray-200);
     --ag-odd-row-background-color: transparent;
     --ag-header-background-color: var(--gray-50);
+    --ag-header-column-separator-display: block;
+    --ag-header-column-separator-height: 100%;
     .ag-root-wrapper {
       border: none;
       border-radius: 0;

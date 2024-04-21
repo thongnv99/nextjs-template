@@ -5,7 +5,7 @@ import DataGrid, { DataGridHandle } from 'components/DataGrid';
 import BadgeCell from 'components/DataGrid/BadgeCell';
 import ButtonCell from 'components/DataGrid/ButtonCell';
 import ExamChart from 'components/ExamChart';
-import InfoUserPoint from 'components/InfoUser/Point';
+import PointCell from 'components/InfoUser/Point';
 import Loader from 'components/Loader';
 import { METHOD } from 'global';
 import { useMutation, useSWRWrapper } from 'hooks/swr';
@@ -62,7 +62,7 @@ const ExamHistory = (props: { examId: string }) => {
       flex: 1,
       field: 'statScore',
       minWidth: 120,
-      cellRenderer: InfoUserPoint,
+      cellRenderer: PointCell,
       cellRendererParams: (params: any) => {
         return {
           point:
