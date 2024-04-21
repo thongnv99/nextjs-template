@@ -22,20 +22,31 @@ import {
 } from 'react-window';
 import QuestionPicker from 'components/QuestionPicker';
 import ExamPicker from 'components/ExamPicker';
+import { Formik } from 'formik';
+import TextInput from 'elements/TextInput';
+import useSWR from 'swr';
 type Props = {
   inPicker?: boolean;
   onRowCheckedChange?: (data: IQuestion, value?: boolean) => void;
 };
 
+interface QuestionFilter {
+  type: string;
+  sample: string;
+  tags: string;
+  exam?: IExam;
+}
+
 const QuestionMgmt = (props: Props) => {
   const componentId = useRef(uuid());
   const router = useRouter();
   const { lng } = useParams();
-  const [type, setType] = useState('');
-  const [sample, setSample] = useState('');
-  const [year, setYear] = useState('');
-  const [exam, setExam] = useState<IExam | null>();
   const [mapChecked, setMapChecked] = useState<Record<string, boolean>>({});
+  const { data: filterCached, mutate: saveFilter } =
+    useSWR<QuestionFilter>('QUESTION_FILTER');
+  const filter = useRef<QuestionFilter>(
+    filterCached ?? { sample: '', tags: '', type: '' },
+  );
 
   const [data, setData] = useState<IQuestion[]>([]);
   const loading = useRef(false);
@@ -44,6 +55,8 @@ const QuestionMgmt = (props: Props) => {
     limit: FETCH_COUNT,
     totalPage: 1,
   });
+
+  const timer = useRef<NodeJS.Timeout>();
 
   const { trigger, isMutating } = useMutation<QuestionRes>(
     '/api/vi/questions',
@@ -60,15 +73,19 @@ const QuestionMgmt = (props: Props) => {
 
   useEffect(() => {
     requestData();
+
+    return () => {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
+    };
   }, []);
-  useEffect(() => {
-    handleRefresh();
-  }, [sample, type, year, exam]);
 
   const requestData = () => {
     const { page, totalPage } = pagination.current;
     if (page < totalPage) {
       loading.current = true;
+      const { sample, type, tags, exam } = filter.current;
       trigger({
         page: page + 1,
         limit: FETCH_COUNT,
@@ -78,8 +95,8 @@ const QuestionMgmt = (props: Props) => {
         ...(!isBlank(sample) && {
           isSample: sample === 'true',
         }),
-        ...(!isBlank(year) && {
-          year,
+        ...(!isBlank(tags) && {
+          tags,
         }),
         ...(exam && {
           source: 'EXAM',
@@ -156,46 +173,74 @@ const QuestionMgmt = (props: Props) => {
           </div>
         </>
       )}
-      <div className="px-5 mb-4 flex gap-2">
-        <div className="max-w-lg flex-1">
-          <Dropdown
-            label="Loại câu hỏi"
-            placeholder="Loại câu hỏi"
-            className="w-full"
-            options={QuestionTypeOptions}
-            selected={type}
-            onChange={value => setType(value)}
-          />
-        </div>
-        <div className="max-w-lg flex-1">
-          <Dropdown
-            label="Câu hỏi mẫu"
-            placeholder="Câu hỏi mẫu"
-            className="w-full"
-            options={SampleOptions}
-            selected={sample}
-            onChange={value => setSample(value)}
-          />
-        </div>
-        <div className="max-w-lg flex-1">
-          <Dropdown
-            label="Năm"
-            placeholder="Năm"
-            className="w-full"
-            options={YearOptions}
-            selected={year}
-            onChange={value => setYear(value)}
-          />
-        </div>
-        <div className="max-w-lg flex-1">
-          <ExamPicker
-            label="Đề thi"
-            placeholder="Chọn đề thi"
-            className="w-full"
-            onChange={setExam}
-          />
-        </div>
-      </div>
+      <Formik
+        onSubmit={values => {
+          filter.current = values;
+          saveFilter(values);
+          handleRefresh();
+        }}
+        initialValues={filter.current}
+      >
+        {({ values, setFieldValue, handleSubmit }) => {
+          return (
+            <div className="px-5 mb-4 flex gap-2">
+              <div className="max-w-lg flex-1">
+                <Dropdown
+                  label="Loại câu hỏi"
+                  placeholder="Loại câu hỏi"
+                  className="w-full"
+                  options={QuestionTypeOptions}
+                  selected={values.type}
+                  onChange={value => {
+                    setFieldValue('type', value);
+                    handleSubmit();
+                  }}
+                />
+              </div>
+              <div className="max-w-lg flex-1">
+                <Dropdown
+                  label="Câu hỏi mẫu"
+                  placeholder="Câu hỏi mẫu"
+                  className="w-full"
+                  options={SampleOptions}
+                  selected={values.sample}
+                  onChange={value => {
+                    setFieldValue('sample', value);
+                    handleSubmit();
+                  }}
+                />
+              </div>
+              <div className="max-w-lg flex-1">
+                <TextInput
+                  label="Tags"
+                  placeholder="Tags"
+                  className="w-full"
+                  value={values.tags}
+                  name="tags"
+                  onBlur={() => {
+                    handleSubmit();
+                  }}
+                  onChange={e => {
+                    setFieldValue('tags', e.target.value);
+                  }}
+                />
+              </div>
+              <div className="max-w-lg flex-1">
+                <ExamPicker
+                  label="Đề thi"
+                  placeholder="Chọn đề thi"
+                  className="w-full"
+                  selected={values.exam}
+                  onChange={exam => {
+                    setFieldValue('exam', exam);
+                    handleSubmit();
+                  }}
+                />
+              </div>
+            </div>
+          );
+        }}
+      </Formik>
       <div className="  pb-5 flex-1 w-full flex flex-col gap-2 ">
         {data && data.length > 0 ? (
           <AutoSizer className="list">
@@ -217,7 +262,7 @@ const QuestionMgmt = (props: Props) => {
                       // listRef.current = list;
                     }}
                     itemData={data}
-                    itemSize={() => 88}
+                    itemSize={() => 70}
                     itemCount={data.length}
                     width={width}
                   >

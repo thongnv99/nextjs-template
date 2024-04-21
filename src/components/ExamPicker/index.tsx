@@ -7,7 +7,7 @@ import { ExamRes, IExam, QuestionRes } from 'interfaces';
 import Clear from 'assets/svg/x.svg';
 type ExamPickerProps = {
   placeholder?: string;
-  selected?: string;
+  selected?: IExam | null;
   onChange?: (value?: IExam | null) => void;
   label?: string;
   hasError?: boolean;
@@ -16,7 +16,9 @@ type ExamPickerProps = {
 };
 
 export default function ExamPicker(props: ExamPickerProps) {
-  const [selected, setSelected] = useState<IExam | null>(null);
+  const [selected, setSelected] = useState<IExam | null>(
+    props.selected || null,
+  );
   const [query, setQuery] = useState('');
   const { label, hasError, errorMessage, className } = props;
   const { data, isLoading, mutate } = useSWRWrapper<ExamRes>(`/api/v1/exams`, {

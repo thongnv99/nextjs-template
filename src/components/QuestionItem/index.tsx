@@ -91,7 +91,7 @@ const QuestionItem = (props: Props) => {
   const question = props.data;
   return (
     <div className="w-full flex flex-col question-item">
-      <div className="flex gap-4 items-center justify-between p-4 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
+      <div className="flex gap-4 items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
         <div className="flex flex-col gap-[4px]">
           <div className="flex gap-2">
             {props.data.isSample && (
@@ -121,7 +121,7 @@ const QuestionItem = (props: Props) => {
           </div>
           <div
             onClick={() => setModalDetail(true)}
-            className="text-base text-left cursor-pointer text-gray-900 font-semibold h-[2.4rem] overflow-hidden"
+            className="text-sm text-left cursor-pointer text-gray-900 font-semibold h-[2.4rem] overflow-hidden"
             dangerouslySetInnerHTML={{ __html: props.data.content }}
           ></div>
         </div>
@@ -203,12 +203,6 @@ const QuestionItem = (props: Props) => {
                 <div className="min-w-[10rem] font-semibold">Điểm</div>
                 <div className="font-normal text-sm text-gray-500">
                   {formatNumber(props.data.score ?? 1)}
-                </div>
-              </div>
-              <div className="flex">
-                <div className="min-w-[10rem] font-semibold">Năm</div>
-                <div className="font-normal text-sm text-gray-500">
-                  {props.data.year ?? '--'}
                 </div>
               </div>
               <div className="flex">
