@@ -1,5 +1,6 @@
 'use client';
 import ConfirmModal from 'components/ConfirmModal';
+import ContestHistory from 'components/ContestHistory';
 import Loader from 'components/Loader';
 import ModalProvider from 'components/ModalProvider';
 import { METHOD } from 'global';
@@ -66,7 +67,7 @@ const ContestDetail = (props: ContestDetailProps) => {
   return (
     <Loader
       loading={isLoading}
-      className="h-full w-full p-5 border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
+      className="h-full w-full p-5 gap-4 border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
     >
       <div className="flex flex-col items-center">
         <div className="text-5xl mb-4">{contestData?.title}</div>
@@ -94,6 +95,9 @@ const ContestDetail = (props: ContestDetailProps) => {
             Bắt đầu
           </button>
         </div>
+      </div>
+      <div className="flex-1">
+        <ContestHistory contestId={props.contestId} compact />
       </div>
       <ModalProvider show={modal} onClose={() => setModal(false)}>
         <ConfirmModal

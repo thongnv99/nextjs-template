@@ -53,20 +53,20 @@ export const getRoutesConfig = (role: ROLES) => [
     label: 'J_6',
     route: '/blog',
     icon: Blog,
-    children: [
-      {
-        label: 'J_6',
-        route: '/blog',
-      },
-      {
-        label: 'J_7',
-        route: '/blog/blog-management',
-      },
-      {
-        label: 'J_8',
-        route: '/blog/blog-form',
-      },
-    ],
+    // children: [
+    //   {
+    //     label: 'J_6',
+    //     route: '/blog',
+    //   },
+    //   {
+    //     label: 'J_7',
+    //     route: '/blog/blog-management',
+    //   },
+    //   {
+    //     label: 'J_8',
+    //     route: '/blog/blog-form',
+    //   },
+    // ],
   },
   // {
   //   label: 'Thanh toán',
