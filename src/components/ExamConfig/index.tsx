@@ -127,7 +127,7 @@ const ExamConfig = (props: ExamConfigProps) => {
           <div
             className="text-gray-500 cursor-pointer"
             onClick={() => {
-              router.push(`/${lng}/exam`);
+              router.push(`/${lng}/${props.isContest ? 'contest' : 'exam'}`);
             }}
           >
             {props.isContest ? 'Cuộc thi' : 'Đề thi'}

@@ -1,41 +1,81 @@
 'use client';
 import Loader from 'components/Loader';
 import QuestionItem from 'components/QuestionItem';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { isBlank, uuid } from 'utils/common';
 import Plus from 'assets/svg/plus.svg';
-import { QUESTION_TYPE, ROLES } from 'global';
-import { useSWRWrapper } from 'hooks/swr';
-import { ContestRes, ExamRes, IExam, QuestionRes } from 'interfaces';
+import { FETCH_COUNT, METHOD, QUESTION_TYPE, ROLES } from 'global';
+import { useMutation, useSWRWrapper } from 'hooks/swr';
+import {
+  ContestRes,
+  ExamRes,
+  IContest,
+  IExam,
+  Pagination,
+  QuestionRes,
+} from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import ContestItem from 'components/ContestItem';
 import ModalProvider from 'components/ModalProvider';
 import ContestForm from 'components/ContestForm';
 import PaginationBar from 'components/PaginationBar';
 import { useUserInfo } from 'hooks/common';
-
+import useSWR from 'swr';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import InfiniteLoader from 'react-window-infinite-loader';
+import {
+  VariableSizeList as List,
+  ListChildComponentProps,
+} from 'react-window';
+import EmptyData from 'components/EmptyData';
+interface ContestFilter {
+  searchKey: string;
+}
 const ContestMgmt = ({ compact }: { compact?: boolean }) => {
   const { data: userInfo } = useUserInfo();
   const componentId = useRef(uuid());
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
     show: false,
   });
-  const [currPage, setCurrPage] = useState(1);
+  const { data: filterCached, mutate: saveFilter } =
+    useSWR<ContestFilter>('CONTEST_FILTER');
+  const filter = useRef<ContestFilter>(filterCached ?? { searchKey: '' });
+  const [data, setData] = useState<IContest[]>([]);
+  const pagination = useRef<Pagination>({
+    page: 0,
+    limit: FETCH_COUNT,
+    totalPage: 1,
+  });
+  const loading = useRef(false);
 
-  const { data, isLoading, mutate } = useSWRWrapper<ContestRes>(
-    `/api/v1/contests`,
-    {
-      url: '/api/v1/contests',
-      params: {
-        // ...(!isBlank(type) && {
-        //   type,
-        // }),
-        page: currPage,
-        limit: 200,
-      },
-      revalidateOnFocus: false,
+  const { trigger, isMutating } = useMutation<ContestRes>('/api/v1/contests', {
+    url: '/api/v1/contests',
+    method: METHOD.GET,
+    onSuccess(data, key, config) {
+      setData(prev => [...prev, ...data.items]);
+      pagination.current = data.pagination;
+      loading.current = false;
     },
-  );
+  });
+
+  useEffect(() => {
+    requestData();
+  }, []);
+
+  const requestData = () => {
+    const { page, totalPage } = pagination.current;
+    if (page < totalPage) {
+      loading.current = true;
+      const { searchKey } = filter.current;
+      trigger({
+        page: page + 1,
+        limit: FETCH_COUNT,
+        ...(!isBlank(searchKey) && {
+          searchKey,
+        }),
+      });
+    }
+  };
 
   const handleCreateExam = () => {
     setExamModal({ show: true });
@@ -43,12 +83,45 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
   };
 
   const handleRefresh = () => {
-    mutate();
+    pagination.current = {
+      page: 0,
+      limit: FETCH_COUNT,
+      totalPage: 1,
+    };
+    setData([]);
+    requestData();
+  };
+
+  const isItemLoaded = (index: number) => {
+    return data[index] != null;
+  };
+
+  const loadMoreItems = () => {
+    return new Promise<void>(() => {
+      if (!loading.current) {
+        requestData();
+      }
+    });
+  };
+
+  const Row = ({ index, style }: ListChildComponentProps) => {
+    const item = data![index];
+    console.log({ item });
+    return (
+      <div style={style} className="py-[2px] flex items-center  px-5">
+        <ContestItem
+          compact={compact}
+          key={item.id}
+          data={item}
+          onRefresh={handleRefresh}
+        />
+      </div>
+    );
   };
   return (
     <Loader
       id={componentId.current}
-      loading={isLoading}
+      loading={isMutating}
       className="h-full w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
     >
       <div className="px-5 py-6 flex items-center justify-between">
@@ -65,22 +138,40 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
           </button>
         )}
       </div>
-      <div className=" px-5 flex-1 w-full flex flex-col gap-2 overflow-y-scroll">
-        {data?.items.map(item => (
-          <ContestItem
-            compact={compact}
-            key={item.id}
-            data={item}
-            onRefresh={handleRefresh}
-          />
-        ))}
-        {/* <div className="mt-auto">
-          <PaginationBar
-            page={currPage}
-            onChangePage={setCurrPage}
-            totalPages={data?.pagination.totalPage ?? 0}
-          />
-        </div> */}
+      <div className="  pb-5 flex-1 w-full flex flex-col gap-2 ">
+        {data && data.length > 0 ? (
+          <AutoSizer className="list">
+            {({ width, height }) => (
+              <InfiniteLoader
+                isItemLoaded={isItemLoaded}
+                itemCount={Number.MAX_SAFE_INTEGER}
+                loadMoreItems={loadMoreItems}
+                threshold={20}
+              >
+                {({ onItemsRendered, ref }) => (
+                  <List
+                    height={height}
+                    onItemsRendered={onItemsRendered}
+                    ref={list => {
+                      // eslint-disable-next-line
+                      (ref as Function)(list);
+
+                      // listRef.current = list;
+                    }}
+                    itemData={data}
+                    itemSize={() => 70}
+                    itemCount={data.length}
+                    width={width}
+                  >
+                    {Row}
+                  </List>
+                )}
+              </InfiniteLoader>
+            )}
+          </AutoSizer>
+        ) : (
+          <EmptyData type="empty" onClick={handleRefresh} />
+        )}
       </div>
 
       <ModalProvider

@@ -78,6 +78,8 @@ export interface IContest {
   status: string;
   createdAt: number;
   order?: number;
+  password?: string;
+  hasPassword?: boolean;
   parts: IPart[];
 }
 export interface IPart {

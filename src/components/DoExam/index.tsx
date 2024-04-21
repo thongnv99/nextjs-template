@@ -2,7 +2,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DoQuestion from './DoQuestion';
 import { useMutation, useSWRWrapper } from 'hooks/swr';
-import { DoExamRes, IExam, IPart, IQuestion, SubmitExamRes } from 'interfaces';
+import {
+  DoExamRes,
+  IContest,
+  IExam,
+  IPart,
+  IQuestion,
+  SubmitExamRes,
+} from 'interfaces';
 import { METHOD, QUESTION_TYPE } from 'global';
 import TimeViewer, { TimeViewerHandle } from 'components/TimeViewer';
 import Preload from 'components/Preload';
@@ -13,6 +20,8 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import ModalProvider from 'components/ModalProvider';
 import ConfirmModal from 'components/ConfirmModal';
 import ExamResult from './ExamResult';
+import TextInput from 'elements/TextInput';
+import { useTranslation } from 'app/i18n/client';
 
 const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const router = useRouter();
@@ -25,8 +34,9 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     show: false,
     hasSaveSession: false,
   });
+  const [modalPassword, setModalPassword] = useState(false);
   const formRef = useRef<FormikProps<{ parts: IPart[] | undefined }>>();
-
+  const { t } = useTranslation();
   useEffect(() => {
     window.addEventListener('beforeunload', beforeUnload);
     return () => {
@@ -37,20 +47,22 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const beforeUnload = (event: BeforeUnloadEvent) => {
     event.preventDefault();
   };
-  const { data: examData } = useSWRWrapper<IExam>(
-    `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
-    {
-      url: `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
-    },
-  );
+  const { data: examData, isLoading: loadingDetail } = useSWRWrapper<
+    IExam & IContest
+  >(`/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`, {
+    url: `/api/v1/${props.isContest ? 'contests' : 'exams'}/${props.examId}`,
+  });
   const componentId = useRef(uuid());
   const {
-    data: exam,
-    trigger,
+    data: joinExamData,
+    trigger: joinExam,
     isMutating,
+    error: joinExamError,
   } = useMutation<DoExamRes>(`/api/v1/joinExam`, {
     url: `/api/v1/joinExam`,
     method: METHOD.POST,
+    loading: true,
+    componentId: componentId.current,
     onSuccess() {
       console.log('success', timerController.current);
     },
@@ -78,12 +90,28 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const timerController = useRef<TimeViewerHandle>();
 
   useEffect(() => {
-    trigger(
+    if (examData) {
+      if (props.isContest) {
+        if (examData.hasPassword) {
+        } else {
+          handleJoinExam();
+        }
+      } else {
+        handleJoinExam();
+      }
+    }
+  }, [examData]);
+
+  const handleJoinExam = (password?: string) => {
+    joinExam(
       props.isContest
         ? {
             source: 'CONTEST',
             contestId: props.examId,
             hasSaveSession: hasSaveSession,
+            ...(!isBlank(password) && {
+              password,
+            }),
           }
         : {
             source: 'EXAM',
@@ -94,18 +122,18 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
             }),
           },
     );
-  }, [hasSaveSession, props.examId, props.isContest, sessionId, trigger]);
+  };
 
   const onSubmit = (values: { parts: IPart[] | undefined }) => {
     submitExam({
-      sessionId: exam?.sessionId,
+      sessionId: joinExamData?.sessionId,
       answersByPart: values.parts?.map((part, idx) => ({
         part: idx,
         answers: part.questions.map(question =>
-          question.answer
+          question.answer != null
             ? Array.isArray(question.answer)
               ? question.answer.join(',')
-              : question.answer
+              : String(question.answer)
             : '',
         ),
       })),
@@ -120,17 +148,76 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     return (question.answer as string[])?.every(item => !isBlank(item));
   };
 
-  if (isMutating) {
+  if ((isMutating || loadingDetail) && !examData?.hasPassword) {
     return <Preload />;
+  }
+  if (examData?.hasPassword && (!joinExamData || joinExamError)) {
+    return (
+      <Loader
+        id={componentId.current}
+        className=" w-full max-w-screen-lg m-auto pb-6"
+      >
+        <div className="flex flex-col  bg-white p-4 border border-gray-200">
+          <div>Nhập mật khẩu</div>
+          <Formik
+            onSubmit={(values: { password: string }) => {
+              console.log(values);
+              handleJoinExam(values.password);
+            }}
+            initialValues={{ password: '' }}
+          >
+            {({
+              values,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              errors,
+              touched,
+            }) => {
+              return (
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col items-center gap-4"
+                >
+                  {joinExamError && (
+                    <div className="text-red-500">{t(joinExamError.code)}</div>
+                  )}
+                  <TextInput
+                    label="Mật khẩu"
+                    placeholder="Nhập mật khẩu "
+                    name="password"
+                    type="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    hasError={touched.password && !isBlank(errors.password)}
+                    errorMessage={errors.password}
+                  />
+                  <button className="btn-primary" type="submit">
+                    Xác nhận
+                  </button>
+                </form>
+              );
+            }}
+          </Formik>
+        </div>
+      </Loader>
+    );
   }
 
   if (result && result?.status !== 'SESSION_PAUSE') {
     const resultData = result;
-    return <ExamResult exam={examData} data={resultData} />;
+    return (
+      <ExamResult
+        isContest={props.isContest}
+        exam={examData}
+        data={resultData}
+      />
+    );
   }
   const parts = [] as IPart[];
-  for (let i = 0; i < (exam?.parts.length ?? 0); i++) {
-    const part = exam?.parts?.[i];
+  for (let i = 0; i < (joinExamData?.parts.length ?? 0); i++) {
+    const part = joinExamData?.parts?.[i];
     const startIdx =
       (parts[i - 1]?.startIdx ?? 0) + (parts[i - 1]?.questions.length ?? 0);
     if (part) {

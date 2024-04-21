@@ -14,9 +14,10 @@ import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
 type Props = {
   data?: SubmitExamRes;
   exam?: IExam;
+  isContest?: boolean;
 };
 
-const ExamResult = ({ data, exam }: Props) => {
+const ExamResult = ({ data, exam, isContest }: Props) => {
   const { lng } = useParams();
   const router = useRouter();
   const parts = JSON.parse(data?.parts as string) as IPart[];
@@ -111,7 +112,9 @@ const ExamResult = ({ data, exam }: Props) => {
             type="button"
             className="btn mt-5 w-fit"
             onClick={() => {
-              router.push(`/${lng}/exam/history/${exam?.id}`);
+              router.push(
+                `/${lng}/${isContest ? 'contest' : 'exam'}/history/${exam?.id}`,
+              );
             }}
           >
             Lịch sử thi
@@ -120,7 +123,7 @@ const ExamResult = ({ data, exam }: Props) => {
             type="button"
             className="btn-primary mt-5 w-fit"
             onClick={() => {
-              router.push(`/${lng}/exam`);
+              router.push(`/${lng}/${isContest ? 'contest' : 'exam'}`);
             }}
           >
             Đồng ý
@@ -165,7 +168,10 @@ const ExamResult = ({ data, exam }: Props) => {
                         <div key={idx} className="flex flex-col ">
                           <h2 className="font-bold">Phần {idx + 1}</h2>
                           {part?.questions.map((question, questionIdx) => {
-                            console.log({ corr: question.correctOption });
+                            console.log({
+                              corr: question.correctOption,
+                              user: question.userAnswer,
+                            });
                             return (
                               <div
                                 key={questionIdx}

@@ -53,7 +53,6 @@ const ExamMgmt = ({ compact }: Props) => {
   const { data: session } = useSession();
   const loading = useRef(false);
 
-  const [currPage, setCurrPage] = useState(1);
   const { trigger, isMutating } = useMutation<ExamRes>('/api/v1/exams', {
     url: '/api/v1/exams',
     method: METHOD.GET,
@@ -148,54 +147,56 @@ const ExamMgmt = ({ compact }: Props) => {
             </button>
           )}
       </div>
-      <Formik
-        onSubmit={values => {
-          filter.current = values;
-          saveFilter(values);
-          handleRefresh();
-        }}
-        initialValues={filter.current}
-      >
-        {({ values, setFieldValue, handleSubmit }) => {
-          return (
-            <form
-              onSubmit={handleSubmit}
-              className="px-5 mb-4 flex gap-2 items-end"
-            >
-              <div className="max-w-lg flex-1">
-                <TextInput
-                  label="Tìm kiếm"
-                  placeholder="Nhập từ khóa tìm kiếm..."
-                  className="w-full"
-                  value={values.searchKey}
-                  name="searchKey"
-                  onChange={e => {
-                    setFieldValue('searchKey', e.target.value);
-                  }}
-                />
-              </div>
-              <div className="max-w-lg flex-1">
-                <Dropdown
-                  label="Đề thi mẫu"
-                  placeholder="Đề thi mẫu"
-                  className="w-full"
-                  options={SampleOptions}
-                  selected={values.sample}
-                  onChange={value => {
-                    setFieldValue('sample', value);
-                    handleSubmit();
-                  }}
-                />
-              </div>
-              <div>
-                <button className="btn-primary !h-[4.1rem]" type="submit">
-                  Tìm kiếm
-                </button>
-              </div>
-            </form>
-          );
-        }}
-      </Formik>
+      {!compact && (
+        <Formik
+          onSubmit={values => {
+            filter.current = values;
+            saveFilter(values);
+            handleRefresh();
+          }}
+          initialValues={filter.current}
+        >
+          {({ values, setFieldValue, handleSubmit }) => {
+            return (
+              <form
+                onSubmit={handleSubmit}
+                className="px-5 mb-4 flex gap-2 items-end"
+              >
+                <div className="max-w-lg flex-1">
+                  <TextInput
+                    label="Tìm kiếm"
+                    placeholder="Nhập từ khóa tìm kiếm..."
+                    className="w-full"
+                    value={values.searchKey}
+                    name="searchKey"
+                    onChange={e => {
+                      setFieldValue('searchKey', e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="max-w-lg flex-1">
+                  <Dropdown
+                    label="Đề thi mẫu"
+                    placeholder="Đề thi mẫu"
+                    className="w-full"
+                    options={SampleOptions}
+                    selected={values.sample}
+                    onChange={value => {
+                      setFieldValue('sample', value);
+                      handleSubmit();
+                    }}
+                  />
+                </div>
+                <div>
+                  <button className="btn-primary !h-[4.1rem]" type="submit">
+                    Tìm kiếm
+                  </button>
+                </div>
+              </form>
+            );
+          }}
+        </Formik>
+      )}
       <div className="  pb-5 flex-1 w-full flex flex-col gap-2 ">
         {data && data.length > 0 ? (
           <AutoSizer className="list">

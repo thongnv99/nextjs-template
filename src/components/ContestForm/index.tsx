@@ -1,4 +1,5 @@
 import Loader from 'components/Loader';
+import Checkbox from 'elements/CheckBox';
 import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
 import { METHOD } from 'global';
@@ -20,6 +21,8 @@ interface ContestInput {
   description: string;
   startTime?: string;
   endTime?: string;
+  hasPassword?: boolean;
+  password?: string;
 }
 
 const ContestForm = (props: ContestFormProps) => {
@@ -89,6 +92,8 @@ const ContestForm = (props: ContestFormProps) => {
         initialValues={{
           title: props.data?.title ?? '',
           description: props.data?.description ?? '',
+          hasPassword: props.data?.hasPassword,
+          password: props.data?.password,
         }}
         onSubmit={handleSubmit}
       >
@@ -99,6 +104,7 @@ const ContestForm = (props: ContestFormProps) => {
           touched,
           errors,
           handleSubmit,
+          setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
             <TextInput
@@ -138,11 +144,12 @@ const ContestForm = (props: ContestFormProps) => {
                 errorMessage={errors.endTime}
               />
             </div>
+
             <TextInput
               label="Mô tả"
               name="description"
               placeholder="Mô tả"
-              className="mb-8"
+              className="mb-3"
               type="textarea"
               onChange={handleChange}
               value={values.description}
@@ -150,7 +157,29 @@ const ContestForm = (props: ContestFormProps) => {
               hasError={touched.description && !isBlank(errors.description)}
               errorMessage={errors.description}
             />
-            <div className="flex gap-3">
+
+            <div className="mb-3">
+              <Checkbox
+                label="Nhập mật khẩu"
+                selected={values.hasPassword}
+                name="hasPassword"
+                onChange={(name, value) => setFieldValue('hasPassword', value)}
+              />
+            </div>
+            {values.hasPassword && (
+              <TextInput
+                label="Mật khẩu"
+                name="password"
+                placeholder="Mật khẩu"
+                className="mb-3"
+                onChange={handleChange}
+                value={values.password}
+                onBlur={handleBlur}
+                hasError={touched.password && !isBlank(errors.password)}
+                errorMessage={errors.password}
+              />
+            )}
+            <div className="flex gap-3 mt-8">
               <button
                 type="button"
                 className="btn flex-1"
