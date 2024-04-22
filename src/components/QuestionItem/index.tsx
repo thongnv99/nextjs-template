@@ -20,6 +20,7 @@ import Badge from 'components/Badge';
 import { LEVEL_TRANSLATE, QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import { useSession } from 'next-auth/react';
 import Checkbox from 'elements/CheckBox';
+import FeedbackBtn from 'components/FeedBackBtn';
 type Props = {
   data: IQuestion;
   onRefresh?: () => void;
@@ -150,6 +151,7 @@ const QuestionItem = (props: Props) => {
                 />
               </>
             )}
+            <FeedbackBtn questionId={props.data.id!} />
           </div>
         )}
 
