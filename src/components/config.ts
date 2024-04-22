@@ -5,6 +5,7 @@ import Exam from 'assets/svg/file-text.svg';
 import Contest from 'assets/svg/bookmark.svg';
 import FlashCard from 'assets/svg/box.svg';
 import Blog from 'assets/svg/book.svg';
+import Warning from 'assets/svg/alert-triangle.svg';
 import { ROLES } from 'global';
 
 export const getRoutesConfig = (role: ROLES) => [
@@ -67,6 +68,12 @@ export const getRoutesConfig = (role: ROLES) => [
     //     route: '/blog/blog-form',
     //   },
     // ],
+  },
+  {
+    label: 'Feedback',
+    route: '/feedback',
+    hide: ![ROLES.ADMIN, ROLES.STAFF].includes(role),
+    icon: Warning,
   },
   // {
   //   label: 'Thanh toán',

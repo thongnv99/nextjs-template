@@ -13,7 +13,7 @@ const ModalProvider = (props: ModalProviderProps) => {
     props.onClose?.();
   };
   return (
-    <Transition appear show={props.show} as={Fragment}>
+    <Transition appear show={props.show || false} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={handleClose}>
         <Transition.Child
           as={Fragment}
