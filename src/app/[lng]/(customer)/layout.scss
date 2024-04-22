@@ -1,11 +1,11 @@
 .customer-layout {
   #sidebar {
     transition: all 0.5s ease-in-out;
-    transform: translateX(100%);
-    opacity: 0;
-    &.show {
-      transform: translateX(0);
-      opacity: 1;
+    transform: translateX(0);
+    opacity: 1;
+    &.hide {
+      transform: translateX(100%);
+      opacity: 0;
     }
   }
 }

@@ -2,11 +2,10 @@
 import { ColDef, ColGroupDef, IDatasource } from 'ag-grid-community';
 import DataGrid, { DataGridHandle } from 'components/DataGrid';
 import Loader from 'components/Loader';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import InfoUser from 'components/InfoUser';
 import { uuid } from 'utils/common';
 import PointCell from 'components/InfoUser/Point';
-import ActionIcon from 'components/InfoUser/ActionIcon';
 import { useMutation } from 'hooks/swr';
 import { METHOD, ROLES } from 'global';
 import { dateTimeFormatter } from 'utils/grid';
@@ -14,9 +13,26 @@ import { differenceInMinutes } from 'date-fns';
 import { useTranslation } from 'app/i18n/client';
 import { CONTEST_HISTORY_STATUS_TRANSLATE } from 'global/translate';
 import { useSession } from 'next-auth/react';
-
+import Eye from 'assets/svg/eye.svg';
+import ButtonCell from 'components/DataGrid/ButtonCell';
+import ModalProvider from 'components/ModalProvider';
+import ContestResult from './ContestResult';
+const EyeBtn = (props: { onClick(): void }) => {
+  return (
+    <div
+      className="h-[4rem] w-[4rem] bg-yellow-100 flex items-center justify-center rounded-lg cursor-pointer"
+      onClick={props.onClick}
+    >
+      <Eye className="h-5 w-5 text-yellow-500" />
+    </div>
+  );
+};
 const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
   const gridRef = useRef<DataGridHandle>();
+  const [modalDetail, setModalDetail] = useState<{
+    show?: boolean;
+    data?: Record<string, unknown>;
+  }>({});
   const componentId = useRef(uuid());
   const { t } = useTranslation();
   const { data: session } = useSession();
@@ -138,8 +154,17 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
     {
       headerName: '',
       flex: 0.1,
-      cellRenderer: ActionIcon,
-      cellRendererParams: {},
+      cellRenderer: ButtonCell,
+      cellRendererParams: {
+        buttons: [
+          {
+            render: EyeBtn,
+            onClick: (data: Record<string, unknown>) => {
+              setModalDetail({ show: true, data });
+            },
+          },
+        ],
+      },
       hide: ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
     },
   ];
@@ -179,6 +204,21 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
           onGridReady={handleRequest}
         />
       </div>
+      <ModalProvider
+        show={modalDetail.show || false}
+        onClose={() => {
+          setModalDetail({ show: false });
+        }}
+      >
+        {modalDetail.data && (
+          <ContestResult
+            onClose={() => {
+              setModalDetail({ show: false });
+            }}
+            data={modalDetail.data}
+          />
+        )}
+      </ModalProvider>
     </Loader>
   );
 };
