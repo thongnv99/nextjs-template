@@ -128,20 +128,20 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   };
 
   const onSubmit = (values: { parts: IPart[] | undefined }) => {
-    // submitExam({
-    //   sessionId: joinExamData?.sessionId,
-    //   answersByPart: values.parts?.map((part, idx) => ({
-    //     part: idx,
-    //     answers: part.questions.map(question =>
-    //       question.answer != null
-    //         ? Array.isArray(question.answer)
-    //           ? question.answer.join(',')
-    //           : String(question.answer)
-    //         : '',
-    //     ),
-    //   })),
-    //   hasSaveSession: submitModal.hasSaveSession,
-    // });
+    submitExam({
+      sessionId: joinExamData?.sessionId,
+      answersByPart: values.parts?.map((part, idx) => ({
+        part: idx,
+        answers: part.questions.map(question =>
+          question.answer != null
+            ? Array.isArray(question.answer)
+              ? question.answer.join(',')
+              : String(question.answer)
+            : '',
+        ),
+      })),
+      hasSaveSession: submitModal.hasSaveSession,
+    });
   };
   const checkQuestionFinished = (question: IQuestion) => {
     if (question.type !== QUESTION_TYPE.FILL_IN_THE_BLANK) {
