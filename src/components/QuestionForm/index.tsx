@@ -308,6 +308,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                     label="Level"
                     onChange={value => setFieldValue('level', value)}
                   />
+                  {/* <Checkbox name='isSample' selected={values.isSample} onChange={(name, value)=>setFieldValue('isSample',value)}/> */}
                   <div className="flex flex-col gap-4">
                     <div className="input-label">Tags</div>
                     {values.tags.length > 0 ? (
