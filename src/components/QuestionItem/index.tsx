@@ -128,7 +128,7 @@ const QuestionItem = (props: Props) => {
           ></div>
         </div>
         {!props.hideAction && (
-          <div className="flex gap-8">
+          <div className=" hidden md:flex gap-8 ">
             <Copy
               data-tooltip-id="default-tooltip"
               data-tooltip-content="Nhân bản"

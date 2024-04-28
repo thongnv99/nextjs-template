@@ -131,7 +131,7 @@ const ExamMgmt = ({ compact }: Props) => {
     <Loader
       id={componentId.current}
       loading={isMutating}
-      className="h-full w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
+      className="h-full flex-1 w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
     >
       <div className="p-5 pb-0 flex items-center justify-between">
         <div className="text-lg font-semibold">{t('J_39')}</div>
@@ -160,7 +160,7 @@ const ExamMgmt = ({ compact }: Props) => {
             return (
               <form
                 onSubmit={handleSubmit}
-                className="px-5 mb-4 flex gap-2 items-end"
+                className="px-5 mb-4 flex-wrap flex gap-2 items-end"
               >
                 <div className="max-w-lg flex-1">
                   <TextInput

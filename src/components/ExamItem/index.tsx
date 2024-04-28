@@ -146,7 +146,7 @@ const ExamItem = (props: Props) => {
           </div>
         </div>
         {!props.compact && (
-          <div className="flex gap-6">
+          <div className="hidden md:flex gap-6">
             <Link
               data-tooltip-id="default-tooltip"
               data-tooltip-content={t('J_54')}

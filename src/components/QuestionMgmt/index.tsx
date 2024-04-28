@@ -184,8 +184,11 @@ const QuestionMgmt = (props: Props) => {
       >
         {({ values, setFieldValue, handleSubmit }) => {
           return (
-            <div className="px-5 mb-4 flex gap-2">
-              <div className="max-w-lg flex-1">
+            <form
+              onSubmit={handleSubmit}
+              className="px-5 mb-4 flex gap-2 flex-wrap"
+            >
+              <div className="md:max-w-lg flex-1">
                 <Dropdown
                   label="Loại câu hỏi"
                   placeholder="Loại câu hỏi"
@@ -198,7 +201,7 @@ const QuestionMgmt = (props: Props) => {
                   }}
                 />
               </div>
-              <div className="max-w-lg flex-1">
+              <div className="md:max-w-lg flex-1">
                 <Dropdown
                   label="Câu hỏi mẫu"
                   placeholder="Câu hỏi mẫu"
@@ -211,7 +214,7 @@ const QuestionMgmt = (props: Props) => {
                   }}
                 />
               </div>
-              <div className="max-w-lg flex-1">
+              <div className="md:max-w-lg flex-1">
                 <TextInput
                   label="Tags"
                   placeholder="Tags"
@@ -226,7 +229,7 @@ const QuestionMgmt = (props: Props) => {
                   }}
                 />
               </div>
-              <div className="max-w-lg flex-1">
+              <div className="md:max-w-lg flex-1">
                 <ExamPicker
                   label="Đề thi"
                   placeholder="Chọn đề thi"
@@ -238,7 +241,7 @@ const QuestionMgmt = (props: Props) => {
                   }}
                 />
               </div>
-            </div>
+            </form>
           );
         }}
       </Formik>

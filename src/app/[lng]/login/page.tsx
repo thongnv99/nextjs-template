@@ -119,10 +119,10 @@ const Login = () => {
       className="w-full h-full flex items-center justify-center relative"
     >
       <div
-        className="flex-[2] z-0 h-full bg-primary-50 absolute top-0
+        className="flex-[2] md:block hidden z-0 h-full bg-primary-50 absolute top-0
        left-0 right-0 bottom-0"
       ></div>
-      <div className=" z-[1] flex-1 px-[3.2rem] max-w-[50rem] shadow-sm rounded-lg bg-white border-gray-400 p-7">
+      <div className=" z-[1] flex-1 px-[3.2rem] max-w-[50rem] md:shadow-sm rounded-lg bg-white border-gray-400 p-7">
         <div className="mb-[4.8rem] text-[4.8rem] text-center">Đăng nhập</div>
         {!isBlank(errorMessage!) && (
           <>

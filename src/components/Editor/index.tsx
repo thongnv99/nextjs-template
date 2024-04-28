@@ -42,6 +42,7 @@ const Editor = (props: EditorProps) => {
               'bold',
               'italic',
               'underline',
+              'strikethrough',
               'code',
               'link',
               'bulletedList',

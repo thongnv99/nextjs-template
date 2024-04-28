@@ -69,9 +69,9 @@ const ExamDetail = (props: { examId?: string }) => {
       {error != null ? (
         <EmptyData type="error" />
       ) : (
-        <div className=" h-full w-full flex flex-col items-center justify-center">
-          <div className="text-5xl mb-4">{examData?.title}</div>
-          <div className="text-2xl text-gray-500 mb-2">
+        <div className=" h-full w-full flex flex-col items-center justify-center px-2">
+          <div className="text-5xl mb-4 text-center">{examData?.title}</div>
+          <div className="text-2xl text-gray-500 mb-2 text-center">
             {examData?.description}
           </div>
           <div className=" mb-8">

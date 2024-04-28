@@ -15,8 +15,8 @@ const HomePage = () => {
   });
 
   return (
-    <div className="h-full gap-8 w-full  rounded-lg max-w-screen-lg m-auto flex flex-col shadow-sm">
-      <div className="flex gap-4">
+    <div className="md:h-full gap-8 w-full  rounded-lg max-w-screen-lg m-auto flex flex-col shadow-sm">
+      <div className="grid grid-cols-1  md:grid-cols-4 gap-4">
         <div className="flex flex-1 flex-col rounded-lg  overflow-hidden  items-center shadow-md bg-white">
           <div className="h-[1rem] bg-blue-400 w-full"></div>
           <div className="flex flex-col w-full items-center p-2 gap-2">
@@ -63,11 +63,11 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <div className="flex-1 flex gap-4 overflow-hidden">
-        <div className="flex-1 h-full ">
+      <div className="flex-1 flex-col md:flex-row flex gap-4 overflow-hidden ">
+        <div className="flex-1 flex flex-col h-full min-h-[50vh]">
           <ContestMgmt compact />
         </div>
-        <div className="flex-1 h-full ">
+        <div className="flex-1 flex flex-col h-full min-h-[50vh]">
           <ExamMgmt compact />
         </div>
       </div>

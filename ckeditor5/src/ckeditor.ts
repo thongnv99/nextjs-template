@@ -10,6 +10,7 @@ import {
   Bold,
   Code,
   Italic,
+  Strikethrough,
   Underline,
 } from '@ckeditor/ckeditor5-basic-styles';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
@@ -64,6 +65,7 @@ class Editor extends ClassicEditor {
     BlockQuote,
     Bold,
     Code,
+    Strikethrough,
     Essentials,
     FontBackgroundColor,
     FontColor,
@@ -110,6 +112,7 @@ class Editor extends ClassicEditor {
         'link',
         'bulletedList',
         'numberedList',
+        'strikethrough',
         '|',
         'outdent',
         'indent',

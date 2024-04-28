@@ -25,12 +25,12 @@ const Header = () => {
       >
         <Logo className="h-full w-auto" />
       </div>
-      <div className=" md:flex hidden items-center  divide-x">
-        <div className="mr-4 h-fit">
+      <div className=" flex items-center  divide-x">
+        <div className="mr-4 h-fit md:flex hidden">
           <LanguagePicker />
         </div>
         {status === 'authenticated' ? (
-          <div className="pl-4 flex items-center justify-center">
+          <div className="pl-4 md:flex hidden items-center justify-center">
             <UserDropdown />
           </div>
         ) : (
@@ -44,12 +44,14 @@ const Header = () => {
           </div>
         )}
       </div>
-      <div
-        onClick={toggleMenu}
-        className="cursor-pointer flex md:hidden items-center justify-center "
-      >
-        <Menu />
-      </div>
+      {status === 'authenticated' && (
+        <div
+          onClick={toggleMenu}
+          className="cursor-pointer flex md:hidden items-center justify-center "
+        >
+          <Menu />
+        </div>
+      )}
     </header>
   );
 };

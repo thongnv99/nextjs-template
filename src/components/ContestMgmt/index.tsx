@@ -122,7 +122,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
     <Loader
       id={componentId.current}
       loading={isMutating}
-      className="h-full w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
+      className="h-full flex-1 w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
     >
       <div className="px-5 py-6 flex items-center justify-between">
         <div className="text-lg font-semibold">

@@ -16,7 +16,7 @@ const mapQuestionType = {
 const QuestionDetailModal = (props: Props) => {
   const question = props.data;
   return (
-    <div className="w-screen max-w-screen-md p-[2.4rem]">
+    <div className="w-screen max-w-screen-sm md:max-w-screen-md py-[2.4rem] md:p-[2.4rem]">
       <div className="font-semibold mb-3 w-full text-center text-[2rem]">
         {props.feedback ? 'Chi tiết phản hồi' : 'Chi tiết câu hỏi'}
       </div>
