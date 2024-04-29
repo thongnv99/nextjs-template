@@ -25,7 +25,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
     <div>
       <div className=" w-full p-4  rounded-md border border-gray-200 m-auto bg-white">
         <h1 className="text-center text-[3rem]">Kết quả</h1>
-        <div className="flex w-full justify-between">
+        <div className="flex flex-wrap w-full justify-between">
           <div className="mb-8  p-4 flex flex-col gap-4 flex-1">
             <div className="flex">
               <div className="min-w-[20rem] text-gray-500">Tên đề thi</div>

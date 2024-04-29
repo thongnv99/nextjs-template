@@ -32,7 +32,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const hasSaveSession = search.get('has-save-session') === 'true';
   const sessionId = search.get('session');
   const [expModal, setExpModal] = useState(false);
-  const [expandTime, setExpandTime] = useState(true);
+  const [expandTime, setExpandTime] = useState(false);
   const [submitModal, setSubmitModal] = useState({
     show: false,
     hasSaveSession: false,
@@ -308,6 +308,13 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                     />
                   </div>
                 )}
+                {hasSaveSession && (
+                  <div className=" block md:hidden mb-2">
+                    <h1 className="text-center text-[2rem] md:text-[3rem]">
+                      {examData?.title}
+                    </h1>
+                  </div>
+                )}
                 <div
                   className="block md:hidden absolute right-0 top-0"
                   onClick={() => {
@@ -318,7 +325,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 </div>
                 {expandTime && (
                   <button
-                    className="btn-primary w-full"
+                    className="btn-primary w-full mb-2"
                     type="button"
                     onClick={() => {
                       setSubmitModal({ show: true, hasSaveSession: false });

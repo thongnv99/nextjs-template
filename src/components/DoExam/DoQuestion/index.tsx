@@ -41,7 +41,7 @@ const DoQuestion = (props: {
         {props.question?.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
           <>
             {props.question.isMultiChoice ? (
-              <>
+              <div className="flex flex-col gap-2">
                 {props.question.options?.map((question, idx) => {
                   return (
                     <Checkbox
@@ -67,7 +67,7 @@ const DoQuestion = (props: {
                     />
                   );
                 })}
-              </>
+              </div>
             ) : (
               <RadioGroup
                 className={'flex-col gap-2'}
