@@ -1,6 +1,5 @@
 'use client';
-import { Disclosure } from '@headlessui/react';
-import React, { useRef, useState } from 'react';
+import React, { MouseEventHandler, useRef, useState } from 'react';
 import { useMutation } from 'hooks/swr';
 import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -21,6 +20,8 @@ import ModalProvider from 'components/ModalProvider';
 import Badge from 'components/Badge';
 import Loader from 'components/Loader';
 import ConfirmModal from 'components/ConfirmModal';
+import MenuDropdown from 'elements/MenuDrodown';
+import More from 'assets/svg/more-vertical.svg';
 
 type Props = { data: IExam; onRefresh(): void; compact?: boolean };
 
@@ -125,7 +126,7 @@ const ExamItem = (props: Props) => {
             )}
           </div>
           <div className="text-sm flex items-center gap-4 text-gray-500 font-normal">
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <Calendar className="w-[1.6rem] h-[1.6rem]" />{' '}
               <div>
                 {' '}
@@ -146,6 +147,35 @@ const ExamItem = (props: Props) => {
           </div>
         </div>
         {!props.compact && (
+          <MenuDropdown
+            buttonRender={More}
+            options={[
+              {
+                label: 'J_54',
+                onClick: handleDoExam as unknown as MouseEventHandler,
+              },
+              {
+                label: 'J_55',
+                onClick: handleViewHistory as unknown as MouseEventHandler,
+              },
+              {
+                label: 'J_57',
+                onClick: handleEdit as unknown as MouseEventHandler,
+                hide:
+                  props.data.isSample &&
+                  ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
+              },
+              {
+                label: 'J_58',
+                onClick: handleDelete as unknown as MouseEventHandler,
+                hide:
+                  props.data.isSample &&
+                  ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
+              },
+            ]}
+          />
+        )}
+        {/* {!props.compact && (
           <div className="hidden md:flex gap-6">
             <Link
               data-tooltip-id="default-tooltip"
@@ -177,7 +207,7 @@ const ExamItem = (props: Props) => {
               </>
             )}
           </div>
-        )}
+        )} */}
       </div>
       <ModalProvider show={modalDelete}>
         <Loader id={componentId.current}>

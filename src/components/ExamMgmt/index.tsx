@@ -135,14 +135,14 @@ const ExamMgmt = ({ compact }: Props) => {
       <div className="p-5 pb-0 flex items-center justify-between">
         <div className="text-lg font-semibold">{t('J_39')}</div>
         {!compact &&
-          (!process.env.LOCK_CREATE_EXAM ||
-            [ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role)) && (
+          [ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role) && (
             <button
               type="button"
               className="btn-primary btn-icon"
               onClick={handleCreateExam}
             >
-              <Plus /> {t('J_40')}
+              <Plus />{' '}
+              <span className="hidden md:inline-block">{t('J_40')}</span>
             </button>
           )}
       </div>

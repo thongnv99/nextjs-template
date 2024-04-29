@@ -7,6 +7,10 @@ import React from 'react';
 import { useSession } from 'next-auth/react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { toggleMenu } from 'utils/common';
+import Image from 'next/image';
+import UserDropdown from 'components/UserDropdown';
+import avatar from 'assets/png/example-avatar.png';
+import { ROLES_TRANSLATE } from 'global/translate';
 
 const Sidebar = () => {
   const { t } = useTranslation();
@@ -21,6 +25,21 @@ const Sidebar = () => {
   };
   return (
     <nav className="h-full w-full p-4 flex flex-col gap-2">
+      <div className="flex flex-col items-center md:hidden border-b border-b-gray-200 pb-2">
+        <Image
+          src={avatar}
+          alt="avatar"
+          className="object-cover inline-flex w-[6rem] h-[6rem] rounded-[50%] justify-center overflow-hidden"
+        />
+        <div className="flex flex-col items-center">
+          <div className="font-bold">{`${data?.user.firstName ?? ''} ${
+            data?.user.lastName ?? ''
+          }`}</div>
+          <div className="text-left text-gray-500">
+            {t(ROLES_TRANSLATE[data?.user.role])}
+          </div>
+        </div>
+      </div>
       {getRoutesConfig(data?.user.role).map((route, idx) => {
         if (route.hide) {
           return null;
@@ -51,6 +70,10 @@ const Sidebar = () => {
           </div>
         );
       })}
+
+      <div className="mt-auto md:hidden">
+        <UserDropdown inMenu />
+      </div>
     </nav>
   );
 };
