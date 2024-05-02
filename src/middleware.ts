@@ -43,7 +43,7 @@ export default withAuth(
       }
       return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
     }
-
+    console.log(req.url, req.nextauth.token == null);
     if (req.nextauth.token == null) {
       console.log('/vi', req.nextUrl.pathname);
       if (
@@ -65,6 +65,7 @@ export default withAuth(
       req.nextUrl.pathname === '/vi' ||
       req.nextUrl.pathname === '/en'
     ) {
+      console.log('/home');
       return NextResponse.redirect(new URL(`/${lng}/home`, req.url));
     }
 

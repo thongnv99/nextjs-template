@@ -4,6 +4,7 @@ import { useSWRWrapper } from 'hooks/swr';
 import { BlogListRes, IBlog } from 'interfaces';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import React from 'react';
 import { encodeUrl } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
@@ -34,13 +35,14 @@ const BlogList = ({ inDetail }: { inDetail?: boolean }) => {
     method: METHOD.GET,
   });
   const { status } = useSession();
+  const { lng } = useParams();
   return (
     <div className="h-full w-full flex flex-col bg-white p-6 rounded-lg shadow-md">
       <div className="py-6  flex items-center justify-between w-full ">
         <div className="text-lg font-semibold">Tất cả</div>
         {status === 'authenticated' && (
           <Link
-            href={'/blog/blog-management'}
+            href={`/${lng}/blog/blog-management`}
             className="text-sm text-blue-500 font-semibold"
           >
             Quản lý blog
