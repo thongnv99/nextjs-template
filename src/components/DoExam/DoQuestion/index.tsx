@@ -11,6 +11,7 @@ import { IQuestion } from 'interfaces';
 import React from 'react';
 import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import Checkbox from 'elements/CheckBox';
+import FeedbackBtn from 'components/FeedBackBtn';
 
 const DoQuestion = (props: {
   question?: IQuestion;
@@ -29,7 +30,10 @@ const DoQuestion = (props: {
   };
 
   return (
-    <div id={props.id} className="rounded-md  p-4 bg-white">
+    <div id={props.id} className="relative rounded-md  p-4 bg-white">
+      <div className="absolute right-0 top-0">
+        <FeedbackBtn questionId={props.question?.id!} />
+      </div>
       <div className="flex mb-4 gap-4">
         <div className="whitespace-nowrap">Câu {props.idx}:</div>
         <div

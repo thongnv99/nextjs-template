@@ -58,15 +58,18 @@ const UserMgmtPage = () => {
   const [createModal, setCreateModal] = useState(false);
   const [confirmDeleteModal, setConfirmDeleteModal] = useState<{
     show?: boolean;
-    data?: IContest;
+    data?: any;
   }>({ show: false });
   const [editModal, setEditModal] = useState<{
     show?: boolean;
-    data?: IContest;
+    data?: any;
   }>({ show: false });
 
   const handleShowConfirmDelete = (data: IContest) => {
     setConfirmDeleteModal({ show: true, data });
+  };
+  const handleCloseDelete = () => {
+    setConfirmDeleteModal({ show: false });
   };
   const handleShowEditModal = (data: IContest) => {
     setEditModal({ show: true, data });
@@ -82,7 +85,28 @@ const UserMgmtPage = () => {
       refreshInterval: 0,
     },
   );
-  console.log({ data });
+
+  const { trigger: updateUser, isMutating } = useMutation<{
+    items: Record<string, unknown>[];
+  }>('USER_UPDATE_USER', {
+    url: '/api/v1/admin/users/{userId}',
+    method: METHOD.PUT,
+    loading: true,
+    componentId: componentId.current,
+    notification: {
+      title: 'Cập nhật tài khoản',
+      content: 'Cập nhật tài khoản thành công',
+    },
+    onSuccess: data => {
+      setConfirmDeleteModal({ show: false });
+      refreshData();
+    },
+  });
+
+  function refreshData() {
+    gridRef.current?.api?.updateGridOptions({ rowData: [] });
+    mutate();
+  }
 
   const columnDefs: Array<ColDef> = [
     {
@@ -177,6 +201,17 @@ const UserMgmtPage = () => {
   const handleCreateClick = () => {
     setCreateModal(true);
   };
+
+  const handleConfirmDelete = () => {
+    updateUser({
+      userId: confirmDeleteModal.data.id,
+      statusInfo:
+        (confirmDeleteModal.data?.statusInfo as any)?.status === 'LOCKED'
+          ? 'ACTIVE'
+          : 'LOCKED',
+    });
+  };
+
   return (
     <Loader
       id={componentId.current}
@@ -203,6 +238,31 @@ const UserMgmtPage = () => {
           rowData={data?.items ?? []}
         />
       </div>
+
+      <ModalProvider
+        show={confirmDeleteModal?.show}
+        onClose={handleCloseDelete}
+      >
+        <ConfirmModal
+          type={
+            (confirmDeleteModal.data?.statusInfo as any)?.status === 'LOCKED'
+              ? 'success'
+              : 'error'
+          }
+          title={
+            (confirmDeleteModal.data?.statusInfo as any)?.status === 'LOCKED'
+              ? 'Mở khóa tài khoản'
+              : 'Khóa tài khoản'
+          }
+          content={
+            (confirmDeleteModal.data?.statusInfo as any)?.status === 'LOCKED'
+              ? 'Bạn có chắc chắn muốn mở khóa tài khoản này không?'
+              : 'Bạn có chắc chắn muốn khóa tài khoản này không?'
+          }
+          onCancel={handleCloseDelete}
+          onConfirm={handleConfirmDelete}
+        />
+      </ModalProvider>
     </Loader>
   );
 };

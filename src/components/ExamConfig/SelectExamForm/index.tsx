@@ -28,7 +28,10 @@ const SelectExamForm = (props: ExamFormProps) => {
     props.onSelect(values.exam);
   };
   return (
-    <Loader id={componentId.current} className="w-screen max-w-screen-sm p-6">
+    <Loader
+      id={componentId.current}
+      className="w-screen min-h-[70rem] max-w-screen-sm p-6 flex flex-col"
+    >
       <div className="flex flex-col mb-5">
         <div className="text-lg font-bold text-gray-900">
           {t('Chọn đề thi')}
@@ -36,14 +39,14 @@ const SelectExamForm = (props: ExamFormProps) => {
       </div>
       <Formik initialValues={{}} onSubmit={handleSubmit}>
         {({ handleSubmit, setFieldValue }) => (
-          <form className="flex flex-col gap-10" onSubmit={handleSubmit}>
+          <form className="flex flex-1 flex-col gap-10" onSubmit={handleSubmit}>
             <ExamPicker
               label="Đề thi"
               placeholder="Chọn đề thi"
               onChange={value => setFieldValue('exam', value)}
             />
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 mt-auto">
               <button
                 type="button"
                 className="btn flex-1"

@@ -8,14 +8,9 @@ import { METHOD, ROLES } from 'global';
 import { formatDateToString } from 'utils/datetime';
 import { uuid } from 'utils/common';
 import { useTranslation } from 'app/i18n/client';
-import Trash from 'assets/svg/trash.svg';
-import Edit from 'assets/svg/edit.svg';
-import Link from 'assets/svg/external-link.svg';
-import Upload from 'assets/svg/upload.svg';
 import Calendar from 'assets/svg/calendar.svg';
 import HelpCircle from 'assets/svg/help-circle.svg';
 import Layer from 'assets/svg/3-layers.svg';
-import FileText from 'assets/svg/file-text.svg';
 import ModalProvider from 'components/ModalProvider';
 import Badge from 'components/Badge';
 import Loader from 'components/Loader';
@@ -111,10 +106,13 @@ const ExamItem = (props: Props) => {
   return (
     <div className="w-full flex flex-col ">
       <div className=" hover:bg-primary-50 cursor-pointer flex items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
-        <div className="flex flex-col justify-between items-start">
-          <div className="flex">
+        <div
+          style={{ maxWidth: 'calc(100% - 30px)' }}
+          className="flex  flex-col justify-between items-start"
+        >
+          <div className="flex w-full">
             <div
-              className="text-base text-left text-gray-900 font-semibold  cursor-pointer"
+              className="text-base text-left text-gray-900 font-semibold text-ellipsis truncate   cursor-pointer"
               dangerouslySetInnerHTML={{ __html: props.data.title }}
               onClick={handleDoExam as any}
             ></div>

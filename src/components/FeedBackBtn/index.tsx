@@ -46,7 +46,7 @@ const FeedbackBtn = (props: Props) => {
         onClick={handleShow}
         data-tooltip-id="default-tooltip"
         data-tooltip-content="feedback"
-        className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
+        className="w-3 h-3 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
       />
 
       <ModalProvider show={modal} onClose={handleClose}>

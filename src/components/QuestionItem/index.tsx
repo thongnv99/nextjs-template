@@ -1,8 +1,9 @@
 import { Disclosure, Transition } from '@headlessui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import Trash from 'assets/svg/trash.svg';
 import Edit from 'assets/svg/edit.svg';
 import Copy from 'assets/svg/copy.svg';
+import More from 'assets/svg/more-vertical.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
 import { METHOD, QUESTION_LEVEL, QUESTION_TYPE, ROLES } from 'global';
@@ -22,6 +23,7 @@ import { useSession } from 'next-auth/react';
 import Checkbox from 'elements/CheckBox';
 import FeedbackBtn from 'components/FeedBackBtn';
 import QuestionDetailModal from 'components/QuestionDetail';
+import MenuDropdown from 'elements/MenuDrodown';
 type Props = {
   data: IQuestion;
   onRefresh?: () => void;
@@ -123,37 +125,34 @@ const QuestionItem = (props: Props) => {
           </div>
           <div
             onClick={() => setModalDetail(true)}
-            className="text-sm text-left cursor-pointer text-gray-900 font-semibold h-[2.4rem] overflow-hidden"
+            className="text-sm text-left cursor-pointer text-gray-900 font-semibold h-[2rem] overflow-hidden"
             dangerouslySetInnerHTML={{ __html: props.data.content }}
           ></div>
         </div>
         {!props.hideAction && (
-          <div className=" hidden md:flex gap-8 ">
-            <Copy
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="Nhân bản"
-              onClick={handleCopy}
-              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-            />
-            {(!props.data.isSample ||
-              [ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role)) && (
-              <>
-                <Edit
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Sửa"
-                  onClick={handleEdit}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                <Trash
-                  onClick={handleDelete}
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Xóa"
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-              </>
-            )}
-            <FeedbackBtn questionId={props.data.id!} />
-          </div>
+          <MenuDropdown
+            buttonRender={More}
+            options={[
+              {
+                label: 'Nhân bản',
+                onClick: handleCopy as unknown as MouseEventHandler,
+              },
+              {
+                label: 'J_57',
+                onClick: handleEdit as unknown as MouseEventHandler,
+                hide:
+                  props.data.isSample &&
+                  ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
+              },
+              {
+                label: 'J_58',
+                onClick: handleDelete as unknown as MouseEventHandler,
+                hide:
+                  props.data.isSample &&
+                  ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
+              },
+            ]}
+          />
         )}
 
         {props.showDelete && (

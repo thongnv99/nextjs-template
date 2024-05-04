@@ -84,7 +84,7 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
     {
       headerName: 'Điểm số',
       flex: 1,
-      minWidth: 200,
+      minWidth: 250,
       field: 'score',
       cellRenderer: PointCell,
       cellRendererParams: (params: any) => {
@@ -162,10 +162,16 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
             onClick: (data: Record<string, unknown>) => {
               setModalDetail({ show: true, data });
             },
+            hide: (data: Record<string, unknown>) => {
+              return (
+                ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role) &&
+                (data.userId as Record<string, unknown>)?.id !==
+                  session?.user.id
+              );
+            },
           },
         ],
       },
-      hide: ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
     },
   ];
 

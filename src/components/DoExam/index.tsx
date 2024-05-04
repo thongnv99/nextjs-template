@@ -32,7 +32,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const hasSaveSession = search.get('has-save-session') === 'true';
   const sessionId = search.get('session');
   const [expModal, setExpModal] = useState(false);
-  const [expandTime, setExpandTime] = useState(false);
+  const [expandTime, setExpandTime] = useState(window.innerWidth > 768);
   const [submitModal, setSubmitModal] = useState({
     show: false,
     hasSaveSession: false,
