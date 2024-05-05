@@ -40,7 +40,7 @@ const QuestionPicker = (props: QuestionPickerProps) => {
   };
 
   return (
-    <div className="w-screen max-w-screen-md p-6 transition-all duration-500 h-[90vh] flex flex-col">
+    <div className="w-screen max-w-screen-md p-2 md:p-6 transition-all duration-500 h-[90vh] flex flex-col">
       <Formik
         innerRef={instance => (formRef.current = instance!)}
         onSubmit={handleSubmit}

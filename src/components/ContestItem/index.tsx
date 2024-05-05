@@ -1,12 +1,8 @@
 import { Disclosure, Transition } from '@headlessui/react';
-import React, { useEffect, useRef, useState } from 'react';
-import Trash from 'assets/svg/trash.svg';
-import Edit from 'assets/svg/edit.svg';
-import Link from 'assets/svg/external-link.svg';
-import Chevron from 'assets/svg/chevron-down.svg';
-import { IContest, IQuestion } from 'interfaces';
+import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { IContest } from 'interfaces';
 import { METHOD, QUESTION_TYPE, ROLES } from 'global';
-import { formatNumber, uuid } from 'utils/common';
+import { uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 import ModalProvider from 'components/ModalProvider';
 import Loader from 'components/Loader';
@@ -19,7 +15,9 @@ import Layer from 'assets/svg/3-layers.svg';
 import FileText from 'assets/svg/file-text.svg';
 import Badge from 'components/Badge';
 import { useUserInfo } from 'hooks/common';
-import Upload from 'assets/svg/upload.svg';
+import More from 'assets/svg/more-vertical.svg';
+import MenuDropdown from 'elements/MenuDrodown';
+import { useSession } from 'next-auth/react';
 
 type Props = { data: IContest; onRefresh(): void; compact?: boolean };
 
@@ -29,6 +27,7 @@ const ContestItem = (props: Props) => {
   const { lng } = useParams();
   const [modalDelete, setModalDelete] = useState(false);
   const [modalPublish, setModalPublish] = useState(false);
+  const { data: session } = useSession();
   const componentId = useRef(uuid());
   const { trigger: deleteContest } = useMutation('CONTEST_DELETE_CONTEST', {
     url: '/api/v1/contests/{contestId}',
@@ -48,7 +47,7 @@ const ContestItem = (props: Props) => {
     '/api/v1/contests/{contestId}',
     {
       url: '/api/v1/contests/{contestId}',
-      method: METHOD.DELETE,
+      method: METHOD.PUT,
       componentId: componentId.current,
       loading: true,
       notification: {
@@ -154,55 +153,49 @@ const ContestItem = (props: Props) => {
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <Layer className="w-[1.6rem] h-[1.6rem]" />{' '}
               <div>{`${props.data.parts.length} phần thi`} </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <HelpCircle className="w-[1.6rem] h-[1.6rem]" />{' '}
               <div>{`${questionCount} câu hỏi`} </div>
             </div>
           </div>
         </div>
         {!props.compact && (
-          <div className="flex gap-6">
-            <Link
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="Thi"
-              onClick={handleDoExam}
-              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-            />
-            <FileText
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content="Lịch sử"
-              onClick={handleViewHistory}
-              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-            />
-            {userInfo?.user.role === ROLES.ADMIN && (
-              <>
-                <Edit
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Sửa"
-                  onClick={handleEdit}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                <Trash
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content="Xóa"
-                  onClick={handleDelete}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                {props.data.status === 'DRAFT' && (
-                  <Upload
-                    data-tooltip-id="default-tooltip"
-                    data-tooltip-content="Đăng"
-                    onClick={handleUpload}
-                    className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                  />
-                )}
-              </>
-            )}
-          </div>
+          <MenuDropdown
+            buttonRender={More}
+            options={[
+              {
+                label: 'J_54',
+                onClick: handleDoExam as unknown as MouseEventHandler,
+              },
+              {
+                label: 'J_55',
+                onClick: handleViewHistory as unknown as MouseEventHandler,
+              },
+              {
+                label: 'Đăng',
+                onClick: handleUpload as unknown as MouseEventHandler,
+                hide:
+                  ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role) ||
+                  props.data.status === 'PUBLISH',
+              },
+              {
+                label: 'J_57',
+                onClick: handleEdit as unknown as MouseEventHandler,
+                hide: ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
+              },
+              {
+                label: 'J_58',
+                onClick: handleDelete as unknown as MouseEventHandler,
+                hide:
+                  ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role) ||
+                  props.data.status === 'PUBLISH',
+              },
+            ]}
+          />
         )}
       </div>
       <ModalProvider show={modalDelete}>

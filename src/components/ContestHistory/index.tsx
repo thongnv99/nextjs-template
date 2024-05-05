@@ -175,12 +175,17 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
     },
   ];
 
-  const handleRequest = (e: any) => {
+  const handleRequest = () => {
     gridRef.current?.api?.showLoadingOverlay();
     requestData({
       source: 'CONTEST',
       contestId: props.contestId,
     });
+  };
+
+  const refreshData = () => {
+    gridRef.current?.api?.setGridOption('rowData', []);
+    handleRequest();
   };
 
   return (
@@ -221,6 +226,7 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
             onClose={() => {
               setModalDetail({ show: false });
             }}
+            onRefresh={refreshData}
             data={modalDetail.data}
           />
         )}

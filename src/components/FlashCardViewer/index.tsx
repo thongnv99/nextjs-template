@@ -8,6 +8,9 @@ import Left from 'assets/svg/chevron-left.svg';
 import Right from 'assets/svg/chevron-right.svg';
 import { useMutation } from 'hooks/swr';
 import { FLASH_CARD_STATUS, METHOD } from 'global';
+import Square from 'assets/svg/square.svg';
+import Star from 'assets/svg/star.svg';
+import Triangle from 'assets/svg/triangle.svg';
 
 const FlipCard = ({ data }: { data: IFlashCard }) => {
   const [active, setActive] = useState(false);
@@ -44,7 +47,7 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
   };
 
   return (
-    <div className="bg-[#2B308B] rounded-2xl flex flex-col h-full w-full">
+    <div className="bg-[#2B308B] overflow-hidden rounded-2xl flex flex-col h-full w-full">
       <div
         className={`flip-card w-full cursor-pointer bg-[#2B308B] relative flex-1    ${
           active ? 'active' : ''
@@ -53,11 +56,11 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
       >
         <div className="flip-card-inner">
           <div
-            className="flip-card-front text-[4rem] flex items-center justify-center rounded-2xl"
+            className="flip-card-front text-[1.8rem] md:text-[4rem] flex items-center justify-center rounded-2xl"
             dangerouslySetInnerHTML={{ __html: data.question }}
           ></div>
           <div
-            className="flip-card-back text-[4rem] flex items-center justify-center rounded-2xl"
+            className="flip-card-back text-[1.8rem] md:text-[4rem] flex items-center justify-center rounded-2xl"
             dangerouslySetInnerHTML={{ __html: data.answer }}
           ></div>
         </div>
@@ -139,7 +142,7 @@ const FlashCardViewer = (props: {
       <div className=" relative">
         <div
           ref={sliderRef}
-          className="keen-slider zoom-out !h-[60vh] !w-[60vw]"
+          className="keen-slider zoom-out !h-[60vh] !w-screen md:!w-[60vw]"
         >
           {props.flashCards.map((data, idx) => (
             <div key={idx} className="keen-slider__slide zoom-out__slide ">

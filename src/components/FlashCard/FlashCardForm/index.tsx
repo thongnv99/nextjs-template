@@ -1,3 +1,4 @@
+import Editor from 'components/Editor';
 import Loader from 'components/Loader';
 import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
@@ -89,20 +90,17 @@ const FlashCardForm = (props: FlashCardFormProps) => {
           touched,
           errors,
           handleSubmit,
+          setFieldValue,
         }) => (
           <form onSubmit={handleSubmit}>
-            <TextInput
-              label="Câu hỏi"
-              name="question"
-              className="mb-3"
-              type="textarea"
-              placeholder="Nội dung câu hỏi..."
-              value={values.question}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              hasError={touched.question && !isBlank(errors.question)}
-              errorMessage={errors.question}
-            />
+            <div className="input-container mb-4">
+              <label className="input-label">Câu hỏi</label>
+              <Editor
+                data={values.question}
+                placeholder="Nội dung câu hỏi..."
+                onChange={data => setFieldValue('question', data)}
+              />
+            </div>
             <TextInput
               label="Đáp án"
               name="answer"

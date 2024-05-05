@@ -56,11 +56,14 @@ const FlashCardItem = ({ data, onView, onRefresh }: FlashCardItemProps) => {
     setModalUpdate(true);
   };
   return (
-    <div className="flash-card-items  rounded-lg border border-gray-200 shadow-lg h-[25rem] overflow-hidden flex flex-col">
-      <div className="bg-primary-500 text-white p-4 font-normal">
-        {data.question}
+    <div className="flash-card-items  rounded-lg border border-gray-200 shadow-lg h-fit  overflow-hidden flex flex-col">
+      <div
+        className="bg-primary-500 text-white p-4 font-normal h-[20rem] overflow-hidden  "
+        dangerouslySetInnerHTML={{ __html: data.question }}
+      ></div>
+      <div className="p-4 text-gray-500 font-normal flex-1 h-[2rem] overflow-hidden truncate ">
+        {data.answer}
       </div>
-      <div className="p-4 text-gray-500 font-normal flex-1">{data.answer}</div>
       <div className="flex justify-between p-4">
         <div></div>
         <div className="flex gap-5 text-gray-500">

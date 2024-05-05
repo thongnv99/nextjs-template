@@ -170,7 +170,7 @@ const ExamConfig = (props: ExamConfigProps) => {
             touched,
           }) => (
             <form className="flex flex-col gap-4">
-              <div className="border rounded-2xl transition-all p-6  bg-white flex flex-col gap-4">
+              <div className="border rounded-2xl transition-all p-2 md:p-6  bg-white flex flex-col gap-2 md:gap-4">
                 <TextInput
                   label="Thời gian (phút)"
                   name={`duration`}
@@ -191,7 +191,7 @@ const ExamConfig = (props: ExamConfigProps) => {
               {values.parts.map((part, idx) => (
                 <div
                   key={idx}
-                  className="border rounded-2xl transition-all p-6 flex flex-col gap-4 bg-white"
+                  className="border rounded-2xl transition-all p-2 md:p-6 flex flex-col gap-2 md:gap-4 bg-white"
                 >
                   <div className=" flex flex-col  ">
                     <div className="flex w-full items-center justify-between">
@@ -234,7 +234,7 @@ const ExamConfig = (props: ExamConfigProps) => {
                           <Plus /> Thêm câu hỏi
                         </button>
                       </div>
-                      <div className="p-6  flex flex-col gap-4">
+                      <div className="p-2 md:p-6  flex flex-col gap-4">
                         {part.questions.map((question, questionIdx) => (
                           <QuestionDnd
                             key={question.id}
@@ -265,7 +265,7 @@ const ExamConfig = (props: ExamConfigProps) => {
                   </div>
                 </div>
               ))}
-              <div className="w-full flex justify-center m-8 gap-8">
+              <div className="w-full flex justify-center my-8 gap-8">
                 {values.parts.length === 0 && (
                   <button
                     type="button"

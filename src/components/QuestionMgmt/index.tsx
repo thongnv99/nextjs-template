@@ -36,6 +36,7 @@ interface QuestionFilter {
   sample: string;
   tags: string;
   exam?: IExam;
+  searchKey: string;
 }
 
 const QuestionMgmt = (props: Props) => {
@@ -46,7 +47,7 @@ const QuestionMgmt = (props: Props) => {
   const { data: filterCached, mutate: saveFilter } =
     useSWR<QuestionFilter>('QUESTION_FILTER');
   const filter = useRef<QuestionFilter>(
-    filterCached ?? { sample: '', tags: '', type: '' },
+    filterCached ?? { sample: '', tags: '', type: '', searchKey: '' },
   );
 
   const [data, setData] = useState<IQuestion[]>([]);
@@ -189,6 +190,23 @@ const QuestionMgmt = (props: Props) => {
               className="px-5 mb-4 flex gap-2 flex-wrap"
             >
               <div className="md:max-w-lg flex-1">
+                <TextInput
+                  label="Tìm kiếm"
+                  placeholder="Nhập từ khóa tìm kiếm..."
+                  className="w-full"
+                  value={values.searchKey}
+                  name="searchKey"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      handleSubmit();
+                    }
+                  }}
+                  onChange={e => {
+                    setFieldValue('searchKey', e.target.value);
+                  }}
+                />
+              </div>
+              <div className="md:max-w-lg flex-1">
                 <Dropdown
                   label="Loại câu hỏi"
                   placeholder="Loại câu hỏi"
@@ -221,8 +239,10 @@ const QuestionMgmt = (props: Props) => {
                   className="w-full"
                   value={values.tags}
                   name="tags"
-                  onBlur={() => {
-                    handleSubmit();
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      handleSubmit();
+                    }
                   }}
                   onChange={e => {
                     setFieldValue('tags', e.target.value);

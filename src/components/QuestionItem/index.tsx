@@ -96,7 +96,7 @@ const QuestionItem = (props: Props) => {
   return (
     <div className="w-full flex flex-col question-item">
       <div className="flex gap-4 items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
-        <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col gap-[4px] overflow-hidden">
           <div className="flex gap-2">
             {props.data.isSample && (
               <Badge

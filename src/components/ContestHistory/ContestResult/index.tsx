@@ -2,19 +2,67 @@
 import ArrowRight from 'assets/svg/arrow-right.svg';
 import { Disclosure, Transition } from '@headlessui/react';
 import { IPart } from 'interfaces';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import Chevron from 'assets/svg/chevron-down.svg';
+import { METHOD, QUESTION_TYPE } from 'global';
+import RadioGroup from 'elements/RadioGroup';
+import Loader from 'components/Loader';
+import { useMutation } from 'hooks/swr';
+import { uuid } from 'utils/common';
 
 type Props = {
   data: Record<string, unknown>;
   onClose(): void;
+  onRefresh(): void;
 };
 
 const ContestResult = (props: Props) => {
+  const [essayResult, setEssayResult] = useState<Record<string, string>>({});
+  const componentId = useRef(uuid());
   const parts = props.data.parts as IPart[];
+  const { trigger } = useMutation('/api/v1/admin/examHistories/mark', {
+    url: '/api/v1/admin/examHistories/mark',
+    componentId: componentId.current,
+    method: METHOD.POST,
+    loading: true,
+    notification: {
+      title: 'Chấm điểm',
+      content: 'Chấm điểm thành công',
+    },
+    onSuccess() {
+      props.onClose();
+      props.onRefresh();
+    },
+  });
+
+  const handleRequest = () => {
+    console.log(essayResult);
+    const questions: Record<string, unknown>[] = [];
+    parts.forEach(part => {
+      part.questions.forEach(question => {
+        if (question.type === QUESTION_TYPE.ESSAY) {
+          if (essayResult[question.id]) {
+            questions.push({
+              id: question.id,
+              isCorrect: essayResult[question.id] === 'true',
+            });
+          } else {
+            questions.push({
+              id: question.id,
+              isCorrect: true,
+            });
+          }
+        }
+      });
+    });
+    trigger({
+      examHistoryId: props.data.id,
+      questions,
+    });
+  };
   return (
-    <div className="w-screen max-w-screen-md ">
+    <Loader id={componentId.current} className="w-screen max-w-screen-md ">
       <div className="w-full flex flex-col items-center p-4">
         <div>{`${(props.data.userId as any).firstName as string} ${
           (props.data.userId as any).lastName as string
@@ -70,69 +118,107 @@ const ContestResult = (props: Props) => {
                         </div>
                       ))}
                     </div>
-                    <div className="mt-4">
-                      <Disclosure>
-                        {({ open }) => {
-                          return (
-                            <div className="w-full flex flex-col question-item">
-                              <Disclosure.Button>
-                                <div className="flex items-center justify-between transition duration-75 bg-primary-200">
-                                  <div className="  p-2 flex gap-2 items-center">
-                                    Đáp án đúng:{' '}
-                                    <strong>
-                                      {String(question!.correctOption)
-                                        ?.split(',')
-                                        .map(item => Number(item) + 1)
-                                        .join(', ')}
-                                    </strong>
-                                    <ArrowRight />
-                                    <strong className="uppercase">
-                                      {
-                                        QUESTION_STATUS_TRANSLATE[
-                                          question.status
-                                        ]
-                                      }
-                                    </strong>
+                    {question.type === QUESTION_TYPE.ESSAY && (
+                      <div className="flex flex-col px-2">
+                        <div>Bài làm:</div>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: question.userAnswer as string,
+                          }}
+                        ></div>
+                      </div>
+                    )}
+                    {question.type === QUESTION_TYPE.ESSAY &&
+                      props.data.status === 'MARK_PENDING' && (
+                        <div className="mt-2">
+                          <div>Chấm bài: </div>
+                          <RadioGroup
+                            value={essayResult[question.id] ?? 'true'}
+                            onChange={value => {
+                              setEssayResult(prev => ({
+                                ...prev,
+                                [question.id]: value as string,
+                              }));
+                            }}
+                            options={[
+                              {
+                                label: 'Đúng',
+                                value: 'true',
+                              },
+                              {
+                                label: 'Sai',
+                                value: 'false',
+                              },
+                            ]}
+                          />
+                        </div>
+                      )}
+                    {question.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
+                      <div className="mt-4">
+                        <Disclosure>
+                          {({ open }) => {
+                            return (
+                              <div className="w-full flex flex-col question-item">
+                                <Disclosure.Button>
+                                  <div className="flex items-center justify-between transition duration-75 bg-primary-200">
+                                    <div className="  p-2 flex gap-2 items-center">
+                                      Đáp án đúng:{' '}
+                                      <strong>
+                                        {String(question!.correctOption)
+                                          ?.split(',')
+                                          .map(item => Number(item) + 1)
+                                          .join(', ')}
+                                      </strong>
+                                      <ArrowRight />
+                                      <strong className="uppercase">
+                                        {
+                                          QUESTION_STATUS_TRANSLATE[
+                                            question.status
+                                          ]
+                                        }
+                                      </strong>
+                                    </div>
+                                    {question.answerExplain && (
+                                      <div className="flex gap-8">
+                                        <Chevron
+                                          className={`${
+                                            open ? 'rotate-180' : ''
+                                          } w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transform transition duration-75`}
+                                        />
+                                      </div>
+                                    )}
                                   </div>
-                                  {question.answerExplain && (
-                                    <div className="flex gap-8">
-                                      <Chevron
-                                        className={`${
-                                          open ? 'rotate-180' : ''
-                                        } w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transform transition duration-75`}
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-                              </Disclosure.Button>
-                              <Transition
-                                show={open}
-                                enter="transition-all duration-100 ease-out"
-                                enterFrom="transform h-0 opacity-0"
-                                enterTo="transform  opacity-100"
-                                leave="transition-all duration-100 ease-out"
-                                leaveFrom="transform  opacity-100"
-                                leaveTo="transform h-0 opacity-0"
-                                className="overflow-hidden "
-                              >
-                                <Disclosure.Panel static>
-                                  {question.answerExplain && (
-                                    <div className="p-2 bg-primary-50">
-                                      <div>Giải thích đáp án</div>
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: question.answerExplain ?? '',
-                                        }}
-                                      ></div>
-                                    </div>
-                                  )}
-                                </Disclosure.Panel>
-                              </Transition>
-                            </div>
-                          );
-                        }}
-                      </Disclosure>
-                    </div>
+                                </Disclosure.Button>
+                                <Transition
+                                  show={open}
+                                  enter="transition-all duration-100 ease-out"
+                                  enterFrom="transform h-0 opacity-0"
+                                  enterTo="transform  opacity-100"
+                                  leave="transition-all duration-100 ease-out"
+                                  leaveFrom="transform  opacity-100"
+                                  leaveTo="transform h-0 opacity-0"
+                                  className="overflow-hidden "
+                                >
+                                  <Disclosure.Panel static>
+                                    {question.answerExplain && (
+                                      <div className="p-2 bg-primary-50">
+                                        <div>Giải thích đáp án</div>
+                                        <div
+                                          dangerouslySetInnerHTML={{
+                                            __html:
+                                              question.answerExplain ?? '',
+                                          }}
+                                        ></div>
+                                      </div>
+                                    )}
+                                  </Disclosure.Panel>
+                                </Transition>
+                              </div>
+                            );
+                          }}
+                        </Disclosure>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -144,11 +230,13 @@ const ContestResult = (props: Props) => {
         <button onClick={props.onClose} className="btn" type="button">
           Hủy bỏ
         </button>
-        <button className="btn-primary" type="button">
-          Cập nhật điểm
-        </button>
+        {props.data?.status === 'MARK_PENDING' && (
+          <button className="btn-primary" type="button" onClick={handleRequest}>
+            Cập nhật điểm
+          </button>
+        )}
       </div>
-    </div>
+    </Loader>
   );
 };
 

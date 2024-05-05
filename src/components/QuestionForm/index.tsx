@@ -134,7 +134,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         blankPositions: [],
         correctOptions: String(data.correctOption).split(','),
         isMultiChoice: data.isMultiChoice,
-        tags: data.tags?.split('|') ?? [],
+        tags: data.tags?.split(',') ?? [],
       };
       if (values.type === QUESTION_TYPE.FILL_IN_THE_BLANK) {
         const container = document.createElement('div');
@@ -165,7 +165,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         year: values.year,
         score: values.score,
         questionCategoryId: values.questionCategoryId,
-        tags: values.tags.join('|'),
+        tags: values.tags.join(','),
         source: 'QUESTION',
         content: values.content,
         answer: 'Tự chấm',
@@ -177,7 +177,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         score: values.score,
         level: values.level,
         year: values.year,
-        tags: values.tags.join('|'),
+        tags: values.tags.join(','),
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: values.content,
@@ -205,7 +205,7 @@ const QuestionForm = (props: QuestionFormProps) => {
         score: values.score,
         level: values.level,
         year: values.year,
-        tags: values.tags.join('|'),
+        tags: values.tags.join(','),
         questionCategoryId: values.questionCategoryId,
         source: 'QUESTION',
         content: container.innerHTML,
@@ -235,7 +235,7 @@ const QuestionForm = (props: QuestionFormProps) => {
       id={componentId.current}
       className="base-container question-form bg-white"
     >
-      <div className="base-top-container">
+      <div className="base-top-container flex-wrap">
         <div className="base-title">
           {props.isEdit ? 'Cập nhật câu hỏi' : 'Tạo mới câu hỏi'}
         </div>
@@ -288,8 +288,11 @@ const QuestionForm = (props: QuestionFormProps) => {
             setFieldValue,
             handleSubmit,
           }) => (
-            <form className="w-full h-full flex gap-8" onSubmit={handleSubmit}>
-              <div className="question-section w-[35%]">
+            <form
+              className="w-full h-full flex flex-wrap gap-8"
+              onSubmit={handleSubmit}
+            >
+              <div className="question-section w-full md:w-[35%] ">
                 <div className="title">Cài đặt</div>
                 <div className="flex flex-col gap-2">
                   <TextInput

@@ -112,9 +112,9 @@ const Register = () => {
   return (
     <Loader
       id={componentId.current}
-      className="w-full h-full flex items-center justify-center p-8 overflow-y-auto bg-primary-50"
+      className="w-screen h-screen md:py-8   overflow-y-auto bg-primary-50"
     >
-      <div className=" flex-1 px-[3.2rem] max-w-[50rem] shadow-sm rounded-lg bg-white border-gray-400 p-7">
+      <div className=" m-auto px-[3.2rem] max-w-[50rem] shadow-sm rounded-lg bg-white border-gray-400 p-7">
         <div className="mb-[4.8rem] text-[4.8rem] text-center">Đăng ký</div>
         {!isBlank(errorMessage!) && (
           <div className="mb-[4.8rem] text-[1.6rem] text-center text-red-600">
@@ -150,7 +150,7 @@ const Register = () => {
                   label="Họ"
                   name="lastName"
                   value={values.lastName}
-                  className="col-span-1"
+                  className="md:col-span-1"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="off"
@@ -161,7 +161,7 @@ const Register = () => {
                   label="Tên"
                   name="firstName"
                   value={values.firstName}
-                  className="col-span-1"
+                  className="md:col-span-1"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="off"
@@ -173,7 +173,7 @@ const Register = () => {
                   name="dob"
                   type="date"
                   value={values.dob as unknown as string}
-                  className="col-span-1"
+                  className="md:col-span-1"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="off"
@@ -198,7 +198,7 @@ const Register = () => {
                   name="phoneNumber"
                   type="text"
                   value={values.phoneNumber}
-                  className="col-span-2"
+                  className="md:col-span-2"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   hasError={touched.phoneNumber && !isBlank(errors.phoneNumber)}
@@ -208,7 +208,7 @@ const Register = () => {
                   label="Email"
                   name="email"
                   value={values.email}
-                  className="col-span-2"
+                  className="md:col-span-2"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   autoComplete="off"
@@ -216,7 +216,7 @@ const Register = () => {
                   hasError={touched.email && !isBlank(errors.email)}
                   errorMessage={errors.email}
                 />
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                   <TextInput
                     label="Mật khẩu"
                     name="password"
@@ -236,7 +236,7 @@ const Register = () => {
                 </div>
                 <TextInput
                   label="Xác nhận mật khẩu"
-                  className="col-span-2"
+                  className="md:col-span-2"
                   name="confirmPassword"
                   type="password"
                   value={values.confirmPassword}

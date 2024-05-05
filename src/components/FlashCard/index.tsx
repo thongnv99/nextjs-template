@@ -66,8 +66,10 @@ const FlashCard = (props: Props) => {
       loading={isLoading}
       className="h-full w-full border border-gray-200 rounded-lg flex flex-col shadow-sm"
     >
-      <div className="px-5 py-6 flex justify-between">
-        <div className="text-lg font-semibold">Danh sách flashcard</div>
+      <div className="px-5 py-6 flex justify-between ">
+        <div className="text-lg font-semibold h-full flex items-center">
+          Flashcard
+        </div>
         <div className="flex items-center gap-4">
           <div>
             <Dropdown
@@ -83,12 +85,13 @@ const FlashCard = (props: Props) => {
             className="btn-primary btn-icon !h-full"
             onClick={handleCreateClick}
           >
-            <Plus /> Thêm flashcard
+            <Plus />{' '}
+            <span className="md:inline-block hidden">Thêm flashcard</span>
           </button>
         </div>
       </div>
       {data?.items.length ? (
-        <div className="p-5 flex-1 grid grid-cols-4  gap-4 overflow-y-auto">
+        <div className="p-5 flex-1 grid grid-col-1 md:grid-col-2 lg:grid-cols-4  gap-4 overflow-y-auto">
           {data?.items.map((item, idx) => (
             <FlashCardItem
               data={item}
@@ -157,20 +160,6 @@ const FlashCard = (props: Props) => {
           </div>
         </div>
       </Transition>
-      {/* <ModalProvider
-        dialogClass="!bg-transparent !rounded-none !overflow-visible"
-        show={viewModal.show}
-        onClose={() => setViewModal({ show: false, currentIdx: 0 })}
-      >
-        {delaySlider ? (
-          <FlashCardViewer
-            flashCards={data?.items ?? []}
-            currentIdx={viewModal.currentIdx}
-          />
-        ) : (
-          <Preload />
-        )}
-      </ModalProvider> */}
     </Loader>
   );
 };

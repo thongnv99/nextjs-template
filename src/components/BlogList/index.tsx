@@ -13,9 +13,9 @@ const BlogCard = ({ data }: { data: IBlog }) => {
   return (
     <Link
       href={`blog/${encodeUrl(data)}`}
-      className="w-full p-6 rounded-lg shadow-sm flex flex-col bg-white border-gray-200 border cursor-pointer"
+      className="w-full p-2 md:p-6 rounded-lg shadow-sm flex flex-col bg-white border-gray-200 border cursor-pointer"
     >
-      <div className="text-[2.4rem] font-bold text-black mb-8 text-ellipsis w-full  whitespace-nowrap">
+      <div className="text-[2.4rem] font-bold text-black mb-8 text-ellipsis w-full truncate  whitespace-nowrap">
         {data.title}
       </div>
       <div
@@ -37,8 +37,8 @@ const BlogList = ({ inDetail }: { inDetail?: boolean }) => {
   const { status } = useSession();
   const { lng } = useParams();
   return (
-    <div className="h-full w-full flex flex-col bg-white p-6 rounded-lg shadow-md">
-      <div className="py-6  flex items-center justify-between w-full ">
+    <div className="h-full w-full flex flex-col bg-white p-2 md:p-6 rounded-lg shadow-md">
+      <div className="py-2 md:py-6  flex items-center justify-between w-full ">
         <div className="text-lg font-semibold">Tất cả</div>
         {status === 'authenticated' && (
           <Link

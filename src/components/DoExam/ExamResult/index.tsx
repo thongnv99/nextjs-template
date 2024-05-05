@@ -10,6 +10,7 @@ import DoQuestion from '../DoQuestion';
 import { Disclosure, Transition } from '@headlessui/react';
 import ArrowRight from 'assets/svg/arrow-right.svg';
 import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
+import { QUESTION_TYPE } from 'global';
 
 type Props = {
   data?: SubmitExamRes;
@@ -168,10 +169,6 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                         <div key={idx} className="flex flex-col ">
                           <h2 className="font-bold">Phần {idx + 1}</h2>
                           {part?.questions.map((question, questionIdx) => {
-                            console.log({
-                              corr: question.correctOption,
-                              user: question.userAnswer,
-                            });
                             return (
                               <div
                                 key={questionIdx}
@@ -218,75 +215,89 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                                     ),
                                   )}
                                 </div>
-                                <div className="mt-4">
-                                  <Disclosure>
-                                    {({ open }) => {
-                                      return (
-                                        <div className="w-full flex flex-col question-item">
-                                          <Disclosure.Button>
-                                            <div className="flex items-center justify-between transition duration-75 bg-primary-200">
-                                              <div className="  p-2 flex gap-2 items-center">
-                                                Đáp án đúng:{' '}
-                                                <strong>
-                                                  {String(
-                                                    question!.correctOption,
-                                                  )
-                                                    ?.split(',')
-                                                    .map(
-                                                      item => Number(item) + 1,
+
+                                {question.type === QUESTION_TYPE.ESSAY && (
+                                  <div className="flex flex-col px-2">
+                                    <div>Bài làm:</div>
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: question.userAnswer as string,
+                                      }}
+                                    ></div>
+                                  </div>
+                                )}
+                                {question.type !== QUESTION_TYPE.ESSAY && (
+                                  <div className="mt-4">
+                                    <Disclosure>
+                                      {({ open }) => {
+                                        return (
+                                          <div className="w-full flex flex-col question-item">
+                                            <Disclosure.Button>
+                                              <div className="flex items-center justify-between transition duration-75 bg-primary-200">
+                                                <div className="  p-2 flex gap-2 items-center">
+                                                  Đáp án đúng:{' '}
+                                                  <strong>
+                                                    {String(
+                                                      question!.correctOption,
                                                     )
-                                                    .join(', ')}
-                                                </strong>
-                                                <ArrowRight />
-                                                <strong className="uppercase">
-                                                  {
-                                                    QUESTION_STATUS_TRANSLATE[
-                                                      question.status
-                                                    ]
-                                                  }
-                                                </strong>
+                                                      ?.split(',')
+                                                      .map(
+                                                        item =>
+                                                          Number(item) + 1,
+                                                      )
+                                                      .join(', ')}
+                                                  </strong>
+                                                  <ArrowRight />
+                                                  <strong className="uppercase">
+                                                    {
+                                                      QUESTION_STATUS_TRANSLATE[
+                                                        question.status
+                                                      ]
+                                                    }
+                                                  </strong>
+                                                </div>
+                                                {question.answerExplain && (
+                                                  <div className="flex gap-8">
+                                                    <Chevron
+                                                      className={`${
+                                                        open ? 'rotate-180' : ''
+                                                      } w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transform transition duration-75`}
+                                                    />
+                                                  </div>
+                                                )}
                                               </div>
-                                              {question.answerExplain && (
-                                                <div className="flex gap-8">
-                                                  <Chevron
-                                                    className={`${
-                                                      open ? 'rotate-180' : ''
-                                                    } w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transform transition duration-75`}
-                                                  />
-                                                </div>
-                                              )}
-                                            </div>
-                                          </Disclosure.Button>
-                                          <Transition
-                                            show={open}
-                                            enter="transition-all duration-100 ease-out"
-                                            enterFrom="transform h-0 opacity-0"
-                                            enterTo="transform  opacity-100"
-                                            leave="transition-all duration-100 ease-out"
-                                            leaveFrom="transform  opacity-100"
-                                            leaveTo="transform h-0 opacity-0"
-                                            className="overflow-hidden "
-                                          >
-                                            <Disclosure.Panel static>
-                                              {question.answerExplain && (
-                                                <div className="p-2 bg-primary-50">
-                                                  <div>Giải thích đáp án</div>
-                                                  <div
-                                                    dangerouslySetInnerHTML={{
-                                                      __html:
-                                                        question.answerExplain ??
-                                                        '',
-                                                    }}
-                                                  ></div>
-                                                </div>
-                                              )}
-                                            </Disclosure.Panel>
-                                          </Transition>
-                                        </div>
-                                      );
-                                    }}
-                                  </Disclosure>
-                                </div>
+                                            </Disclosure.Button>
+                                            <Transition
+                                              show={open}
+                                              enter="transition-all duration-100 ease-out"
+                                              enterFrom="transform h-0 opacity-0"
+                                              enterTo="transform  opacity-100"
+                                              leave="transition-all duration-100 ease-out"
+                                              leaveFrom="transform  opacity-100"
+                                              leaveTo="transform h-0 opacity-0"
+                                              className="overflow-hidden "
+                                            >
+                                              <Disclosure.Panel static>
+                                                {question.answerExplain && (
+                                                  <div className="p-2 bg-primary-50">
+                                                    <div>Giải thích đáp án</div>
+                                                    <div
+                                                      dangerouslySetInnerHTML={{
+                                                        __html:
+                                                          question.answerExplain ??
+                                                          '',
+                                                      }}
+                                                    ></div>
+                                                  </div>
+                                                )}
+                                              </Disclosure.Panel>
+                                            </Transition>
+                                          </div>
+                                        );
+                                      }}
+                                    </Disclosure>
+                                  </div>
+                                )}
                               </div>
                             );
                           })}

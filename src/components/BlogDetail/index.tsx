@@ -19,7 +19,7 @@ const BlogDetail = ({ data }: BlogDetailProps) => {
         </Link>{' '}
         / <span className="italic text-gray-500">{data.title}</span>
       </span>
-      <div className="bg-white shadow-md rounded-md p-8 h-full">
+      <div className="bg-white shadow-md rounded-md p-4 md:p-8 h-full">
         <div className="mb-[9.6rem] flex flex-col gap-3 items-center">
           <h1 className="text-[3.2rem] font-bold text-gray-900 ">
             {data.title}
