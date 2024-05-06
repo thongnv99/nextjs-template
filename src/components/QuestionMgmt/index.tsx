@@ -87,7 +87,7 @@ const QuestionMgmt = (props: Props) => {
     const { page, totalPage } = pagination.current;
     if (page < totalPage) {
       loading.current = true;
-      const { sample, type, tags, exam } = filter.current;
+      const { sample, type, tags, exam, searchKey } = filter.current;
       trigger({
         page: page + 1,
         limit: FETCH_COUNT,
@@ -99,6 +99,9 @@ const QuestionMgmt = (props: Props) => {
         }),
         ...(!isBlank(tags) && {
           tags,
+        }),
+        ...(!isBlank(searchKey) && {
+          searchKey,
         }),
         ...(exam && {
           source: 'EXAM',
