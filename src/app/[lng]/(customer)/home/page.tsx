@@ -24,7 +24,7 @@ const HomePage = () => {
               {t('J_44')} <Info className="w-4 h-4 cursor-pointer" />
             </div>
             <div className="font-bold text-lg">
-              {formatNumber(data?.contest.totalCompleted ?? 0)}
+              {formatNumber(data?.contest.totalSessionCompleted ?? 0)}
             </div>
           </div>
         </div>
@@ -35,7 +35,7 @@ const HomePage = () => {
               {t('J_45')} <Info className="w-4 h-4 cursor-pointer" />
             </div>
             <div className="font-bold text-lg">
-              {formatNumber(data?.exam.totalCompleted)}
+              {formatNumber(data?.exam.totalSessionCompleted)}
             </div>
           </div>
         </div>
