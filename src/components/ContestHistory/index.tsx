@@ -146,7 +146,7 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
             new Date(startTime as number),
             new Date(endTime as number),
           );
-          return `${minutes} Phút`;
+          return `${Math.abs(minutes)} Phút`;
         }
         return 'Đang làm bài';
       },
