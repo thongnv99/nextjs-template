@@ -3,9 +3,10 @@ import Loader from 'components/Loader';
 import Checkbox from 'elements/CheckBox';
 import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
-import { METHOD } from 'global';
+import { METHOD, ROLES } from 'global';
 import { useMutation } from 'hooks/swr';
 import { IExam } from 'interfaces';
+import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useRef } from 'react';
 import { isBlank, uuid } from 'utils/common';
@@ -25,6 +26,7 @@ const ExamForm = (props: ExamFormProps) => {
   const { t } = useTranslation();
   const componentId = useRef(uuid());
   const router = useRouter();
+  const { data: user } = useSession();
   const { lng } = useParams();
   const { trigger: createExam } = useMutation<Record<string, unknown>>(
     'EXAM_CREATE_EXAM',
@@ -115,16 +117,17 @@ const ExamForm = (props: ExamFormProps) => {
               hasError={touched.description && !isBlank(errors.description)}
               errorMessage={errors.description}
             />
-            {!props.data && (
-              <Checkbox
-                className="mb-8"
-                selected={values.isSample}
-                label="Đề mẫu"
-                onChange={(_, value) => {
-                  setFieldValue('isSample', value);
-                }}
-              />
-            )}
+            {!props.data &&
+              [ROLES.ADMIN, ROLES.STAFF].includes(user?.user.role) && (
+                <Checkbox
+                  className="mb-8"
+                  selected={values.isSample}
+                  label="Đề mẫu"
+                  onChange={(_, value) => {
+                    setFieldValue('isSample', value);
+                  }}
+                />
+              )}
             <div className="flex gap-3">
               <button
                 type="button"

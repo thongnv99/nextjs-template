@@ -142,13 +142,13 @@ const UserMgmtPage = () => {
       },
     },
     {
-      headerName: 'Số cuột thi tham gia',
-      field: 'contest.totalCompleted',
+      headerName: 'Số cuộc thi tham gia',
+      field: 'contest.totalSessionCompleted',
       cellClass: 'text-right',
     },
     {
       headerName: 'Số đề thi đã làm',
-      field: 'exam.totalCompleted',
+      field: 'exam.totalSessionCompleted',
       cellClass: 'text-right',
     },
     {
