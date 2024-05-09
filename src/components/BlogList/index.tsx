@@ -10,19 +10,32 @@ import { encodeUrl } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 
 const BlogCard = ({ data }: { data: IBlog }) => {
+  const { lng } = useParams();
+
+  const tag = document.createElement('div');
+  tag.innerHTML = data.content;
+  const imgs = tag.getElementsByTagName('img');
+  for (let i = 0; i < imgs.length; i++) {
+    const img = imgs.item(i);
+    if (img) {
+      const replaceChild = document.createElement('div');
+      replaceChild.innerHTML = 'Hình ảnh';
+      img.parentNode?.replaceChild(replaceChild, img);
+    }
+  }
   return (
     <Link
-      href={`blog/${encodeUrl(data)}`}
+      href={`/${lng}/blog/${encodeUrl(data)}`}
       className="w-full p-2 md:p-6 rounded-lg shadow-sm flex flex-col bg-white border-gray-200 border cursor-pointer"
     >
-      <div className="text-[2.4rem] font-bold text-black mb-8 text-ellipsis w-full truncate  whitespace-nowrap">
+      <div className=" text-[1.6rem] md:text-[2.4rem] font-bold text-black mb-4 md:mb-8 text-ellipsis w-full line-clamp-2">
         {data.title}
       </div>
       <div
-        className="text-base font-normal text-[#4A4A68] mb-3 text-ellipsis w-full line-clamp-[4]"
-        dangerouslySetInnerHTML={{ __html: data.content }}
+        className=" text-[1.2rem] md:text-base font-normal text-[#4A4A68] mb-1 md:mb-3 text-ellipsis w-full line-clamp-[4]"
+        dangerouslySetInnerHTML={{ __html: tag.innerHTML }}
       ></div>
-      <div className="text-base font-normal text-[#4A4A68]">
+      <div className="text-[1.2rem] md:text-base font-normal text-[#4A4A68]">
         {formatDateToString(new Date(data.createdAt), 'dd/MM/yyyy')}
       </div>
     </Link>

@@ -9,7 +9,12 @@ const nextConfig = {
     return [{
       source: '/',// ^(?!.*(?:vi|en)).*$
       destination: '/vi',
-    }];
+    },
+      //  {
+      //   source: '/media/:path*',
+      //   destination: 'https://dev.kenchikunokaze.com/media/:path*',
+      // }
+    ];
   },
   reactStrictMode: false,
   images: {

@@ -8,7 +8,7 @@ import { QUESTION_TYPE } from 'global';
 import ArrowRight from 'assets/svg/arrow-right.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import Checkbox from 'elements/CheckBox';
 import FeedbackBtn from 'components/FeedBackBtn';
@@ -20,6 +20,7 @@ const DoQuestion = (props: {
   idx?: number;
   answer?: string | string[];
   showAnswer?: boolean;
+  triggerShowAnswer?: { show: boolean };
   onChange(answer: string | string[] | number): void; // array when type = fill blank
 }) => {
   const getBlankOptions = (content: string) => {
@@ -28,6 +29,14 @@ const DoQuestion = (props: {
     const options = el.getElementsByTagName('code');
     return new Array(options.length).fill('') as string[];
   };
+
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (props.triggerShowAnswer?.show) {
+      setOpen(true);
+    }
+  }, [props.triggerShowAnswer]);
 
   return (
     <div id={props.id} className="relative rounded-md  p-4 bg-white">
@@ -125,11 +134,11 @@ const DoQuestion = (props: {
       </div>
       {props.question && props.showAnswer && (
         <div className="mt-4">
-          <Disclosure>
-            {({ open }) => {
+          <Disclosure defaultOpen>
+            {() => {
               return (
                 <div className="w-full flex flex-col question-item">
-                  <Disclosure.Button>
+                  <button type="button" onClick={() => setOpen(!open)}>
                     <div className="flex p-2 items-center justify-between transition duration-75 bg-primary-200">
                       <div className="   flex gap-2 items-center">Đáp án:</div>
                       {props.question!.answerExplain && (
@@ -142,7 +151,7 @@ const DoQuestion = (props: {
                         </div>
                       )}
                     </div>
-                  </Disclosure.Button>
+                  </button>
                   <Transition
                     show={open}
                     enter="transition-all duration-100 ease-out"

@@ -106,7 +106,6 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
 
   const Row = ({ index, style }: ListChildComponentProps) => {
     const item = data![index];
-    console.log({ item });
     return (
       <div style={style} className="py-[2px] flex items-center  px-5">
         <ContestItem

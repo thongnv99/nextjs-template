@@ -114,7 +114,7 @@ const QuestionItem = (props: Props) => {
             />
             {props.data.tags &&
               props.data.tags
-                ?.split('|')
+                ?.split(',')
                 .map((tag, idx) => (
                   <Badge
                     key={idx}

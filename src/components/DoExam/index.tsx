@@ -37,6 +37,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     show: false,
     hasSaveSession: false,
   });
+  const [triggerShowAnswer, setTriggerShowAnswer] = useState({ show: false });
   const [modalPassword, setModalPassword] = useState(false);
   const formRef = useRef<FormikProps<{ parts: IPart[] | undefined }>>();
   const { t } = useTranslation();
@@ -276,6 +277,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                             answer,
                           )
                         }
+                        triggerShowAnswer={triggerShowAnswer}
                         showAnswer={hasSaveSession}
                         question={item}
                         idx={(part.startIdx ?? 0) + questionIdx + 1}
@@ -334,16 +336,26 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                     Nộp bài
                   </button>
                 )}
+
                 {hasSaveSession && expandTime && (
-                  <button
-                    className="btn !bg-primary-50 w-full"
-                    type="button"
-                    onClick={() => {
-                      setSubmitModal({ show: true, hasSaveSession: true });
-                    }}
-                  >
-                    Lưu phiên thi
-                  </button>
+                  <>
+                    <button
+                      className="btn !bg-primary-50 w-full"
+                      type="button"
+                      onClick={() => {
+                        setSubmitModal({ show: true, hasSaveSession: true });
+                      }}
+                    >
+                      Lưu phiên thi
+                    </button>
+                    <button
+                      className="btn !bg-primary-50  w-full mt-2"
+                      type="button"
+                      onClick={() => setTriggerShowAnswer({ show: true })}
+                    >
+                      Hiển thị đáp án
+                    </button>
+                  </>
                 )}
               </div>
               {expandTime && (

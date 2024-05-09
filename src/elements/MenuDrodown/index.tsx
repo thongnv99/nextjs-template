@@ -10,6 +10,8 @@ type MenuDropdown = {
     onClick: MouseEventHandler;
     hide?: boolean;
   }[];
+
+  header?: string;
 };
 
 const MenuDropdown = (props: MenuDropdown) => {
@@ -32,6 +34,17 @@ const MenuDropdown = (props: MenuDropdown) => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute right-0 mt-2 w-[25rem] z-10 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+            {props.header && (
+              <div className="px-1 py-1 ">
+                <Menu.Item>
+                  <div
+                    className={`${'text-gray-900'}  text-center font-bold group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  >
+                    {t(props.header)}
+                  </div>
+                </Menu.Item>
+              </div>
+            )}
             {props.options.map((item, idx) => {
               if (item.hide) {
                 return null;

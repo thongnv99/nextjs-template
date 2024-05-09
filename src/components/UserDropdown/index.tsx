@@ -61,11 +61,6 @@ export const UserDropdown = (props: { inMenu?: boolean }) => {
         <Menu as="div" className="relative inline-block text-left">
           <div>
             <Menu.Button className=" flex gap-2 items-center">
-              <Image
-                src={avatar}
-                alt="avatar"
-                className="object-cover inline-flex w-[4rem] h-[4rem] rounded-[50%] justify-center overflow-hidden"
-              />
               <div>
                 <div className="font-bold">{`${data?.user.firstName ?? ''} ${
                   data?.user.lastName ?? ''

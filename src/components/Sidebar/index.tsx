@@ -26,11 +26,6 @@ const Sidebar = () => {
   return (
     <nav className="h-full w-full p-4 flex flex-col gap-2">
       <div className="flex flex-col items-center md:hidden border-b border-b-gray-200 pb-2">
-        <Image
-          src={avatar}
-          alt="avatar"
-          className="object-cover inline-flex w-[6rem] h-[6rem] rounded-[50%] justify-center overflow-hidden"
-        />
         <div className="flex flex-col items-center">
           <div className="font-bold">{`${data?.user.firstName ?? ''} ${
             data?.user.lastName ?? ''
@@ -48,7 +43,7 @@ const Sidebar = () => {
         const isActive = pathname.startsWith(`/${lng}${route.route}`);
         return (
           <div
-            className={`h-[4rem] p-2 flex items-center gap-2 
+            className={`h-[4rem]  p-1 md:p-2 flex items-center gap-2 
             hover:bg-primary-100 hover:text-primary-500
              cursor-pointer rounded-md
              ${isActive ? '!bg-primary-100 !text-primary-500' : ''}
@@ -62,11 +57,6 @@ const Sidebar = () => {
               <Icon />
             </div>
             <div className="font-semibold">{t(route.label)}</div>
-            {/* {route.children && (
-              <div className="ml-auto">
-                <ArrowDown />
-              </div>
-            )} */}
           </div>
         );
       })}

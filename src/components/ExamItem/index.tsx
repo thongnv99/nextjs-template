@@ -147,6 +147,7 @@ const ExamItem = (props: Props) => {
         {!props.compact && (
           <MenuDropdown
             buttonRender={More}
+            header={props.data.title}
             options={[
               {
                 label: 'J_54',
