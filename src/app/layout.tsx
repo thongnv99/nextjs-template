@@ -4,8 +4,8 @@ import 'styles/globals.css';
 import 'styles/index.scss';
 
 export const metadata: Metadata = {
-  title: 'Japanese exam',
-  description: 'Japanese exam',
+  title: 'Kenchikunokaze',
+  description: 'Kenchikunokaze',
 };
 
 export default function RootLayout({

@@ -56,6 +56,8 @@ export interface IQuestion {
   answer?: string | string[];
   blankPositions?: { answer: string }[];
   userAnswer?: string;
+  adminNote?: string;
+  adminScore?: string;
   status: 'INCORRECT' | 'CORRECT';
   tags: string;
   isMultiChoice?: boolean;
