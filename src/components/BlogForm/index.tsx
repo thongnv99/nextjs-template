@@ -1,4 +1,5 @@
 'use client';
+import { useTranslation } from 'app/i18n/client';
 import BlogDetail from 'components/BlogDetail';
 import { useUpdateBlogMutation } from 'components/BlogManagement/mutation';
 import ConfirmModal from 'components/ConfirmModal';
@@ -27,7 +28,7 @@ const BlogForm = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const [blogId, setBlogId] = useState(id);
-
+  const { t } = useTranslation();
   const [successModal, setSuccessModal] = useState(false);
   const [previewModal, setPreviewModal] = useState<{
     show: boolean;
@@ -51,8 +52,8 @@ const BlogForm = () => {
     loading: true,
     componentId: componentId.current,
     notification: {
-      title: 'Lưu bài viết',
-      content: 'Lưu bài viết thành công',
+      title: 'J_75',
+      content: 'J_76',
     },
     onSuccess(data) {
       console.log({ data });
@@ -66,8 +67,8 @@ const BlogForm = () => {
       console.log('success');
     },
     notification: {
-      title: 'Cập nhật bài viết',
-      content: 'Cập nhật bài viết thành công',
+      title: 'J_77',
+      content: 'J_78',
     },
   });
 
@@ -129,10 +130,10 @@ const BlogForm = () => {
         </div>
         <div className="flex">
           <button className="btn mr-6" type="button" onClick={handlePreview}>
-            Xem trước
+            {t('J_79')}
           </button>
           <button className="btn-primary" type="button" onClick={handleSave}>
-            Lưu blog
+            {t('J_80')}
           </button>
         </div>
       </div>
@@ -162,29 +163,27 @@ const BlogForm = () => {
               className="flex h-full flex-col gap-6"
             >
               <TextInput
-                label="Tiêu đề"
+                label="J_81"
                 name="title"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 hasError={touched.title && !isBlank(errors.title)}
                 errorMessage={errors.title}
                 value={values.title}
-                // leadingIcon={<Mail />}
-                placeholder="Tiêu đề của blog"
+                placeholder="J_82"
               />
               <TextInput
-                label="Mô tả"
+                label="J_68"
                 name="description"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 hasError={touched.description && !isBlank(errors.description)}
                 errorMessage={errors.description}
                 value={values.description}
-                // leadingIcon={<Mail />}
-                placeholder="Mô tả"
+                placeholder="J_68"
               />
               <div className="flex-1 flex flex-col">
-                <div>Nội dung</div>
+                <div>{t('J_83')}</div>
                 <div className="flex-1">
                   <Editor
                     data={values.content}
@@ -200,10 +199,10 @@ const BlogForm = () => {
           <ConfirmModal
             onCancel={handleHiddenSuccess}
             // onConfirm={handleHiddenSuccess}
-            title="Tạo bài viêt"
-            content="Bài viết của bạn đã được lưu vào hệ thống. "
+            title="J_84"
+            content="J_85"
             type="success"
-            labelConfirm="Đăng"
+            labelConfirm="J_56"
           />
         </ModalProvider>
         <ModalProvider
@@ -220,7 +219,7 @@ const BlogForm = () => {
                 className="btn-primary"
                 onClick={() => setPreviewModal({ show: false })}
               >
-                Đóng
+                {t('J_61')}
               </button>
             </div>
           )}

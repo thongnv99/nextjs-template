@@ -33,15 +33,6 @@ const ExamChart = ({ data }: { data: Record<string, unknown>[] }) => {
         fontSize: '12px',
       },
       xDateFormat: '%H:%M:%S %d/%m/%Y',
-      // formatter: function () {
-      //   return (
-      //     '<b> Thời gian:' +
-      //     Highcharts.dateFormat('%H:%M:%S %d/%m/%Y', this.x as number) +
-      //     '</b><br/>' +
-      //     'Điểm: ' +
-      //     this.y
-      //   );
-      // },
     },
     legend: {
       enabled: false,

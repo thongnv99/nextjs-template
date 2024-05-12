@@ -29,8 +29,8 @@ const FlashCardItem = ({ data, onView, onRefresh }: FlashCardItemProps) => {
     componentId: componentId.current,
     loading: true,
     notification: {
-      title: 'Xóa flash card',
-      content: 'Xóa flash card thành công',
+      title: 'J_195',
+      content: 'J_196',
     },
     onSuccess() {
       handleCloseDelete();
@@ -75,8 +75,8 @@ const FlashCardItem = ({ data, onView, onRefresh }: FlashCardItemProps) => {
       <ModalProvider show={modalDelete}>
         <Loader id={componentId.current}>
           <ConfirmModal
-            title="Xóa flash card"
-            content="Bạn có chắc chắn muốn xóa flash card này không?"
+            title="J_197"
+            content="J_198"
             onConfirm={handleConfirmDelete}
             onCancel={handleCloseDelete}
             type={'warning'}

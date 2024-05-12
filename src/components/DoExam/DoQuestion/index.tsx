@@ -5,13 +5,12 @@ import RadioGroup from 'elements/RadioGroup';
 import TextInput from 'elements/TextInput';
 import { Formik } from 'formik';
 import { QUESTION_TYPE } from 'global';
-import ArrowRight from 'assets/svg/arrow-right.svg';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { IQuestion } from 'interfaces';
 import React, { useEffect, useState } from 'react';
-import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import Checkbox from 'elements/CheckBox';
 import FeedbackBtn from 'components/FeedBackBtn';
+import { useTranslation } from 'app/i18n/client';
 
 const DoQuestion = (props: {
   question?: IQuestion;
@@ -23,6 +22,7 @@ const DoQuestion = (props: {
   triggerShowAnswer?: { show: boolean };
   onChange(answer: string | string[] | number): void; // array when type = fill blank
 }) => {
+  const { t } = useTranslation();
   const getBlankOptions = (content: string) => {
     const el = document.createElement('div');
     el.innerHTML = content;
@@ -44,7 +44,9 @@ const DoQuestion = (props: {
         <FeedbackBtn questionId={props.question?.id!} />
       </div>
       <div className="flex mb-4 gap-4">
-        <div className="whitespace-nowrap">Câu {props.idx}:</div>
+        <div className="whitespace-nowrap">
+          {t('J_116', { idx: props.idx })}:
+        </div>
         <div
           className="font-bold"
           dangerouslySetInnerHTML={{ __html: props.question?.content ?? '' }}
@@ -140,7 +142,9 @@ const DoQuestion = (props: {
                 <div className="w-full flex flex-col question-item">
                   <button type="button" onClick={() => setOpen(!open)}>
                     <div className="flex p-2 items-center justify-between transition duration-75 bg-primary-200">
-                      <div className="   flex gap-2 items-center">Đáp án:</div>
+                      <div className="   flex gap-2 items-center">
+                        {t('J_142')}
+                      </div>
                       {props.question!.answerExplain && (
                         <div className="flex gap-8">
                           <Chevron
@@ -165,7 +169,7 @@ const DoQuestion = (props: {
                     <Disclosure.Panel static>
                       <div className="p-2 bg-primary-50">
                         <div className="   flex gap-2 items-center className='font-bold'">
-                          Đáp án:
+                          {t('J_142')}
                           <strong>
                             {props
                               .question!.correctOption?.split(',')
@@ -176,7 +180,7 @@ const DoQuestion = (props: {
                       </div>
                       {props.question!.answerExplain && (
                         <div className="p-2 bg-primary-50">
-                          <div className="font-bold">Giải thích đáp án</div>
+                          <div className="font-bold">{t('J_123')}</div>
                           <div
                             dangerouslySetInnerHTML={{
                               __html: props.question!.answerExplain ?? '',

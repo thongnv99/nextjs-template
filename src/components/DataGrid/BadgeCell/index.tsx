@@ -1,4 +1,6 @@
+'use client';
 import { ICellRendererParams } from 'ag-grid-community';
+import { useTranslation } from 'app/i18n/client';
 import React from 'react';
 
 interface BadgeCellProps extends ICellRendererParams {
@@ -6,6 +8,7 @@ interface BadgeCellProps extends ICellRendererParams {
   colorClass?: Record<string, string>;
 }
 const BadgeCell = (props: BadgeCellProps) => {
+  const { t } = useTranslation();
   return (
     <div className="w-full h-full flex items-center">
       <div
@@ -26,8 +29,8 @@ const BadgeCell = (props: BadgeCellProps) => {
           </svg>
         ) : (
           ''
-        )}{' '}
-        {props.value}
+        )}
+        {t(props.value)}
       </div>
     </div>
   );

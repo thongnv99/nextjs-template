@@ -14,11 +14,11 @@ interface Props {
 const config = {
   empty: {
     icon: <EmptyState />,
-    label: 'Không có dữ liệu',
+    label: 'J_161',
   },
   error: {
     icon: <ErrorState />,
-    label: 'Xảy ra lỗi',
+    label: 'J_162',
   },
 };
 

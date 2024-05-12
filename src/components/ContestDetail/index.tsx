@@ -1,4 +1,5 @@
 'use client';
+import { useTranslation } from 'app/i18n/client';
 import ConfirmModal from 'components/ConfirmModal';
 import ContestHistory from 'components/ContestHistory';
 import Loader from 'components/Loader';
@@ -18,6 +19,7 @@ const ContestDetail = (props: ContestDetailProps) => {
   const router = useRouter();
   const { lng } = useParams();
   const [modal, setModal] = useState(false);
+  const { t } = useTranslation();
   const { data: contestData, isLoading } = useSWRWrapper<IContest>(
     `/api/v1/contests/${props.contestId}`,
     {
@@ -31,27 +33,27 @@ const ContestDetail = (props: ContestDetailProps) => {
   );
   const data = [
     {
-      label: 'Thời gian bắt đầu',
+      label: 'J_94',
       value: contestData?.startTime
         ? formatDateToString(new Date(contestData?.startTime), 'dd/MM/yyyy')
         : '--',
     },
     {
-      label: 'Thời gian kết thúc',
+      label: 'J_95',
       value: contestData?.endTime
         ? formatDateToString(new Date(contestData?.endTime), 'dd/MM/yyyy')
         : '--',
     },
     {
-      label: 'Thời gian làm bài',
+      label: 'J_96',
       value: `${(contestData?.duration ?? 0) / 60 ?? '--'} phút`,
     },
     {
-      label: 'Phần thi',
+      label: 'J_97',
       value: `${contestData?.parts.length ?? '--'} phần`,
     },
     {
-      label: 'Câu hỏi',
+      label: 'J_3',
       value: `${questionCount ?? '--'} câu`,
     },
   ];
@@ -77,14 +79,14 @@ const ContestDetail = (props: ContestDetailProps) => {
         <div className=" mb-8">
           {data.map((item, idx) => (
             <div key={idx} className="flex justify-between gap-14">
-              <div className="text-gray-600">{item.label}</div>
+              <div className="text-gray-600">{t(item.label)}</div>
               <div>{item.value}</div>
             </div>
           ))}
         </div>
         <div className="flex gap-8">
           <button className="btn" type="button" onClick={handleBack}>
-            Quay lại
+            {t('J_98')}
           </button>
 
           <button
@@ -92,7 +94,7 @@ const ContestDetail = (props: ContestDetailProps) => {
             type="button"
             onClick={() => setModal(true)}
           >
-            Bắt đầu
+            {t('J_99')}
           </button>
         </div>
       </div>
@@ -101,11 +103,11 @@ const ContestDetail = (props: ContestDetailProps) => {
       </div>
       <ModalProvider show={modal} onClose={() => setModal(false)}>
         <ConfirmModal
-          title={'Bắt đầu làm bài'}
-          content="Thời gian sẽ được tính khi chọn bắt đầu."
+          title={'J_100'}
+          content="J_101"
           onConfirm={handleDoContest}
           onCancel={() => setModal(false)}
-          labelConfirm="Bắt đầu"
+          labelConfirm="J_99"
           type={'success'}
         />
       </ModalProvider>

@@ -26,6 +26,7 @@ import TextInput from 'elements/TextInput';
 import { useTranslation } from 'app/i18n/client';
 
 const DoExam = (props: { examId: string; isContest?: boolean }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { lng } = useParams();
   const search = useSearchParams();
@@ -40,7 +41,6 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
   const [triggerShowAnswer, setTriggerShowAnswer] = useState({ show: false });
   const [modalPassword, setModalPassword] = useState(false);
   const formRef = useRef<FormikProps<{ parts: IPart[] | undefined }>>();
-  const { t } = useTranslation();
   useEffect(() => {
     window.addEventListener('beforeunload', beforeUnload);
     return () => {
@@ -79,8 +79,8 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
       loading: true,
       componentId: componentId.current,
       notification: {
-        title: 'Nộp bài',
-        content: 'Nộp bài thành công',
+        title: 'J_149',
+        content: 'J_150',
       },
       onSuccess(data) {
         if (data?.status === 'SESSION_PAUSE') {
@@ -162,7 +162,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
         className=" w-full max-w-screen-lg m-auto pb-6"
       >
         <div className="flex flex-col  bg-white p-4 border border-gray-200">
-          <div>Nhập mật khẩu</div>
+          <div>{t('J_111')}</div>
           <Formik
             onSubmit={(values: { password: string }) => {
               console.log(values);
@@ -187,8 +187,8 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                     <div className="text-red-500">{t(joinExamError.code)}</div>
                   )}
                   <TextInput
-                    label="Mật khẩu"
-                    placeholder="Nhập mật khẩu "
+                    label="J_112"
+                    placeholder="J_111"
                     name="password"
                     type="password"
                     onChange={handleChange}
@@ -198,7 +198,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                     errorMessage={errors.password}
                   />
                   <button className="btn-primary" type="submit">
-                    Xác nhận
+                    {t('C_1')}
                   </button>
                 </form>
               );
@@ -292,7 +292,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
               <div className=" w-full border border-gray-200 bg-white p-4 rounded-md flex flex-col ">
                 {!hasSaveSession && (
                   <div className="w-full mb-2 md:mb-4 relative">
-                    <div className="md:block hidden">Thời gian còn lại</div>
+                    <div className="md:block hidden">{t('J_151')}</div>
                     {expandTime && (
                       <div className=" block md:hidden mb-2">
                         <h1 className="text-center text-[2rem] md:text-[3rem]">
@@ -333,7 +333,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                       setSubmitModal({ show: true, hasSaveSession: false });
                     }}
                   >
-                    Nộp bài
+                    {t('J_149')}
                   </button>
                 )}
 
@@ -346,14 +346,14 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                         setSubmitModal({ show: true, hasSaveSession: true });
                       }}
                     >
-                      Lưu phiên thi
+                      {t('J_152')}
                     </button>
                     <button
                       className="btn !bg-primary-50  w-full mt-2"
                       type="button"
                       onClick={() => setTriggerShowAnswer({ show: true })}
                     >
-                      Hiển thị đáp án
+                      {t('J_153')}
                     </button>
                   </>
                 )}
@@ -362,7 +362,9 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 <div className=" max-h-[70vh] flex-1 overflow-y-auto w-full border border-gray-200 bg-white p-4 rounded-md ">
                   {values.parts?.map((part, idx) => (
                     <div key={idx} className="mb-4">
-                      <h2 className="text-[2rem] mb-2">Phần {idx + 1}</h2>
+                      <h2 className="text-[2rem] mb-2">
+                        {t('J_115', { idx: idx + 1 })}
+                      </h2>
                       <div className="grid grid-cols-5 gap-4">
                         {part?.questions.map((item, idx) => (
                           <div
@@ -389,10 +391,10 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 onConfirm={() => {
                   handleSubmit();
                 }}
-                labelConfirm={'Nộp bài'}
+                labelConfirm={'J_149'}
                 type="warning"
-                title="Hết thời gian"
-                content={'Thời gian làm bài đã hết'}
+                title="J_154"
+                content={'J_155'}
               />
             </ModalProvider>
             <ModalProvider
@@ -405,18 +407,10 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 onConfirm={() => {
                   handleSubmit();
                 }}
-                labelConfirm={submitModal.hasSaveSession ? 'Lưu' : 'Nộp bài'}
+                labelConfirm={submitModal.hasSaveSession ? 'J_156' : 'J_149'}
                 type="success"
-                title={
-                  submitModal.hasSaveSession
-                    ? 'Lưu bài thi'
-                    : 'Hoàn thành bài thi'
-                }
-                content={
-                  submitModal.hasSaveSession
-                    ? 'Phiện thi sẽ được hệ thống lưu lại, bạn có thể quay lại để tiếp tục luyện tập'
-                    : 'Vui lòng kiểm tra kĩ đáp án trước khi nộp bài'
-                }
+                title={submitModal.hasSaveSession ? 'J_157' : 'J_158'}
+                content={submitModal.hasSaveSession ? 'J_159' : 'J_160'}
               />
             </ModalProvider>
           </form>

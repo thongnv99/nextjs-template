@@ -1,4 +1,5 @@
 'use client';
+import { useTranslation } from 'app/i18n/client';
 import ConfirmModal from 'components/ConfirmModal';
 import EmptyData from 'components/EmptyData';
 import Loader from 'components/Loader';
@@ -10,6 +11,7 @@ import React, { useState } from 'react';
 import { formatDateToString } from 'utils/datetime';
 
 const ExamDetail = (props: { examId?: string }) => {
+  const { t } = useTranslation();
   const {
     data: examData,
     isLoading,
@@ -42,22 +44,22 @@ const ExamDetail = (props: { examId?: string }) => {
   );
   const data = [
     {
-      label: 'Ngày tạo',
+      label: 'J_174',
       value: examData?.createdAt
         ? formatDateToString(new Date(examData.createdAt), 'dd/MM/yyyy')
         : '--',
     },
     {
-      label: 'Thời gian làm bài',
-      value: `${(examData?.duration ?? 0) / 60 ?? '--'} phút`,
+      label: 'J_96',
+      value: `${(examData?.duration ?? 0) / 60 ?? '--'} ${t('J_130')}`,
     },
     {
-      label: 'Phần thi',
-      value: `${examData?.parts.length ?? '--'} phần`,
+      label: 'J_97',
+      value: t('J_52', { count: examData?.parts.length as number }),
     },
     {
-      label: 'Câu hỏi',
-      value: `${questionCount ?? '--'} câu`,
+      label: 'J_3',
+      value: t('J_53', { count: questionCount as number }),
     },
   ];
 
@@ -77,19 +79,18 @@ const ExamDetail = (props: { examId?: string }) => {
           <div className=" mb-8">
             {data.map((item, idx) => (
               <div key={idx} className="flex justify-between gap-14">
-                <div className="text-gray-600">{item.label}</div>
+                <div className="text-gray-600">{t(item.label)}</div>
                 <div>{item.value}</div>
               </div>
             ))}
           </div>
-          <div className="mb-10">
-            <strong>Hướng dẫn:</strong> Chọn <strong>Thi thử</strong> để tính
-            thời gian làm bài. chọn <strong>Luyện tập</strong> để không bị giới
-            hạn thời gian làm bài!
-          </div>
+          <div
+            className="mb-10"
+            dangerouslySetInnerHTML={{ __html: t('J_175') as string }}
+          ></div>
           <div className="flex gap-8">
             <button className="btn" type="button" onClick={handleBack}>
-              Quay lại
+              {t('J_98')}
             </button>
 
             <button
@@ -97,14 +98,14 @@ const ExamDetail = (props: { examId?: string }) => {
               type="button"
               onClick={() => setModal({ show: true, hasSaveSession: true })}
             >
-              Luyện tập
+              {t('J_176')}
             </button>
             <button
               className="btn-primary"
               type="button"
               onClick={() => setModal({ show: true, hasSaveSession: false })}
             >
-              Thi thử
+              {t('J_177')}
             </button>
           </div>
         </div>
@@ -115,15 +116,11 @@ const ExamDetail = (props: { examId?: string }) => {
         onClose={() => setModal({ show: false })}
       >
         <ConfirmModal
-          title={modal.hasSaveSession ? 'Luyện tập' : 'Thi thử'}
-          content={
-            modal.hasSaveSession
-              ? 'Bạn có chắc chắn muốn luyện tập'
-              : 'Thời gian làm bài sẽ được tính khi chọn Bắt đầu'
-          }
+          title={modal.hasSaveSession ? 'J_176' : 'J_177'}
+          content={modal.hasSaveSession ? 'J_178' : 'J_179'}
           onConfirm={handleDoExam}
           onCancel={() => setModal({ show: false })}
-          labelConfirm="Bắt đầu"
+          labelConfirm="J_99"
           type={'success'}
         />
       </ModalProvider>

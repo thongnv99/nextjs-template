@@ -1,4 +1,5 @@
 'use client';
+import { useTranslation } from 'app/i18n/client';
 import { METHOD } from 'global';
 import { useSWRWrapper } from 'hooks/swr';
 import { BlogListRes, IBlog } from 'interfaces';
@@ -49,16 +50,17 @@ const BlogList = ({ inDetail }: { inDetail?: boolean }) => {
   });
   const { status } = useSession();
   const { lng } = useParams();
+  const { t } = useTranslation();
   return (
     <div className="h-full w-full flex flex-col bg-white p-2 md:p-6 rounded-lg shadow-md">
       <div className="py-2 md:py-6  flex items-center justify-between w-full ">
-        <div className="text-lg font-semibold">Tất cả</div>
+        <div className="text-lg font-semibold">{t('J_86')}</div>
         {status === 'authenticated' && (
           <Link
             href={`/${lng}/blog/blog-management`}
             className="text-sm text-blue-500 font-semibold"
           >
-            Quản lý blog
+            {t('J_87')}
           </Link>
         )}
       </div>

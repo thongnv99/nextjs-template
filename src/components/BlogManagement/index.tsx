@@ -19,6 +19,7 @@ import ConfirmModal from 'components/ConfirmModal';
 import { IBlog } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import { useUpdateBlogMutation } from './mutation';
+import { useTranslation } from 'app/i18n/client';
 
 const DeleteBtn = (props: { onClick(): void }) => {
   return (
@@ -58,6 +59,7 @@ const BlogManagement = () => {
   const componentId = useRef(uuid());
   const { lng } = useParams();
   const router = useRouter();
+  const { t } = useTranslation();
   const { trigger: requestData } = useMutation<{
     items: Record<string, unknown>[];
   }>('BLOG_QUERY_BY_ME', {
@@ -80,13 +82,10 @@ const BlogManagement = () => {
     loading: true,
     componentId: componentId.current,
     notification: {
-      title: 'Xóa bài viết',
-      content: 'Xóa bài viết thành công',
+      title: 'J_88',
+      content: 'J_89',
     },
     onSuccess: data => {
-      // gridRef.current?.api?.applyTransaction({
-      //   remove: [confirmModal.data?.id],
-      // });
       setConfirmDeleteModal({ show: false });
       refreshData();
     },
@@ -124,12 +123,10 @@ const BlogManagement = () => {
   };
 
   const handleConfirmDelete = () => {
-    console.log('delete');
     deleteBlog({ postId: confirmDeleteModal.data?.id });
   };
 
   const handleCloseDelete = () => {
-    console.log('close delete');
     setConfirmDeleteModal({ show: false });
   };
 
@@ -138,12 +135,10 @@ const BlogManagement = () => {
   };
 
   const handleConfirmPublish = () => {
-    console.log('Publish');
     updateBlog({ postId: confirmPublishModal.data?.id, status: 'PUBLISH' });
   };
 
   const handleClosePublish = () => {
-    console.log('close Publish');
     setConfirmPublishModal({ show: false });
   };
 
@@ -153,13 +148,13 @@ const BlogManagement = () => {
 
   const columnDefs: Array<ColDef> = [
     {
-      headerName: 'Title',
+      headerName: 'J_81',
       flex: 1,
       field: 'title',
       cellClass: 'bold',
     },
     {
-      headerName: 'Trạng thái',
+      headerName: 'J_72',
       flex: 1,
       field: 'status',
       cellRenderer: BadgeCell,
@@ -204,13 +199,13 @@ const BlogManagement = () => {
       className="h-full w-full bg-white border border-gray-200 rounded-lg flex flex-col shadow-sm"
     >
       <div className="px-5 py-6 flex justify-between">
-        <div className="text-lg font-semibold">Quản lý blog</div>
+        <div className="text-lg font-semibold">{t('J_87')}</div>
         <button
           type="button"
           className="btn-primary btn-icon"
           onClick={handleCreateClick}
         >
-          <Plus /> Thêm blog
+          <Plus /> {t('J_90')}
         </button>
       </div>
       <div className="flex-1">
@@ -232,8 +227,8 @@ const BlogManagement = () => {
       >
         <ConfirmModal
           type="error"
-          title="Xóa bài viết"
-          content="Bạn có chắc chắn muốn hủy bài viết này không?"
+          title="J_88"
+          content="J_91"
           onCancel={handleCloseDelete}
           onConfirm={handleConfirmDelete}
         />
@@ -244,8 +239,8 @@ const BlogManagement = () => {
       >
         <ConfirmModal
           type="error"
-          title="Đăng bài viết"
-          content="Bạn có chắc chắn muốn đăng bài viết này không?"
+          title="J_92"
+          content="J_93"
           onCancel={handleClosePublish}
           onConfirm={handleConfirmPublish}
         />

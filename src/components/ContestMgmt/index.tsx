@@ -28,6 +28,7 @@ import {
   ListChildComponentProps,
 } from 'react-window';
 import EmptyData from 'components/EmptyData';
+import { useTranslation } from 'app/i18n/client';
 interface ContestFilter {
   searchKey: string;
 }
@@ -37,6 +38,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
     show: false,
   });
+  const { t } = useTranslation();
   const { data: filterCached, mutate: saveFilter } =
     useSWR<ContestFilter>('CONTEST_FILTER');
   const filter = useRef<ContestFilter>(filterCached ?? { searchKey: '' });
@@ -125,7 +127,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
     >
       <div className="px-5 py-6 flex items-center justify-between">
         <div className="text-lg font-semibold">
-          {compact ? 'Cuộc thi' : 'Danh sách cuộc thi'}
+          {t(compact ? 'J_2' : 'J_141')}
         </div>
         {!compact && userInfo?.user.role === ROLES.ADMIN && (
           <button
@@ -133,7 +135,7 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
             className="btn-primary btn-icon"
             onClick={handleCreateExam}
           >
-            <Plus /> Thêm cuộc thi
+            <Plus /> {t('J_140')}
           </button>
         )}
       </div>
@@ -154,8 +156,6 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
                     ref={list => {
                       // eslint-disable-next-line
                       (ref as Function)(list);
-
-                      // listRef.current = list;
                     }}
                     itemData={data}
                     itemSize={() => 70}

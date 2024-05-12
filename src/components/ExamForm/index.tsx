@@ -122,7 +122,7 @@ const ExamForm = (props: ExamFormProps) => {
                 <Checkbox
                   className="mb-8"
                   selected={values.isSample}
-                  label="Đề mẫu"
+                  label="J_180"
                   onChange={(_, value) => {
                     setFieldValue('isSample', value);
                   }}

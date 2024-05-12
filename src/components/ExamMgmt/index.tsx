@@ -161,8 +161,8 @@ const ExamMgmt = ({ compact }: Props) => {
               >
                 <div className="max-w-lg flex-1">
                   <TextInput
-                    label="Tìm kiếm"
-                    placeholder="Nhập từ khóa tìm kiếm..."
+                    label="J_182"
+                    placeholder="J_183"
                     className="w-full"
                     value={values.searchKey}
                     name="searchKey"
@@ -173,8 +173,8 @@ const ExamMgmt = ({ compact }: Props) => {
                 </div>
                 <div className="max-w-lg flex-1">
                   <Dropdown
-                    label="Đề thi mẫu"
-                    placeholder="Đề thi mẫu"
+                    label="J_180"
+                    placeholder="J_180"
                     className="w-full"
                     options={SampleOptions}
                     selected={values.sample}
@@ -186,7 +186,7 @@ const ExamMgmt = ({ compact }: Props) => {
                 </div>
                 <div>
                   <button className="btn-primary !h-[4.1rem]" type="submit">
-                    Tìm kiếm
+                    {t('J_182')}
                   </button>
                 </div>
               </form>

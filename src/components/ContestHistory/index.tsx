@@ -52,7 +52,7 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
 
   const columnDefs: Array<ColDef | ColGroupDef> = [
     {
-      headerName: 'Tên ',
+      headerName: 'J_24',
       flex: 1,
       field: 'name',
       cellClass: 'bold',
@@ -68,21 +68,21 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
       },
     },
     {
-      headerName: 'Thời gian bắt đầu',
+      headerName: 'J_94',
       flex: 1,
       field: 'startTime',
       valueFormatter: dateTimeFormatter,
       minWidth: 200,
     },
     {
-      headerName: 'Thời gian kết thúc',
+      headerName: 'J_95',
       flex: 1,
       field: 'endTime',
       valueFormatter: dateTimeFormatter,
       minWidth: 200,
     },
     {
-      headerName: 'Điểm số',
+      headerName: 'J_71',
       flex: 1,
       minWidth: 250,
       field: 'score',
@@ -94,28 +94,28 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
       },
     },
     {
-      headerName: 'Câu hỏi',
+      headerName: 'J_3',
       children: [
         {
-          headerName: 'Trả lời đúng',
+          headerName: 'J_126',
           field: 'statAnswer.totalCorrect',
           cellClass: 'text-right',
           maxWidth: 120,
         },
         {
-          headerName: 'Trả lời sai',
+          headerName: 'J_127',
           field: 'statAnswer.totalIncorrect',
           cellClass: 'text-right',
           maxWidth: 120,
         },
         {
-          headerName: 'Không trả lời',
+          headerName: 'J_128',
           field: 'statAnswer.totalNotAnswer',
           cellClass: 'text-right',
           maxWidth: 120,
         },
         {
-          headerName: 'Tổng',
+          headerName: 'J_129',
           field: 'statAnswer.total',
           cellClass: 'text-right',
           maxWidth: 120,
@@ -123,7 +123,7 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
       ],
     },
     {
-      headerName: 'Trạng thái',
+      headerName: 'J_72',
       flex: 1,
       field: 'status',
       valueFormatter: params => {
@@ -134,7 +134,7 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
       minWidth: 200,
     },
     {
-      headerName: 'Thời gian làm bài',
+      headerName: 'J_96',
       flex: 1,
       field: 'forTime',
       minWidth: 200,
@@ -146,9 +146,9 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
             new Date(startTime as number),
             new Date(endTime as number),
           );
-          return `${Math.abs(minutes)} Phút`;
+          return `${Math.abs(minutes)} ${t('J_130')}`;
         }
-        return 'Đang làm bài';
+        return 'J_131';
       },
     },
     {
@@ -195,16 +195,9 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
     >
       {!props.compact && (
         <div className="px-5 py-3 text-lg font-semibold gap-x-3 flex items-center">
-          Lịch sử cuộc thi{' '}
-          {/* <span className="text-[1.2rem] text-[var(--brand-800)] bg-[var(--gray-50)] rounded-full px-[1rem]">
-          240 người tham gia
-        </span> */}
+          {t('J_125')}
         </div>
       )}
-      {/* <div className="flex  justify-evenly">
-        <ExamSummaryChart data={data1} />
-        <ExamSummaryChart data={data2} />
-      </div> */}
       <div className="flex-1">
         <DataGrid
           ref={gridRef}

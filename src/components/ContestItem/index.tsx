@@ -1,7 +1,7 @@
-import { Disclosure, Transition } from '@headlessui/react';
-import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
+'use client';
+import React, { MouseEventHandler, useRef, useState } from 'react';
 import { IContest } from 'interfaces';
-import { METHOD, QUESTION_TYPE, ROLES } from 'global';
+import { METHOD, ROLES } from 'global';
 import { uuid } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 import ModalProvider from 'components/ModalProvider';
@@ -12,19 +12,19 @@ import { useParams, useRouter } from 'next/navigation';
 import Calendar from 'assets/svg/calendar.svg';
 import HelpCircle from 'assets/svg/help-circle.svg';
 import Layer from 'assets/svg/3-layers.svg';
-import FileText from 'assets/svg/file-text.svg';
 import Badge from 'components/Badge';
 import { useUserInfo } from 'hooks/common';
 import More from 'assets/svg/more-vertical.svg';
 import MenuDropdown from 'elements/MenuDrodown';
 import { useSession } from 'next-auth/react';
+import { useTranslation } from 'app/i18n/client';
 
 type Props = { data: IContest; onRefresh(): void; compact?: boolean };
 
 const ContestItem = (props: Props) => {
-  const { data: userInfo } = useUserInfo();
   const router = useRouter();
   const { lng } = useParams();
+  const { t } = useTranslation();
   const [modalDelete, setModalDelete] = useState(false);
   const [modalPublish, setModalPublish] = useState(false);
   const { data: session } = useSession();
@@ -35,8 +35,8 @@ const ContestItem = (props: Props) => {
     componentId: componentId.current,
     loading: true,
     notification: {
-      title: 'Xóa cuộc thi',
-      content: 'Xóa cuộc thi thành công',
+      title: 'J_132',
+      content: 'J_133',
     },
     onSuccess() {
       handleCloseDelete();
@@ -51,8 +51,8 @@ const ContestItem = (props: Props) => {
       componentId: componentId.current,
       loading: true,
       notification: {
-        title: 'Đăng cuộc thi',
-        content: 'Đăng cuộc thi thành công',
+        title: 'J_134',
+        content: 'J_135',
       },
       onSuccess() {
         handleClosePublish();
@@ -93,8 +93,8 @@ const ContestItem = (props: Props) => {
   };
 
   const mapBadgeTranslate: Record<string, string> = {
-    DRAFT: 'Nháp',
-    PUBLISH: 'Đã đăng',
+    DRAFT: 'J_136',
+    PUBLISH: 'J_137',
   };
 
   const handleUpload = () => {
@@ -155,11 +155,11 @@ const ContestItem = (props: Props) => {
             )}
             <div className="hidden md:flex items-center gap-2">
               <Layer className="w-[1.6rem] h-[1.6rem]" />{' '}
-              <div>{`${props.data.parts.length} phần thi`} </div>
+              <div>{t('J_52', { count: props.data.parts.length })} </div>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <HelpCircle className="w-[1.6rem] h-[1.6rem]" />{' '}
-              <div>{`${questionCount} câu hỏi`} </div>
+              <div>{t('J_53', { count: questionCount })} </div>
             </div>
           </div>
         </div>
@@ -176,7 +176,7 @@ const ContestItem = (props: Props) => {
                 onClick: handleViewHistory as unknown as MouseEventHandler,
               },
               {
-                label: 'Đăng',
+                label: 'J_56',
                 onClick: handleUpload as unknown as MouseEventHandler,
                 hide:
                   ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role) ||
@@ -201,8 +201,8 @@ const ContestItem = (props: Props) => {
       <ModalProvider show={modalDelete}>
         <Loader id={componentId.current}>
           <ConfirmModal
-            title="Xóa cuộc thi"
-            content="Cuộc thi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa cuộc thi này không?"
+            title="J_132"
+            content="J_138"
             onConfirm={handleConfirmDelete}
             onCancel={handleCloseDelete}
             type={'warning'}
@@ -213,8 +213,8 @@ const ContestItem = (props: Props) => {
         <Loader id={componentId.current}>
           <ConfirmModal
             type="success"
-            title="Đăng cuộc thi"
-            content="Bạn có chắc chắn muốn đăng cuộc thi này không?"
+            title="J_134"
+            content="J_139"
             onCancel={handleClosePublish}
             onConfirm={handleConfirmPublish}
           />

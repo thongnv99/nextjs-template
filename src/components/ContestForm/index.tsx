@@ -1,3 +1,4 @@
+import { useTranslation } from 'app/i18n/client';
 import Loader from 'components/Loader';
 import Checkbox from 'elements/CheckBox';
 import TextInput from 'elements/TextInput';
@@ -30,6 +31,7 @@ const ContestForm = (props: ContestFormProps) => {
   const { mutate } = useSWRConfig();
   const router = useRouter();
   const { lng } = useParams();
+  const { t } = useTranslation();
   const { trigger: createContest } = useMutation<Record<string, unknown>>(
     'EXAM_CREATE_CONTEST',
     {
@@ -38,8 +40,8 @@ const ContestForm = (props: ContestFormProps) => {
       componentId: componentId.current,
       loading: true,
       notification: {
-        title: 'Thêm cuộc thi',
-        content: 'Thêm cuộc thi thành công.',
+        title: 'J_102',
+        content: 'J_103',
       },
       onSuccess(data) {
         props.onClose();
@@ -53,8 +55,8 @@ const ContestForm = (props: ContestFormProps) => {
     componentId: componentId.current,
     loading: true,
     notification: {
-      title: 'Cập nhật đề thi',
-      content: 'Cập nhật đề thi thành công.',
+      title: 'J_104',
+      content: 'J_105',
     },
     onSuccess() {
       props.onClose();
@@ -83,10 +85,8 @@ const ContestForm = (props: ContestFormProps) => {
   return (
     <Loader id={componentId.current} className="w-screen max-w-screen-md p-6">
       <div className="flex flex-col mb-5">
-        <div className="text-lg font-bold text-gray-900">Cuộc thi</div>
-        <div className="text-sm font-normal text-gray-500">
-          Nhập thông tin cho cuộc thi
-        </div>
+        <div className="text-lg font-bold text-gray-900">{t('J_2')}</div>
+        <div className="text-sm font-normal text-gray-500">{t('J_106')}</div>
       </div>
       <Formik
         initialValues={{
@@ -108,10 +108,10 @@ const ContestForm = (props: ContestFormProps) => {
         }) => (
           <form onSubmit={handleSubmit}>
             <TextInput
-              label="Tên"
+              label="J_24"
               name="title"
               className="mb-3"
-              placeholder="Tên cuộc thi..."
+              placeholder="J_107"
               value={values.title}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -120,11 +120,11 @@ const ContestForm = (props: ContestFormProps) => {
             />
             <div className="flex gap-3">
               <TextInput
-                label="Bắt đầu"
+                label="J_99"
                 name="startTime"
                 className="mb-3 flex-1"
                 type="date"
-                placeholder="Thời gian bắt đầu"
+                placeholder="J_108"
                 value={values.startTime}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -132,11 +132,11 @@ const ContestForm = (props: ContestFormProps) => {
                 errorMessage={errors.startTime}
               />
               <TextInput
-                label="Kết thúc"
+                label="J_109"
                 name="endTime"
                 type="date"
                 className="mb-3 flex-1"
-                placeholder="Thời gian kết thúc"
+                placeholder="J_110"
                 value={values.endTime}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -146,9 +146,9 @@ const ContestForm = (props: ContestFormProps) => {
             </div>
 
             <TextInput
-              label="Mô tả"
+              label="J_68"
               name="description"
-              placeholder="Mô tả"
+              placeholder="J_68"
               className="mb-3"
               type="textarea"
               onChange={handleChange}
@@ -160,7 +160,7 @@ const ContestForm = (props: ContestFormProps) => {
 
             <div className="mb-3">
               <Checkbox
-                label="Nhập mật khẩu"
+                label="J_111"
                 selected={values.hasPassword}
                 name="hasPassword"
                 onChange={(name, value) => setFieldValue('hasPassword', value)}
@@ -168,9 +168,9 @@ const ContestForm = (props: ContestFormProps) => {
             </div>
             {values.hasPassword && (
               <TextInput
-                label="Mật khẩu"
+                label="J_112"
                 name="password"
-                placeholder="Mật khẩu"
+                placeholder="J_112"
                 className="mb-3"
                 onChange={handleChange}
                 value={values.password}
@@ -185,10 +185,10 @@ const ContestForm = (props: ContestFormProps) => {
                 className="btn flex-1"
                 onClick={props.onClose}
               >
-                Đóng
+                {t('J_61')}
               </button>
               <button type="submit" className="btn-primary flex-1">
-                Xác nhận
+                {t('C_1')}
               </button>
             </div>
           </form>

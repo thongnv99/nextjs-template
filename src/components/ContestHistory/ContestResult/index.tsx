@@ -2,17 +2,17 @@
 import ArrowRight from 'assets/svg/arrow-right.svg';
 import { Disclosure, Transition } from '@headlessui/react';
 import { IPart } from 'interfaces';
-import React, { useRef, useState } from 'react';
+import React, { useRef} from 'react';
 import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import Chevron from 'assets/svg/chevron-down.svg';
 import { METHOD, QUESTION_TYPE } from 'global';
-import RadioGroup from 'elements/RadioGroup';
 import Loader from 'components/Loader';
 import { useMutation } from 'hooks/swr';
 import { uuid } from 'utils/common';
 import { Formik, FormikProps } from 'formik';
 import TextInput from 'elements/TextInput';
 import Editor from 'components/Editor';
+import { useTranslation } from 'app/i18n/client';
 
 type Props = {
   data: Record<string, unknown>;
@@ -30,7 +30,7 @@ interface EssayResultForm {
 }
 
 const ContestResult = (props: Props) => {
-  const [essayResult, setEssayResult] = useState<Record<string, unknown>>({});
+  const {t} = useTranslation();
   const componentId = useRef(uuid());
   const formRef = useRef<FormikProps<EssayResultForm>>();
   const parts = props.data.parts as IPart[];
@@ -40,8 +40,8 @@ const ContestResult = (props: Props) => {
     method: METHOD.POST,
     loading: true,
     notification: {
-      title: 'Chấm điểm',
-      content: 'Chấm điểm thành công',
+      title: 'J_113',
+      content: 'J_114',
     },
     onSuccess() {
       props.onClose();
@@ -92,7 +92,7 @@ const ContestResult = (props: Props) => {
             <div className="p-4">
               {parts?.map((part, idx) => (
                 <div key={idx} className="flex flex-col ">
-                  <h2 className="font-bold">Phần {idx + 1}</h2>
+                  <h2 className="font-bold">{t('J_115',{idx:idx + 1 })} </h2>
                   {part?.questions.map((question, questionIdx) => {
                     return (
                       <div
@@ -101,7 +101,7 @@ const ContestResult = (props: Props) => {
                       >
                         <div className="flex mb-4 gap-4">
                           <div className="whitespace-nowrap">
-                            Câu {questionIdx + 1}:
+                          {t('J_116',{idx:questionIdx + 1 })}
                           </div>
                           <div
                             className="font-bold"
@@ -140,7 +140,7 @@ const ContestResult = (props: Props) => {
                         </div>
                         {question.type === QUESTION_TYPE.ESSAY && (
                           <div className="flex flex-col px-2">
-                            <div>Bài làm:</div>
+                            <div>{t('J_117')}</div>
                             <div
                               dangerouslySetInnerHTML={{
                                 __html: question.userAnswer as string,
@@ -151,7 +151,7 @@ const ContestResult = (props: Props) => {
                         {question.type === QUESTION_TYPE.ESSAY &&
                           props.data.status === 'MARK_PENDING' && (
                             <div className="mt-2">
-                              <div>Chấm bài: </div>
+                              <div>{t('J_118')} </div>
                               <TextInput
                                 type="number"
                                 max={question.score}
@@ -160,13 +160,12 @@ const ContestResult = (props: Props) => {
                                 name={`essayResult[${question.id}].score`}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
-                                label={`Điểm (Tối đa ${question.score} điểm)`}
+                                label={`J_119`}
                               />
                               <div className="input-container mb-4">
-                                <label className="input-label">Ghi chú</label>
+                                <label className="input-label">{t('J_120')}</label>
                                 <Editor
                                   data={values.essayResult[question.id]?.note}
-                                  placeholder="Nội dung câu hỏi..."
                                   onChange={data =>
                                     setFieldValue(
                                       `essayResult[${question.id}].note`,
@@ -189,7 +188,7 @@ const ContestResult = (props: Props) => {
                                         {question.type !==
                                         QUESTION_TYPE.ESSAY ? (
                                           <div className="  p-2 flex gap-2 items-center">
-                                            Đáp án đúng:{' '}
+                                            {t('J_121')}
                                             <strong>
                                               {String(question!.correctOption)
                                                 ?.split(',')
@@ -207,7 +206,7 @@ const ContestResult = (props: Props) => {
                                           </div>
                                         ) : (
                                           <div className=" p-2 flex gap-2 items-center">
-                                            Điểm:{' '}
+                                            {t('J_119')}
                                             <strong>
                                               {question.adminScore}
                                             </strong>
@@ -239,7 +238,7 @@ const ContestResult = (props: Props) => {
                                         {(question.answerExplain ||
                                           question.adminNote) && (
                                           <div className="p-2 bg-primary-50">
-                                            <div>Giải thích đáp án</div>
+                                            <div>{t('J_123')}</div>
                                             <div
                                               dangerouslySetInnerHTML={{
                                                 __html:
@@ -269,11 +268,11 @@ const ContestResult = (props: Props) => {
       </Formik>
       <div className="p-4 flex gap-8 items-center justify-center">
         <button onClick={props.onClose} className="btn" type="button">
-          Hủy bỏ
+          {t('C_2')}
         </button>
         {props.data?.status === 'MARK_PENDING' && (
           <button className="btn-primary" type="button" onClick={handleRequest}>
-            Cập nhật điểm
+            {t('J_124')}
           </button>
         )}
       </div>

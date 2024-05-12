@@ -21,6 +21,7 @@ import { useDrop } from 'react-dnd';
 import QuestionDnd from './QestionDnd';
 import ExamPicker from 'components/ExamPicker';
 import SelectExamForm from './SelectExamForm';
+import { useTranslation } from 'app/i18n/client';
 interface ExamConfigProps {
   examId: string;
   isContest?: boolean;
@@ -33,6 +34,7 @@ interface ExamConfigValues {
 }
 
 const ExamConfig = (props: ExamConfigProps) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { lng } = useParams();
   const componentId = useRef(uuid());
@@ -80,10 +82,8 @@ const ExamConfig = (props: ExamConfigProps) => {
       componentId: componentId.current,
       loading: true,
       notification: {
-        title: props.isContest ? 'Cập nhật cuộc thi' : 'Cập nhật đề thi',
-        content: props.isContest
-          ? 'Cập nhật cuộc thi thành công.'
-          : 'Cập nhật đề thi thành công.',
+        title: props.isContest ? 'J_166' : 'J_167',
+        content: props.isContest ? 'J_168' : 'J_169',
       },
       onSuccess() {
         router.push(`/${lng}/${props.isContest ? 'contest' : 'exam'}`);
@@ -130,15 +130,15 @@ const ExamConfig = (props: ExamConfigProps) => {
               router.push(`/${lng}/${props.isContest ? 'contest' : 'exam'}`);
             }}
           >
-            {props.isContest ? 'Cuộc thi' : 'Đề thi'}
+            {props.isContest ? 'J_2' : 'J_1'}
           </div>
           <ArrowRight />
           <div className="flex">
-            {exam.title}{' '}
+            {exam.title}
             <Edit
               onClick={() => setTitleModal(true)}
               className="ml-2 text-gray-500 hover:text-gray-900 cursor-pointer w-4 h-4"
-            />{' '}
+            />
           </div>
         </div>
         <button
@@ -146,7 +146,7 @@ const ExamConfig = (props: ExamConfigProps) => {
           className="btn btn-primary"
           onClick={() => formRef.current?.submitForm()}
         >
-          Lưu
+          {t('J_156')}
         </button>
       </div>
       <div>
@@ -195,7 +195,9 @@ const ExamConfig = (props: ExamConfigProps) => {
                 >
                   <div className=" flex flex-col  ">
                     <div className="flex w-full items-center justify-between">
-                      <div className="text-lg">Phần {idx + 1}</div>
+                      <div className="text-lg">
+                        {t('J_115', { idx: idx + 1 })}
+                      </div>
 
                       <div
                         data-tooltip-id="default-tooltip"
@@ -223,7 +225,7 @@ const ExamConfig = (props: ExamConfigProps) => {
                   <div className="flex flex-col w-full gap-4">
                     <div>
                       <div className="flex w-full items-center justify-between">
-                        <div>Danh sách câu hỏi</div>
+                        <div>{t('J_170')}</div>
                         <button
                           type="button"
                           className="btn !border-primary-500 btn-icon !text-primary-500"
@@ -231,7 +233,7 @@ const ExamConfig = (props: ExamConfigProps) => {
                             setQuestionModal({ show: true, currentPart: idx })
                           }
                         >
-                          <Plus /> Thêm câu hỏi
+                          <Plus /> {t('J_171')}
                         </button>
                       </div>
                       <div className="p-2 md:p-6  flex flex-col gap-4">
@@ -274,7 +276,7 @@ const ExamConfig = (props: ExamConfigProps) => {
                       setModalCopy({ show: true });
                     }}
                   >
-                    Nhân bản để thi
+                    {t('J_172')}
                   </button>
                 )}
                 <button
@@ -287,7 +289,7 @@ const ExamConfig = (props: ExamConfigProps) => {
                     ]);
                   }}
                 >
-                  <Plus /> Thêm phần thi
+                  <Plus /> {t('J_173')}
                 </button>
               </div>
             </form>

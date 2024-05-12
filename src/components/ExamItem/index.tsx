@@ -118,7 +118,7 @@ const ExamItem = (props: Props) => {
             ></div>
             {props.data.isSample && (
               <Badge
-                content="Mẫu"
+                content="J_181"
                 className="bg-primary-100 text-primary-500 ml-4  text-[1rem]"
               />
             )}
@@ -174,39 +174,6 @@ const ExamItem = (props: Props) => {
             ]}
           />
         )}
-        {/* {!props.compact && (
-          <div className="hidden md:flex gap-6">
-            <Link
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('J_54')}
-              onClick={handleDoExam}
-              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-            />
-            <FileText
-              data-tooltip-id="default-tooltip"
-              data-tooltip-content={t('J_55')}
-              onClick={handleViewHistory}
-              className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-            />
-            {(!props.data.isSample ||
-              [ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role)) && (
-              <>
-                <Edit
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content={t('J_57')}
-                  onClick={handleEdit}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-                <Trash
-                  data-tooltip-id="default-tooltip"
-                  data-tooltip-content={t('J_58')}
-                  onClick={handleDelete}
-                  className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
-                />
-              </>
-            )}
-          </div>
-        )} */}
       </div>
       <ModalProvider show={modalDelete}>
         <Loader id={componentId.current}>

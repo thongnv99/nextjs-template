@@ -6,11 +6,11 @@ import Chevron from 'assets/svg/chevron-down.svg';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 import { formatDateToString } from 'utils/datetime';
-import DoQuestion from '../DoQuestion';
 import { Disclosure, Transition } from '@headlessui/react';
 import ArrowRight from 'assets/svg/arrow-right.svg';
 import { QUESTION_STATUS_TRANSLATE } from 'global/translate';
 import { QUESTION_TYPE } from 'global';
+import { useTranslation } from 'app/i18n/client';
 
 type Props = {
   data?: SubmitExamRes;
@@ -19,23 +19,22 @@ type Props = {
 };
 
 const ExamResult = ({ data, exam, isContest }: Props) => {
+  const { t } = useTranslation();
   const { lng } = useParams();
   const router = useRouter();
   const parts = JSON.parse(data?.parts as string) as IPart[];
   return (
     <div>
       <div className=" w-full p-4  rounded-md border border-gray-200 m-auto bg-white">
-        <h1 className="text-center text-[3rem]">Kết quả</h1>
+        <h1 className="text-center text-[3rem]">{t('J_143')}</h1>
         <div className="flex flex-wrap w-full justify-between">
           <div className="mb-8  p-4 flex flex-col gap-4 flex-1">
             <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">Tên đề thi</div>
+              <div className="min-w-[20rem] text-gray-500">{t('J_144')}</div>
               <div>{exam?.title}</div>
             </div>
             <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">
-                Thời gian bắt đầu
-              </div>
+              <div className="min-w-[20rem] text-gray-500">{t('J_94')}</div>
               <div>
                 {data?.startTime
                   ? formatDateToString(
@@ -46,9 +45,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
               </div>
             </div>
             <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">
-                Thời gian kết thúc
-              </div>
+              <div className="min-w-[20rem] text-gray-500">{t('J_95')}</div>
               <div>
                 {data?.endTime
                   ? formatDateToString(
@@ -59,9 +56,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
               </div>
             </div>
             <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">
-                Thời gian làm bài
-              </div>
+              <div className="min-w-[20rem] text-gray-500">{t('J_96')}</div>
               <div>
                 {data?.startTime && data?.endTime
                   ? `${differenceInMinutes(data.endTime, data.startTime)} phút`
@@ -69,7 +64,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
               </div>
             </div>
             <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">Đáp án đúng</div>
+              <div className="min-w-[20rem] text-gray-500">{t('J_121')}</div>
               {data?.status === 'FINISHED' ? (
                 <div>
                   <strong className="text-primary-900">
@@ -78,11 +73,11 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                   /{data.statAnswer?.total}
                 </div>
               ) : (
-                <div>Bài thi cần thời gian để xử lý!</div>
+                <div>{t('J_145')}</div>
               )}
             </div>
             <div className="flex">
-              <div className="min-w-[20rem] text-gray-500">Điểm</div>
+              <div className="min-w-[20rem] text-gray-500">{t('J_119')}</div>
               {data?.status === 'FINISHED' ? (
                 <div>
                   <strong className="text-primary-900">
@@ -91,7 +86,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                   /{data.statScore?.total}
                 </div>
               ) : (
-                <div>Bài thi cần thời gian để xử lý!</div>
+                <div>{t('J_145')}</div>
               )}
             </div>
           </div>
@@ -103,7 +98,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                 total: data?.statAnswer?.total ?? 0,
                 value: data?.statAnswer?.totalCorrect ?? 0,
                 padding: 0,
-                label: 'Đáp án đúng',
+                label: 'J_146',
               }}
             />
           </div>
@@ -118,7 +113,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
               );
             }}
           >
-            Lịch sử thi
+            {t('J_147')}
           </button>
           <button
             type="button"
@@ -127,7 +122,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
               router.push(`/${lng}/${isContest ? 'contest' : 'exam'}`);
             }}
           >
-            Đồng ý
+            {t('J_62')}
           </button>
         </div>
       </div>
@@ -140,8 +135,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                   <div className="flex items-center justify-between transition duration-75 ">
                     <div className="flex  justify-between items-start">
                       <div className="text-base text-left text-gray-900 font-semibold">
-                        {' '}
-                        Chi tiết
+                        {t('J_148')}
                       </div>
                     </div>
                     <div className="flex gap-8">
@@ -167,7 +161,9 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                     <div className="p-4">
                       {parts?.map((part, idx) => (
                         <div key={idx} className="flex flex-col ">
-                          <h2 className="font-bold">Phần {idx + 1}</h2>
+                          <h2 className="font-bold">
+                            {t('J_115', { idx: idx + 1 })}
+                          </h2>
                           {part?.questions.map((question, questionIdx) => {
                             return (
                               <div
@@ -176,7 +172,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                               >
                                 <div className="flex mb-4 gap-4">
                                   <div className="whitespace-nowrap">
-                                    Câu {questionIdx + 1}:
+                                    {t('J_116', { idx: questionIdx + 1 })} :
                                   </div>
                                   <div
                                     className="font-bold"
@@ -218,7 +214,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
 
                                 {question.type === QUESTION_TYPE.ESSAY && (
                                   <div className="flex flex-col px-2">
-                                    <div>Bài làm:</div>
+                                    <div>{t('J_117')}</div>
                                     <div
                                       dangerouslySetInnerHTML={{
                                         __html: question.userAnswer as string,
@@ -235,7 +231,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                                             <Disclosure.Button>
                                               <div className="flex items-center justify-between transition duration-75 bg-primary-200">
                                                 <div className="  p-2 flex gap-2 items-center">
-                                                  Đáp án đúng:{' '}
+                                                  {t('J_121')}
                                                   <strong>
                                                     {String(
                                                       question!.correctOption,
@@ -280,7 +276,7 @@ const ExamResult = ({ data, exam, isContest }: Props) => {
                                               <Disclosure.Panel static>
                                                 {question.answerExplain && (
                                                   <div className="p-2 bg-primary-50">
-                                                    <div>Giải thích đáp án</div>
+                                                    <div>{t('J_123')}</div>
                                                     <div
                                                       dangerouslySetInnerHTML={{
                                                         __html:

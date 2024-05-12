@@ -8,11 +8,13 @@ import { Formik } from 'formik';
 import TextInput from 'elements/TextInput';
 import { METHOD } from 'global';
 import { useMutation } from 'hooks/swr';
+import { useTranslation } from 'app/i18n/client';
 
 type Props = { questionId: string };
 
 const FeedbackBtn = (props: Props) => {
   const [modal, setModal] = useState(false);
+  const { t } = useTranslation();
   const componentId = useRef(uuid());
   const { trigger: createFeedback } = useMutation('/api/v1/feedbacks', {
     url: '/api/v1/feedbacks',
@@ -20,8 +22,8 @@ const FeedbackBtn = (props: Props) => {
     componentId: componentId.current,
     loading: true,
     notification: {
-      title: 'Gửi feedback',
-      content: 'Gửi feedback thành công',
+      title: 'J_184',
+      content: 'J_185',
     },
     onSuccess() {
       handleClose();
@@ -55,9 +57,9 @@ const FeedbackBtn = (props: Props) => {
           className="w-screen max-w-screen-md p-6"
         >
           <div className="flex flex-col mb-5">
-            <div className="text-lg font-bold text-gray-900">Feedback</div>
+            <div className="text-lg font-bold text-gray-900">{t('J_186')}</div>
             <div className="text-sm font-normal text-gray-500">
-              Nhập nội dung cần phản hồi
+              {t('J_187')}
             </div>
           </div>
           <Formik
@@ -76,9 +78,9 @@ const FeedbackBtn = (props: Props) => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <TextInput
-                  label="Nội dung"
+                  label="J_83"
                   name="content"
-                  placeholder="Nội dung ..."
+                  placeholder="J_83"
                   className="mb-8"
                   type="textarea"
                   onChange={handleChange}
@@ -93,10 +95,10 @@ const FeedbackBtn = (props: Props) => {
                     className="btn flex-1"
                     onClick={handleClose}
                   >
-                    Đóng
+                    {t('J_61')}
                   </button>
                   <button type="submit" className="btn-primary flex-1">
-                    Xác nhận
+                    {t('C_1')}
                   </button>
                 </div>
               </form>
