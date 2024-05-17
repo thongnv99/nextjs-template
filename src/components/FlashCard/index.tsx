@@ -1,7 +1,7 @@
 'use client';
 import Loader from 'components/Loader';
 import { FLASH_CARD_STATUS, METHOD } from 'global';
-
+import { useTranslation } from 'app/i18n/client';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { isBlank, uuid } from 'utils/common';
 import FlashCardItem from './FlashCardItem';
@@ -35,6 +35,7 @@ const FlashCardStatusOptions = [
 ];
 
 const FlashCard = (props: Props) => {
+  const { t } = useTranslation();
   const componentId = useRef(uuid());
   const [createModal, setCreateModal] = useState(false);
   const [delaySlider, setDelaySlider] = useState(false);
@@ -68,7 +69,7 @@ const FlashCard = (props: Props) => {
     >
       <div className="px-5 py-6 flex justify-between ">
         <div className="text-lg font-semibold h-full flex items-center">
-          Flashcard
+          {t('J_199')}
         </div>
         <div className="flex items-center gap-4">
           <div>
