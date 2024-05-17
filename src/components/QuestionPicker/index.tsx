@@ -17,6 +17,7 @@ import { IQuestion, QuestionRes } from 'interfaces';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { isBlank } from 'utils/common';
 
+
 interface QuestionPickerProps {
   onSelect?: (questions: IQuestion[]) => void;
   onClose?: () => void;
@@ -31,6 +32,7 @@ const mapColor = {
   [QUESTION_LEVEL.HARD]: 'bg-red-100 text-red-500',
 };
 const QuestionPicker = (props: QuestionPickerProps) => {
+
   const formRef = useRef<FormikProps<QuestionPickerValues>>();
   const { t } = useTranslation();
 
@@ -74,7 +76,7 @@ const QuestionPicker = (props: QuestionPickerProps) => {
       </Formik>
       <div className="flex gap-3 mt-8">
         <button type="button" className="btn flex-1" onClick={props.onClose}>
-          Đóng
+          {t('J_61')}
         </button>
         <button
           type="button"
@@ -83,7 +85,7 @@ const QuestionPicker = (props: QuestionPickerProps) => {
             formRef.current?.submitForm();
           }}
         >
-          Xác nhận
+          {t('C_1')}
         </button>
       </div>
     </div>

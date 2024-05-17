@@ -24,6 +24,8 @@ import Checkbox from 'elements/CheckBox';
 import FeedbackBtn from 'components/FeedBackBtn';
 import QuestionDetailModal from 'components/QuestionDetail';
 import MenuDropdown from 'elements/MenuDrodown';
+import { useTranslation } from 'app/i18n/client';
+
 type Props = {
   data: IQuestion;
   onRefresh?: () => void;
@@ -35,13 +37,15 @@ type Props = {
   checked?: boolean;
 };
 
-const mapQuestionType = {
-  [QUESTION_TYPE.ESSAY]: 'Tự luận',
-  [QUESTION_TYPE.MULTIPLE_CHOICE]: 'Trắc nghiệm',
-  [QUESTION_TYPE.FILL_IN_THE_BLANK]: 'Điền vào chỗ trống',
-};
+
 
 const QuestionItem = (props: Props) => {
+  const { t } = useTranslation();
+  const mapQuestionType = {
+    [QUESTION_TYPE.ESSAY]: t('J_9'),
+    [QUESTION_TYPE.MULTIPLE_CHOICE]: t('J_209'),
+    [QUESTION_TYPE.FILL_IN_THE_BLANK]: t('J_10'),
+  };
   const router = useRouter();
   const { lng } = useParams();
   const [modalDelete, setModalDelete] = useState(false);
@@ -56,8 +60,8 @@ const QuestionItem = (props: Props) => {
     componentId: componentId.current,
     loading: true,
     notification: {
-      title: 'Xóa câu hỏi',
-      content: 'Xóa câu hỏi thành công',
+      title: 'J_234',
+      content: 'J_235',
     },
     onSuccess() {
       handleCloseDelete();
@@ -100,7 +104,7 @@ const QuestionItem = (props: Props) => {
           <div className="flex gap-2">
             {props.data.isSample && (
               <Badge
-                content="Mẫu"
+                content="J_43"
                 className="bg-primary-100 text-primary-500 text-[1rem]"
               />
             )}
@@ -134,7 +138,7 @@ const QuestionItem = (props: Props) => {
             buttonRender={More}
             options={[
               {
-                label: 'Nhân bản',
+                label: 'J_172',
                 onClick: handleCopy as unknown as MouseEventHandler,
               },
               {
@@ -160,7 +164,7 @@ const QuestionItem = (props: Props) => {
             <Delete
               onClick={props.onDelete}
               data-tooltip-id="default-tooltip"
-              data-tooltip-content="Xóa"
+              data-tooltip-content="J_58"
               className="w-5 h-5 cursor-pointer text-gray-500 hover:text-gray-900 transition-all"
             />
           </div>
@@ -179,8 +183,8 @@ const QuestionItem = (props: Props) => {
       <ModalProvider show={modalDelete} onClose={handleCloseDelete}>
         <Loader id={componentId.current}>
           <ConfirmModal
-            title="Xóa câu hỏi"
-            content="Câu hỏi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa câu hỏi này không?"
+            title="J_234"
+            content="J_236"
             onConfirm={handleConfirmDelete}
             onCancel={handleCloseDelete}
             type={'warning'}

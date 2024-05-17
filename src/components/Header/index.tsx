@@ -5,13 +5,14 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 import LanguagePicker from 'components/LangPicker';
 import UserDropdown from 'components/UserDropdown';
 import Logo from 'assets/svg/logo.svg';
-import { useTranslation } from 'app/i18n/client';
 import './style.scss';
 import { useSession } from 'next-auth/react';
 import Menu from 'assets/svg/menu-2.svg';
 import { toggleMenu } from 'utils/common';
+import { useTranslation } from 'app/i18n/client';
 
 const Header = () => {
+  const { t } = useTranslation();
   const { lng } = useParams();
   const router = useRouter();
   const { status } = useSession();
@@ -39,7 +40,7 @@ const Header = () => {
               href={`/${lng}/login`}
               className="btn-primary !h-[3rem] flex items-center"
             >
-              Đăng nhập
+              {t('J_206')}
             </Link>
           </div>
         )}

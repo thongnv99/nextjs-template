@@ -26,6 +26,8 @@ import { Formik } from 'formik';
 import TextInput from 'elements/TextInput';
 import useSWR from 'swr';
 import EmptyData from 'components/EmptyData';
+import { useTranslation } from 'app/i18n/client';
+
 type Props = {
   inPicker?: boolean;
   onRowCheckedChange?: (data: IQuestion, value?: boolean) => void;
@@ -40,6 +42,7 @@ interface QuestionFilter {
 }
 
 const QuestionMgmt = (props: Props) => {
+  const { t } = useTranslation();
   const componentId = useRef(uuid());
   const router = useRouter();
   const { lng } = useParams();
@@ -167,13 +170,13 @@ const QuestionMgmt = (props: Props) => {
       {!props.inPicker && (
         <>
           <div className="p-5 pb-0 flex items-center justify-between">
-            <div className="text-lg font-semibold">Danh sách câu hỏi</div>
+            <div className="text-lg font-semibold">{t('J_170')}</div>
             <button
               type="button"
               className="btn-primary btn-icon"
               onClick={handleCreateQuestion}
             >
-              <Plus /> Thêm câu hỏi
+              <Plus /> {t('J_171')}
             </button>
           </div>
         </>
@@ -194,8 +197,8 @@ const QuestionMgmt = (props: Props) => {
             >
               <div className="md:max-w-lg flex-1">
                 <TextInput
-                  label="Tìm kiếm"
-                  placeholder="Nhập từ khóa tìm kiếm..."
+                  label="J_182"
+                  placeholder="J_183"
                   className="w-full"
                   value={values.searchKey}
                   name="searchKey"
@@ -211,8 +214,8 @@ const QuestionMgmt = (props: Props) => {
               </div>
               <div className="md:max-w-lg flex-1">
                 <Dropdown
-                  label="Loại câu hỏi"
-                  placeholder="Loại câu hỏi"
+                  label="J_237"
+                  placeholder="J_237"
                   className="w-full"
                   options={QuestionTypeOptions}
                   selected={values.type}
@@ -224,8 +227,8 @@ const QuestionMgmt = (props: Props) => {
               </div>
               <div className="md:max-w-lg flex-1">
                 <Dropdown
-                  label="Câu hỏi mẫu"
-                  placeholder="Câu hỏi mẫu"
+                  label="J_238"
+                  placeholder="J_238"
                   className="w-full"
                   options={SampleOptions}
                   selected={values.sample}
@@ -254,8 +257,8 @@ const QuestionMgmt = (props: Props) => {
               </div>
               <div className="md:max-w-lg flex-1">
                 <ExamPicker
-                  label="Đề thi"
-                  placeholder="Chọn đề thi"
+                  label="J_1"
+                  placeholder="J_165"
                   className="w-full"
                   selected={values.exam}
                   onChange={exam => {
