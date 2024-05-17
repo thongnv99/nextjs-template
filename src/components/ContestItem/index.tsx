@@ -19,7 +19,13 @@ import MenuDropdown from 'elements/MenuDrodown';
 import { useSession } from 'next-auth/react';
 import { useTranslation } from 'app/i18n/client';
 
-type Props = { data: IContest; onRefresh(): void; compact?: boolean };
+type Props = {
+  data: IContest;
+  onRefresh(): void;
+  compact?: boolean;
+  inPicker?: boolean;
+  onSelect?: (exam: IContest) => void;
+};
 
 const ContestItem = (props: Props) => {
   const router = useRouter();
@@ -66,6 +72,9 @@ const ContestItem = (props: Props) => {
     router.push(`/${lng}/contest/config/${props.data.id}`);
   };
   const handleDoExam = (event: MouseEvent) => {
+    if (props.inPicker) {
+      return;
+    }
     event.stopPropagation();
     router.push(`/${lng}/contest/${props.data.id}`);
   };
@@ -119,11 +128,17 @@ const ContestItem = (props: Props) => {
 
   return (
     <div className="w-full flex flex-col cu">
-      <div className="flex items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
-        <div className="flex flex-col justify-between items-start">
-          <div className="flex">
+      <div
+        onClick={() => props.onSelect?.(props.data)}
+        className="flex hover:bg-primary-50 cursor-pointer items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm"
+      >
+        <div
+          style={{ maxWidth: 'calc(100% - 30px)' }}
+          className="flex flex-col justify-between items-start"
+        >
+          <div className="flex w-full">
             <div
-              className="text-base text-left text-gray-900 font-semibold  cursor-pointer"
+              className="text-base text-left text-gray-900 font-semibold  text-ellipsis truncate    cursor-pointer"
               dangerouslySetInnerHTML={{ __html: props.data.title }}
               onClick={handleDoExam as any}
             ></div>
@@ -135,7 +150,7 @@ const ContestItem = (props: Props) => {
             />
           </div>
           <div className="text-sm flex items-center gap-4 text-gray-500 font-normal">
-            {!props.compact && (
+            {!props.compact && !props.inPicker && (
               <div className="flex items-center gap-2">
                 <Calendar className="w-[1.6rem] h-[1.6rem]" />{' '}
                 <div>
@@ -163,7 +178,7 @@ const ContestItem = (props: Props) => {
             </div>
           </div>
         </div>
-        {!props.compact && (
+        {!props.compact && !props.inPicker && (
           <MenuDropdown
             buttonRender={More}
             options={[

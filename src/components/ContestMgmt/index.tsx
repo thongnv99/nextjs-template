@@ -32,7 +32,15 @@ import { useTranslation } from 'app/i18n/client';
 interface ContestFilter {
   searchKey: string;
 }
-const ContestMgmt = ({ compact }: { compact?: boolean }) => {
+const ContestMgmt = ({
+  compact,
+  inPicker,
+  onSelect,
+}: {
+  compact?: boolean;
+  inPicker?: boolean;
+  onSelect?: (exam: IContest) => void;
+}) => {
   const { data: userInfo } = useUserInfo();
   const componentId = useRef(uuid());
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
@@ -115,6 +123,8 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
           key={item.id}
           data={item}
           onRefresh={handleRefresh}
+          onSelect={onSelect}
+          inPicker={inPicker}
         />
       </div>
     );
@@ -123,22 +133,26 @@ const ContestMgmt = ({ compact }: { compact?: boolean }) => {
     <Loader
       id={componentId.current}
       loading={isMutating}
-      className="h-full flex-1 w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
+      className={`h-full flex-1 w-full  bg-white  flex flex-col ${
+        !inPicker ? 'border border-gray-200 rounded-lg shadow-sm ' : ''
+      } `}
     >
-      <div className="px-5 py-6 flex items-center justify-between">
-        <div className="text-lg font-semibold">
-          {t(compact ? 'J_2' : 'J_141')}
+      {!inPicker && (
+        <div className="px-5 py-6 flex items-center justify-between">
+          <div className="text-lg font-semibold">
+            {t(compact ? 'J_2' : 'J_141')}
+          </div>
+          {!compact && userInfo?.user.role === ROLES.ADMIN && (
+            <button
+              type="button"
+              className="btn-primary btn-icon"
+              onClick={handleCreateExam}
+            >
+              <Plus /> {t('J_140')}
+            </button>
+          )}
         </div>
-        {!compact && userInfo?.user.role === ROLES.ADMIN && (
-          <button
-            type="button"
-            className="btn-primary btn-icon"
-            onClick={handleCreateExam}
-          >
-            <Plus /> {t('J_140')}
-          </button>
-        )}
-      </div>
+      )}
       <div className="  pb-5 flex-1 w-full flex flex-col gap-2 ">
         {data && data.length > 0 ? (
           <AutoSizer className="list">

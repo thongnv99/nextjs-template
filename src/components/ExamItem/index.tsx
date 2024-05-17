@@ -18,7 +18,13 @@ import ConfirmModal from 'components/ConfirmModal';
 import MenuDropdown from 'elements/MenuDrodown';
 import More from 'assets/svg/more-vertical.svg';
 
-type Props = { data: IExam; onRefresh(): void; compact?: boolean };
+type Props = {
+  data: IExam;
+  onRefresh(): void;
+  compact?: boolean;
+  inPicker?: boolean;
+  onSelect?: (exam: IExam) => void;
+};
 
 const ExamItem = (props: Props) => {
   const { t } = useTranslation();
@@ -63,6 +69,9 @@ const ExamItem = (props: Props) => {
     router.push(`/${lng}/exam/config/${props.data.id}`);
   };
   const handleDoExam = (event: MouseEvent) => {
+    if (props.inPicker) {
+      return;
+    }
     event.stopPropagation();
     router.push(`/${lng}/exam/${props.data.id}`);
   };
@@ -105,7 +114,10 @@ const ExamItem = (props: Props) => {
   );
   return (
     <div className="w-full flex flex-col ">
-      <div className=" hover:bg-primary-50 cursor-pointer flex items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm">
+      <div
+        onClick={() => props.onSelect?.(props.data)}
+        className=" hover:bg-primary-50 cursor-pointer flex items-center justify-between p-2 rounded-lg border transition duration-75 border-gray-200 shadow-sm"
+      >
         <div
           style={{ maxWidth: 'calc(100% - 30px)' }}
           className="flex  flex-col justify-between items-start"
@@ -144,7 +156,7 @@ const ExamItem = (props: Props) => {
             </div>
           </div>
         </div>
-        {!props.compact && (
+        {!props.compact && !props.inPicker && (
           <MenuDropdown
             buttonRender={More}
             header={props.data.title}

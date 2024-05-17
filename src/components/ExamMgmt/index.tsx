@@ -27,12 +27,16 @@ import TextInput from 'elements/TextInput';
 import Dropdown from 'elements/Dropdown';
 import { SampleOptions } from 'global/options';
 
-type Props = { compact?: boolean };
+type Props = {
+  compact?: boolean;
+  inPicker?: boolean;
+  onSelect?: (exam: IExam) => void;
+};
 interface ExamFilter {
   searchKey: string;
   sample: string;
 }
-const ExamMgmt = ({ compact }: Props) => {
+const ExamMgmt = ({ compact, inPicker, onSelect }: Props) => {
   const { t } = useTranslation();
   const componentId = useRef(uuid());
   const [examModal, setExamModal] = useState<{ show: boolean; data?: IExam }>({
@@ -117,10 +121,12 @@ const ExamMgmt = ({ compact }: Props) => {
     return (
       <div style={style} className="py-[2px] flex items-center  px-5">
         <ExamItem
+          inPicker={inPicker}
           compact={compact}
           key={item.id}
           data={item}
           onRefresh={handleRefresh}
+          onSelect={onSelect}
         />
       </div>
     );
@@ -130,20 +136,26 @@ const ExamMgmt = ({ compact }: Props) => {
     <Loader
       id={componentId.current}
       loading={isMutating}
-      className="h-full flex-1 w-full border border-gray-200 rounded-lg bg-white flex flex-col shadow-sm"
+      className={`h-full flex-1 w-full  bg-white  flex flex-col ${
+        !inPicker ? 'border border-gray-200 rounded-lg shadow-sm ' : ''
+      } `}
     >
-      <div className="p-5 pb-0 flex items-center justify-between">
-        <div className="text-lg font-semibold">{t('J_39')}</div>
-        {!compact && (
-          <button
-            type="button"
-            className="btn-primary btn-icon"
-            onClick={handleCreateExam}
-          >
-            <Plus /> <span className="hidden md:inline-block">{t('J_40')}</span>
-          </button>
-        )}
-      </div>
+      {!inPicker && (
+        <div className="p-5 pb-0 flex items-center justify-between">
+          <div className="text-lg font-semibold">{t('J_39')}</div>
+          {!compact && (
+            <button
+              type="button"
+              className="btn-primary btn-icon"
+              onClick={handleCreateExam}
+            >
+              <Plus />{' '}
+              <span className="hidden md:inline-block">{t('J_40')}</span>
+            </button>
+          )}
+        </div>
+      )}
+
       {!compact && (
         <Formik
           onSubmit={values => {

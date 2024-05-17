@@ -5,6 +5,7 @@ import Chevron from 'assets/svg/chevron-down.svg';
 import { useSWRWrapper } from 'hooks/swr';
 import { ExamRes, IExam, QuestionRes } from 'interfaces';
 import Clear from 'assets/svg/x.svg';
+import { useTranslation } from 'app/i18n/client';
 type ExamPickerProps = {
   placeholder?: string;
   selected?: IExam | null;
@@ -20,6 +21,7 @@ export default function ExamPicker(props: ExamPickerProps) {
     props.selected || null,
   );
   const [query, setQuery] = useState('');
+  const { t } = useTranslation();
   const { label, hasError, errorMessage, className } = props;
   const { data, isLoading, mutate } = useSWRWrapper<ExamRes>(`/api/v1/exams`, {
     url: '/api/v1/exams',
@@ -57,7 +59,7 @@ export default function ExamPicker(props: ExamPickerProps) {
     >
       {label != null && (
         <label className="dropdown-label" htmlFor="">
-          {label}
+          {t(label)}
         </label>
       )}
       <Combobox value={selected} onChange={setSelected}>
@@ -66,7 +68,7 @@ export default function ExamPicker(props: ExamPickerProps) {
             <Combobox.Input
               className="flex-1 outline-none border-none text-sm leading-5 text-gray-900 "
               value={query}
-              placeholder={props.placeholder}
+              placeholder={t(props.placeholder ?? '')}
               onChange={event => setQuery(event.target.value)}
             />
             {selected && (

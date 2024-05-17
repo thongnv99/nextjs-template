@@ -38,7 +38,7 @@ const ExamConfig = (props: ExamConfigProps) => {
   const router = useRouter();
   const { lng } = useParams();
   const componentId = useRef(uuid());
-  const [modalCopy, setModalCopy] = useState<{ show: boolean; data?: IExam }>();
+  const [modalCopy, setModalCopy] = useState<{ show: boolean }>();
   const formRef = useRef<FormikProps<ExamConfigValues>>();
   const [, drop] = useDrop(() => ({ accept: 'QuestionDnd' }));
   const [titleModal, setTitleModal] = useState(false);
@@ -48,7 +48,7 @@ const ExamConfig = (props: ExamConfigProps) => {
   }>({ show: false });
 
   const { trigger } = useMutation<IExam>('exam/copy/detail', {
-    url: '/api/v1/exams/{examId}',
+    url: '/api/v1/{source}/{examId}',
     method: METHOD.GET,
     loading: true,
     componentId: componentId.current,
@@ -130,7 +130,7 @@ const ExamConfig = (props: ExamConfigProps) => {
               router.push(`/${lng}/${props.isContest ? 'contest' : 'exam'}`);
             }}
           >
-            {props.isContest ? 'J_2' : 'J_1'}
+            {t(props.isContest ? 'J_2' : 'J_1')}
           </div>
           <ArrowRight />
           <div className="flex">
@@ -326,10 +326,13 @@ const ExamConfig = (props: ExamConfigProps) => {
       >
         <SelectExamForm
           onClose={() => setModalCopy({ show: false })}
-          onSelect={exam => {
+          onSelect={(exam, contest) => {
             if (exam) {
-              setModalCopy({ show: false, data: exam });
-              trigger({ examId: exam.id });
+              setModalCopy({ show: false });
+              trigger({ examId: exam.id, source: 'exams' });
+            } else if (contest) {
+              setModalCopy({ show: false });
+              trigger({ examId: contest.id, source: 'contests' });
             }
           }}
         />
