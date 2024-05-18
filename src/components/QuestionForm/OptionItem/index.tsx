@@ -58,7 +58,7 @@ const OptionItem = (props: OptionItemProps) => {
         <Editor
           data={props.value}
           onChange={props.onChange}
-          placeholder="Nhập đáp án"
+          placeholder='J_214'
         />
       </div>
       <Delete

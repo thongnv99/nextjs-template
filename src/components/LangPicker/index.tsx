@@ -6,13 +6,16 @@ import Image from 'next/image';
 import { LANG } from 'global';
 import VI from 'assets/svg/vi-flag.svg';
 import JA from 'assets/svg/ja-flag.svg';
+import { useTranslation } from 'app/i18n/client';
 
-const LangConfig = [
-  { name: 'Tiếng Việt', value: LANG.VI, icon: <VI /> },
-  { name: 'Tiếng Nhật', value: LANG.JA, icon: <JA /> },
-];
 
 const LangPicker = (props: { isMobile?: boolean }) => {
+  const { t } = useTranslation();
+  const LangConfig = [
+    { name: t('J_207'), value: LANG.VI, icon: <VI /> },
+    { name: t('J_208'), value: LANG.JA, icon: <JA /> },
+  ];
+
   const { lng } = useParams();
   const pathName = usePathname();
   const [selected, setSelected] = useState(
@@ -31,7 +34,7 @@ const LangPicker = (props: { isMobile?: boolean }) => {
       </div>
     );
   }
-
+ 
   return (
     <Listbox value={selected} onChange={setSelected}>
       <div className="relative mt-1 mr-2 md:mr-0">

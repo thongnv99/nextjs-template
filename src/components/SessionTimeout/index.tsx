@@ -7,8 +7,10 @@ import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { TRIGGER_SESSION_TIMEOUT } from 'store/key';
 import useSWR, { mutate } from 'swr';
+import { useTranslation } from 'app/i18n/client';
 
 const SessionTimeout = () => {
+  const { t } = useTranslation();
   const { data: triggerTimeout } = useSWR(TRIGGER_SESSION_TIMEOUT, null, {
     refreshInterval: 0,
     revalidateOnFocus: false,
@@ -50,7 +52,7 @@ const SessionTimeout = () => {
         type={'error'}
         title="Session timeout"
         onConfirm={handleConfirm}
-        content="Phiên đăng nhập của bạn đã hết hạn. Vui lòng quay về trang login để đăng nhập lại"
+        content="J_239"
       />
     </ModalProvider>
   );

@@ -11,8 +11,11 @@ import { FLASH_CARD_STATUS, METHOD } from 'global';
 import Square from 'assets/svg/square.svg';
 import Star from 'assets/svg/star.svg';
 import Triangle from 'assets/svg/triangle.svg';
+import { useTranslation } from 'app/i18n/client';
+
 
 const FlipCard = ({ data }: { data: IFlashCard }) => {
+  const { t } = useTranslation();
   const [active, setActive] = useState(false);
   const [status, setStatus] = useState(data.status);
   const { trigger: updateFlashCard } = useMutation(
@@ -21,8 +24,8 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
       url: '/api/v1/flashcards/{flashcardId}',
       method: METHOD.PUT,
       notification: {
-        title: 'Cập nhật flash card',
-        content: 'Cập nhật flash card thành công.',
+        title: 'J_190',
+        content: 'J_191',
       },
       onSuccess() {
         // props.onClose();
@@ -84,7 +87,7 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
           }`}
           onClick={() => changeStatus(FLASH_CARD_STATUS.UNLEARNED)}
         >
-          Chưa thuộc
+          {t('J_200')}
         </div>
         <div
           className={`px-4 py-2 bg-gray-200 cursor-pointer rounded-sm ${
@@ -94,11 +97,11 @@ const FlipCard = ({ data }: { data: IFlashCard }) => {
           }`}
           onClick={() => changeStatus(FLASH_CARD_STATUS.LEARNED)}
         >
-          Đã thuộc
+          {t('J_201')}
         </div>
       </div>
       <div className="w-full p-2 flex items-center justify-center text-gray-100">
-        Click để lật flashcard
+        {t('J_205')}
       </div>
     </div>
   );

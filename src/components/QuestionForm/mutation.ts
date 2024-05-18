@@ -1,6 +1,8 @@
 import { METHOD } from 'global';
 import { useMutation } from 'hooks/swr';
 import { NotificationConfig } from 'interfaces';
+import { useTranslation } from 'app/i18n/client';
+const { t } = useTranslation();
 
 export const useCreateQuestionMutation = ({
   onSuccess,
@@ -19,8 +21,8 @@ export const useCreateQuestionMutation = ({
     loading: true,
     componentId,
     notification: notification ?? {
-      title: 'Tạo câu hỏi',
-      content: 'Tạo câu hỏi thành công',
+      title: 'J_231',
+      content: 'J_232',
     },
     onSuccess: data => {
       onSuccess();
@@ -45,8 +47,8 @@ export const useUpdateQuestionMutation = ({
     loading: true,
     componentId,
     notification: notification ?? {
-      title: 'Cập nhật câu hỏi',
-      content: 'Cập nhật câu hỏi thành công',
+      title: 'J_218',
+      content: 'J_233',
     },
     onSuccess: data => {
       onSuccess();

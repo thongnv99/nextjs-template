@@ -6,36 +6,39 @@ import React from 'react';
 import { formatNumber, isBlank } from 'utils/common';
 import { formatDateToString } from 'utils/datetime';
 import Chevron from 'assets/svg/chevron-down.svg';
+import { useTranslation } from 'app/i18n/client';
 
 type Props = { data: IQuestion; onClose(): void; feedback?: string };
-const mapQuestionType = {
-  [QUESTION_TYPE.ESSAY]: 'Tự luận',
-  [QUESTION_TYPE.MULTIPLE_CHOICE]: 'Trắc nghiệm',
-  [QUESTION_TYPE.FILL_IN_THE_BLANK]: 'Điền vào chỗ trống',
-};
+
 const QuestionDetailModal = (props: Props) => {
+  const { t } = useTranslation();
+  const mapQuestionType = {
+    [QUESTION_TYPE.ESSAY]: t('J_9'),
+    [QUESTION_TYPE.MULTIPLE_CHOICE]: t('J_209'),
+    [QUESTION_TYPE.FILL_IN_THE_BLANK]: t('J_10'),
+  };
   const question = props.data;
   return (
     <div className="w-screen max-w-screen-sm md:max-w-screen-md py-[2.4rem] md:p-[2.4rem]">
       <div className="font-semibold mb-3 w-full text-center text-[2rem]">
-        {props.feedback ? 'Chi tiết phản hồi' : 'Chi tiết câu hỏi'}
+        {props.feedback ? t('J_212') : t('J_213')}
       </div>
       <div className="p-2 px-4">
         <div className="flex flex-col gap-2">
           <div className="flex">
-            <div className="min-w-[10rem] font-semibold">Loại</div>
+            <div className="min-w-[10rem] font-semibold">{t('J_210')}</div>
             <div className="font-normal text-sm text-gray-500">
               {mapQuestionType[props.data.type]}
             </div>
           </div>
           <div className="flex">
-            <div className="min-w-[10rem] font-semibold">Điểm</div>
+            <div className="min-w-[10rem] font-semibold">{t('J_119')}</div>
             <div className="font-normal text-sm text-gray-500">
               {formatNumber(props.data.score ?? 1)}
             </div>
           </div>
           <div className="flex">
-            <div className="min-w-[10rem] font-semibold">Ngày tạo</div>
+            <div className="min-w-[10rem] font-semibold">{t('J_174')}</div>
             <div className="font-normal text-sm text-gray-500">
               {formatDateToString(
                 new Date(props.data.createdAt),
@@ -44,7 +47,7 @@ const QuestionDetailModal = (props: Props) => {
             </div>
           </div>
           <div className="flex">
-            <div className="min-w-[10rem] font-semibold">Tags</div>
+            <div className="min-w-[10rem] font-semibold">{t('J_211')}</div>
             <div className="flex flex-wrap gap-2">
               {props.data.tags
                 ?.split('|')
@@ -63,7 +66,7 @@ const QuestionDetailModal = (props: Props) => {
         </div>
       </div>
       <div className="  px-4 min-w-[10rem] font-semibold">
-        {props.feedback ? 'Chi tiết câu hỏi' : 'Nội dung'}
+        {props.feedback ? t('J_213') : t('J_83')}
       </div>
 
       <div className=" px-8 py-2 bg-white ">
@@ -107,7 +110,7 @@ const QuestionDetailModal = (props: Props) => {
                   <Disclosure.Button className={'outline-none'}>
                     <div className="flex items-center justify-between transition duration-75 bg-primary-200">
                       <div className="  p-2 flex gap-2 items-center">
-                        Đáp án đúng:{' '}
+                        {t('J_121')}{' '}
                         <strong>
                           {String(question!.correctOption)
                             ?.split(',')
@@ -139,7 +142,7 @@ const QuestionDetailModal = (props: Props) => {
                     <Disclosure.Panel static>
                       {question.answerExplain && (
                         <div className="p-2 bg-primary-50">
-                          <div>Giải thích đáp án</div>
+                          <div>{t('J_123')}</div>
                           <div
                             dangerouslySetInnerHTML={{
                               __html: question.answerExplain ?? '',
@@ -157,7 +160,7 @@ const QuestionDetailModal = (props: Props) => {
       </div>
       {props.feedback && (
         <>
-          <div className="  px-4 min-w-[10rem] font-semibold">Feedback</div>
+          <div className="  px-4 min-w-[10rem] font-semibold">{t('J_186')}</div>
           <div className="  px-4 min-w-[10rem] font-normal">
             {props.feedback}
           </div>
@@ -170,7 +173,7 @@ const QuestionDetailModal = (props: Props) => {
           type="button"
           onClick={props.onClose}
         >
-          Đóng
+          {t('J_61')}
         </button>
       </div>
     </div>

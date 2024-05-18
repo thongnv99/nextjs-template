@@ -11,6 +11,7 @@ import Checkbox from 'elements/CheckBox';
 import Delete from 'assets/svg/delete.svg';
 import Plus from 'assets/svg/plus-square.svg';
 import Close from 'assets/svg/x.svg';
+import { useTranslation } from 'app/i18n/client';
 const Editor = dynamic(() => import('components/Editor'), { ssr: false });
 import {
   useCreateQuestionMutation,
@@ -47,35 +48,7 @@ interface QuestionFormValues {
   isMultiChoice?: boolean;
 }
 
-const QuestionTypeOptions = [
-  {
-    label: 'Trắc nghiệm',
-    value: QUESTION_TYPE.MULTIPLE_CHOICE,
-  },
-  {
-    label: 'Điền vào chỗ trống',
-    value: QUESTION_TYPE.FILL_IN_THE_BLANK,
-  },
-  {
-    label: 'Tự luận',
-    value: QUESTION_TYPE.ESSAY,
-  },
-];
 
-const LevelOptions = [
-  {
-    label: 'Dễ',
-    value: QUESTION_LEVEL.EASY,
-  },
-  {
-    label: 'Trung bình',
-    value: QUESTION_LEVEL.MEDIUM,
-  },
-  {
-    label: 'Khó',
-    value: QUESTION_LEVEL.HARD,
-  },
-];
 
 interface QuestionFormProps {
   questionId?: string; // for edit or duplicate
@@ -83,6 +56,36 @@ interface QuestionFormProps {
 }
 
 const QuestionForm = (props: QuestionFormProps) => {
+  const { t } = useTranslation();
+  const QuestionTypeOptions = [
+    {
+      label: t('J_209'),
+      value: QUESTION_TYPE.MULTIPLE_CHOICE,
+    },
+    {
+      label: t('J_10'),
+      value: QUESTION_TYPE.FILL_IN_THE_BLANK,
+    },
+    {
+      label: t('J_9'),
+      value: QUESTION_TYPE.ESSAY,
+    },
+  ];
+  
+  const LevelOptions = [
+    {
+      label: t('J_215'),
+      value: QUESTION_LEVEL.EASY,
+    },
+    {
+      label: t('J_216'),
+      value: QUESTION_LEVEL.MEDIUM,
+    },
+    {
+      label: t('J_217'),
+      value: QUESTION_LEVEL.HARD,
+    },
+  ];
   const router = useRouter();
   const componentId = useRef(uuid());
   const { lng } = useParams();
@@ -237,7 +240,7 @@ const QuestionForm = (props: QuestionFormProps) => {
     >
       <div className="base-top-container flex-wrap">
         <div className="base-title">
-          {props.isEdit ? 'Cập nhật câu hỏi' : 'Tạo mới câu hỏi'}
+          {props.isEdit ? t('J_218') : t('J_219')}
         </div>
         <div className="flex gap-2">
           <button
@@ -245,7 +248,7 @@ const QuestionForm = (props: QuestionFormProps) => {
             className="btn-primary"
             onClick={handleSaveClick}
           >
-            {props.isEdit ? 'Cập nhật' : 'Tạo mới'}
+            {props.isEdit ? t('J_220') : t('J_221')}
           </button>
           <button
             type="button"
@@ -254,7 +257,7 @@ const QuestionForm = (props: QuestionFormProps) => {
               router.back();
             }}
           >
-            Hủy
+            {t('J_222')}
           </button>
         </div>
       </div>
@@ -293,10 +296,10 @@ const QuestionForm = (props: QuestionFormProps) => {
               onSubmit={handleSubmit}
             >
               <div className="question-section w-full md:w-[35%] ">
-                <div className="title">Cài đặt</div>
+                <div className="title">{t('J_223')}</div>
                 <div className="flex flex-col gap-2">
                   <TextInput
-                    label="Điểm"
+                    label='J_119'
                     name="score"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -313,7 +316,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                   />
                   {/* <Checkbox name='isSample' selected={values.isSample} onChange={(name, value)=>setFieldValue('isSample',value)}/> */}
                   <div className="flex flex-col gap-4">
-                    <div className="input-label">Tags</div>
+                    <div className="input-label">{t('J_211')}</div>
                     {values.tags.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
                         {values.tags.map((tag, idx) => (
@@ -336,7 +339,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                         ))}
                       </div>
                     ) : (
-                      <div className="font-normal">Chưa có tags</div>
+                      <div className="font-normal">{t('J_224')}</div>
                     )}
                     <div className="flex gap-2 w-full  justify-between">
                       <div className="flex-1">
@@ -344,7 +347,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                           name="tagText"
                           onChange={handleChange}
                           value={values.tagText}
-                          placeholder="Nhập nội dung để thêm tag"
+                          placeholder="J_225"
                         />
                       </div>
                       <div
@@ -368,7 +371,7 @@ const QuestionForm = (props: QuestionFormProps) => {
               <div className="flex-1 flex flex-col gap-4 pb-4 overflow-x-hidden">
                 <div className="question-section">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="title !mb-0">Câu hỏi</div>
+                    <div className="title !mb-0">{t('J_3')}</div>
                     {props.questionId == null && (
                       <div>
                         <Dropdown
@@ -384,25 +387,23 @@ const QuestionForm = (props: QuestionFormProps) => {
                     <Editor
                       data={values.content}
                       onChange={value => setFieldValue('content', value)}
-                      placeholder="Nhập nội dung câu hỏi"
+                      placeholder="J_226"
                     />
                   </div>
                   {values.type === QUESTION_TYPE.FILL_IN_THE_BLANK && (
                     <>
                       <div className="ck-content mt-4">
-                        <strong>Hướng dẫn: </strong> Nhập nội dung câu hỏi, bôi
-                        đen phần muốn thay thế bằng chỗ trống và chọn biểu tượng{' '}
-                        <code>{`<>`}</code>trên toolbar{' '}
+                        {t('J_227')}
                       </div>
                     </>
                   )}
                 </div>
                 {values.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
                   <div className="question-section">
-                    <div className="title">Đáp án</div>
+                    <div className="title">{t('J_194')}</div>
                     <div className="mb-2">
                       <Checkbox
-                        label="Nhiều đáp án đúng"
+                        label="J_228"
                         name="isMultiChoice"
                         selected={values.isMultiChoice}
                         onChange={(name, value) => setFieldValue(name!, value)}
@@ -488,21 +489,18 @@ const QuestionForm = (props: QuestionFormProps) => {
                         }}
                         className="btn"
                       >
-                        Thêm đáp án
+                        t{('J_229')}
                       </button>
                     </div>
                     <div className="text-right">
-                      <span>
-                        (*) Chọn <strong>đáp án đúng</strong> bằng cách Click
-                        vào ô vuông cạnh đáp án
-                      </span>
+                      {t('J_230')}
                     </div>
                   </div>
                 )}
 
                 {values.type === QUESTION_TYPE.MULTIPLE_CHOICE && (
                   <div className="question-section">
-                    <div className="title">Giải thích đáp án</div>
+                    <div className="title">{t('J_123')}</div>
                     <div className="w-full min-h-[10rem]">
                       <Editor
                         data={values.answerExplain}
@@ -511,7 +509,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                         onChange={value =>
                           setFieldValue(`answerExplain`, value)
                         }
-                        placeholder="Giải thích đáp án"
+                        placeholder="J_123"
                       />
                     </div>
                   </div>

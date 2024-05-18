@@ -1,7 +1,7 @@
 'use client';
 import Loader from 'components/Loader';
 import { FLASH_CARD_STATUS, METHOD } from 'global';
-
+import { useTranslation } from 'app/i18n/client';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { isBlank, uuid } from 'utils/common';
 import FlashCardItem from './FlashCardItem';
@@ -19,22 +19,10 @@ import CloseIcon from 'assets/svg/x.svg';
 
 type Props = {};
 
-const FlashCardStatusOptions = [
-  {
-    label: 'Tất cả',
-    value: '',
-  },
-  {
-    label: 'Chưa thuộc',
-    value: FLASH_CARD_STATUS.UNLEARNED,
-  },
-  {
-    label: 'Đã thuộc',
-    value: FLASH_CARD_STATUS.LEARNED,
-  },
-];
+
 
 const FlashCard = (props: Props) => {
+  const { t } = useTranslation();
   const componentId = useRef(uuid());
   const [createModal, setCreateModal] = useState(false);
   const [delaySlider, setDelaySlider] = useState(false);
@@ -60,6 +48,20 @@ const FlashCard = (props: Props) => {
     }
   }, [viewModal]);
 
+  const FlashCardStatusOptions = [
+    {
+      label: t('J_86'),
+      value: '',
+    },
+    {
+      label: t('J_200'),
+      value: FLASH_CARD_STATUS.UNLEARNED,
+    },
+    {
+      label: t('J_201'),
+      value: FLASH_CARD_STATUS.LEARNED,
+    },
+  ];
   return (
     <Loader
       id={componentId.current}
@@ -68,7 +70,7 @@ const FlashCard = (props: Props) => {
     >
       <div className="px-5 py-6 flex justify-between ">
         <div className="text-lg font-semibold h-full flex items-center">
-          Flashcard
+          {t('J_199')}
         </div>
         <div className="flex items-center gap-4">
           <div>
@@ -108,17 +110,17 @@ const FlashCard = (props: Props) => {
       ) : (
         <div className="h-full w-full flex flex-col items-center justify-center">
           <div className="text-lg font-bold text-gray-900 mb-1">
-            Không tìm thấy dữ liệu
+            {t('J_202')}
           </div>
           <div className="text-sm font-normal text-gray-500 mb-6 ">
-            Bạn chưa có flash card nào , tạo mới ngay!
+            {t('J_203')}
           </div>
           <button
             type="button"
             className="btn-primary btn-icon"
             onClick={handleCreateClick}
           >
-            <Plus /> Thêm flashcard
+            <Plus /> {t('J_204')}
           </button>
         </div>
       )}

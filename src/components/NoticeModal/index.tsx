@@ -37,7 +37,7 @@ const NoticeModal = (props: NoticeModalProps) => {
           type="button"
           onClick={props.onConfirm}
         >
-          {t('Đồng ý')}
+          {t('J_62')}
         </button>
       </div>
     </div>
