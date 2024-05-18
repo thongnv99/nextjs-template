@@ -1,8 +1,6 @@
 import { METHOD } from 'global';
 import { useMutation } from 'hooks/swr';
 import { NotificationConfig } from 'interfaces';
-import { useTranslation } from 'app/i18n/client';
-const { t } = useTranslation();
 
 export const useCreateQuestionMutation = ({
   onSuccess,
