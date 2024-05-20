@@ -19,10 +19,15 @@ import EditIcon from 'assets/svg/edit-2.svg';
 import ButtonCell from 'components/DataGrid/ButtonCell';
 import ConfirmModal from 'components/ConfirmModal';
 import { formatNumber, uuid } from 'utils/common';
-import { METHOD } from 'global';
+import { METHOD, ROLES } from 'global';
 import { useMutation } from 'hooks/swr';
 import Badge from 'components/Badge';
 import BadgeCell from 'components/DataGrid/BadgeCell';
+import { Formik } from 'formik';
+import { useTranslation } from 'app/i18n/client';
+import Dropdown from 'elements/Dropdown';
+import { ROLES_TRANSLATE } from 'global/translate';
+import RadioGroup from 'elements/RadioGroup';
 const Coppy = (props: { onClick(): void }) => {
   return (
     <div>
@@ -53,6 +58,7 @@ const Edit = (props: { onClick(): void }) => {
 };
 
 const UserMgmtPage = () => {
+  const { t } = useTranslation();
   const gridRef = useRef<DataGridHandle>();
   const componentId = useRef(uuid());
   const [createModal, setCreateModal] = useState(false);
@@ -73,6 +79,9 @@ const UserMgmtPage = () => {
   };
   const handleShowEditModal = (data: IContest) => {
     setEditModal({ show: true, data });
+  };
+  const handleCloseEditModal = () => {
+    setEditModal({ show: false });
   };
 
   //lấy danh sách cuộc thi hiện tại
@@ -99,6 +108,7 @@ const UserMgmtPage = () => {
     },
     onSuccess: data => {
       setConfirmDeleteModal({ show: false });
+      handleCloseEditModal();
       refreshData();
     },
   });
@@ -142,6 +152,13 @@ const UserMgmtPage = () => {
       },
     },
     {
+      headerName: 'Loại tài khoản',
+      field: 'role',
+      valueFormatter: params => {
+        return t(ROLES_TRANSLATE[params.value]);
+      },
+    },
+    {
       headerName: 'Số cuộc thi tham gia',
       field: 'contest.totalSessionCompleted',
       cellClass: 'text-right',
@@ -181,13 +198,20 @@ const UserMgmtPage = () => {
     {
       headerName: '',
       pinned: 'right',
-      maxWidth: 60,
+      maxWidth: 200,
       cellRenderer: ButtonCell,
       cellRendererParams: {
         buttons: [
           {
             render: Trash,
             onClick: handleShowConfirmDelete,
+          },
+          {
+            render: Edit,
+            onClick: handleShowEditModal,
+            hide: (data: Record<string, unknown>) => {
+              return data.role === ROLES.ADMIN;
+            },
           },
         ],
       },
@@ -209,6 +233,12 @@ const UserMgmtPage = () => {
         (confirmDeleteModal.data?.statusInfo as any)?.status === 'LOCKED'
           ? 'ACTIVE'
           : 'LOCKED',
+    });
+  };
+  const handleSubmitEdit = (values: { role: string }) => {
+    updateUser({
+      userId: editModal.data.id,
+      role: values.role,
     });
   };
 
@@ -262,6 +292,59 @@ const UserMgmtPage = () => {
           onCancel={handleCloseDelete}
           onConfirm={handleConfirmDelete}
         />
+      </ModalProvider>
+      <ModalProvider show={editModal.show} onClose={handleCloseEditModal}>
+        {editModal.data && (
+          <div className="w-screen max-w-screen-sm p-6">
+            <div className="flex flex-col mb-5">
+              <div className="text-lg font-bold text-gray-900">
+                {t('Cập nhật loại tài khoản')}
+              </div>
+            </div>
+            <Formik
+              initialValues={{
+                role: editModal.data.role,
+              }}
+              onSubmit={handleSubmitEdit}
+            >
+              {({ values, handleSubmit, setFieldValue }) => (
+                <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                  <RadioGroup
+                    value={values.role}
+                    className="flex flex-col gap-2"
+                    options={[
+                      {
+                        label: ROLES_TRANSLATE[ROLES.STAFF],
+                        value: ROLES.STAFF,
+                      },
+                      {
+                        label: ROLES_TRANSLATE[ROLES.USER_FREE],
+                        value: ROLES.USER_FREE,
+                      },
+                      {
+                        label: ROLES_TRANSLATE[ROLES.USER_PREMIUM],
+                        value: ROLES.USER_PREMIUM,
+                      },
+                    ]}
+                    onChange={value => setFieldValue('role', value)}
+                  />
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      className="btn flex-1"
+                      onClick={handleCloseEditModal}
+                    >
+                      {t('J_61')}
+                    </button>
+                    <button type="submit" className="btn-primary flex-1">
+                      {t('C_1')}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </Formik>
+          </div>
+        )}
       </ModalProvider>
     </Loader>
   );
