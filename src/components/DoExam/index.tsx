@@ -360,7 +360,9 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                     <button
                       className="btn !bg-primary-50  w-full mt-2"
                       type="button"
-                      onClick={() => setTriggerShowAnswer({ show: true })}
+                      onClick={() =>
+                        setTriggerShowAnswer({ show: !triggerShowAnswer.show })
+                      }
                     >
                       {t('J_153')}
                     </button>
