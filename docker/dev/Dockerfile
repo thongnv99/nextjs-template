@@ -9,7 +9,7 @@ COPY yarn.lock ./
 
 COPY . .
 
-COPY docker/.env .env.production
+COPY docker/dev/.env .env.production
 RUN yarn 
 RUN yarn build
 
