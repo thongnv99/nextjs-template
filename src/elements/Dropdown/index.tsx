@@ -72,7 +72,7 @@ const Dropdown = (props: DropdownProps) => {
         <div className="relative w-full">
           <Listbox.Button className="dropdown-button">
             <span className="block truncate font-normal">
-              {mapLabel[selected ?? ''] ?? props.placeholder ?? ''}
+              {t(mapLabel[selected ?? ''] ?? props.placeholder ?? '')}
             </span>
             <span className=" ">
               <ChevronDown
@@ -111,7 +111,7 @@ const Dropdown = (props: DropdownProps) => {
                           selected ? 'font-medium' : 'font-normal'
                         }`}
                       >
-                        {option.label}
+                        {t(option.label)}
                       </span>
                       {selected ? (
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">

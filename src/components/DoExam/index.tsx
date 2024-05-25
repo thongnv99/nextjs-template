@@ -289,15 +289,23 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
               ))}
             </div>
             <div className=" md:min-w-[30rem] sticky md:h-screen pb-2 md:pb-[12rem] top-0 right-0  flex flex-col gap-4">
-              <div className=" w-full border border-gray-200 bg-white p-4 rounded-md flex flex-col ">
+              <div className=" w-full border border-gray-200 bg-white p-2 md:p-4 rounded-md flex flex-col ">
                 {!hasSaveSession && (
                   <div className="w-full mb-2 md:mb-4 relative">
                     <div className="md:block hidden">{t('J_151')}</div>
                     {expandTime && (
-                      <div className=" block md:hidden mb-2">
-                        <h1 className="text-center text-[2rem] md:text-[3rem]">
+                      <div className=" md:hidden  flex gap-2">
+                        <h1 className="text-center text-[1.4rem] md:text-[3rem]">
                           {examData?.title}
                         </h1>
+                        <div
+                          className="block md:hidden  p-2 border border-slate-100"
+                          onClick={() => {
+                            setExpandTime(!expandTime);
+                          }}
+                        >
+                          {!expandTime ? <ChevronDown /> : <ChevronUp />}
+                        </div>
                       </div>
                     )}
 
@@ -311,23 +319,24 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                   </div>
                 )}
                 {hasSaveSession && (
-                  <div className=" block md:hidden mb-2">
-                    <h1 className="text-center text-[2rem] md:text-[3rem]">
+                  <div className="  md:hidden  flex gap-2">
+                    <h1 className="text-center text-[1.4rem] md:text-[3rem]">
                       {examData?.title}
                     </h1>
+                    <div
+                      className="block md:hidden  p-2 border border-slate-100"
+                      onClick={() => {
+                        setExpandTime(!expandTime);
+                      }}
+                    >
+                      {!expandTime ? <ChevronDown /> : <ChevronUp />}
+                    </div>
                   </div>
                 )}
-                <div
-                  className="block md:hidden absolute right-0 top-0"
-                  onClick={() => {
-                    setExpandTime(!expandTime);
-                  }}
-                >
-                  {expandTime ? <ChevronDown /> : <ChevronUp />}
-                </div>
+
                 {expandTime && (
                   <button
-                    className="btn-primary w-full mb-2"
+                    className="btn-primary w-full my-2"
                     type="button"
                     onClick={() => {
                       setSubmitModal({ show: true, hasSaveSession: false });
@@ -351,7 +360,9 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                     <button
                       className="btn !bg-primary-50  w-full mt-2"
                       type="button"
-                      onClick={() => setTriggerShowAnswer({ show: true })}
+                      onClick={() =>
+                        setTriggerShowAnswer({ show: !triggerShowAnswer.show })
+                      }
                     >
                       {t('J_153')}
                     </button>

@@ -122,9 +122,9 @@ const BlogForm = () => {
   return (
     <Loader
       id={componentId.current}
-      className="p-6 w-full bg-white m-auto max-w-screen-lg flex flex-col h-full overflow-y-auto"
+      className="p-6 w-full bg-white m-auto max-w-screen-lg flex flex-col"
     >
-      <div className="flex justify-between items-center sticky ">
+      <div className=" sticky -top-2 left-0 bg-white flex justify-between items-center  p-4">
         <div className="text-lg font-semibold">
           {isBlank(blogId) ? 'Tạo blog' : 'Cập nhật blog'}
         </div>

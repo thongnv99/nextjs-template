@@ -33,8 +33,12 @@ const DoQuestion = (props: {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (props.triggerShowAnswer?.show) {
-      setOpen(true);
+    if (props.triggerShowAnswer) {
+      if (props.triggerShowAnswer.show) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
     }
   }, [props.triggerShowAnswer]);
 
