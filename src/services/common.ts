@@ -3,19 +3,27 @@ import { IBlog, PaymentPackageRes, RestError, RestResponse } from 'interfaces';
 import { fetcher } from 'utils/restApi';
 
 export const getPaymentPackages = async () => {
-  const res = await fetcher<{ items: PaymentPackageRes[] }>(
-    '/api/v1/packages',
-    METHOD.GET,
-  );
-  return res.result?.items ?? [];
+  try {
+    const res = await fetcher<{ items: PaymentPackageRes[] }>(
+      '/api/v1/packages',
+      METHOD.GET,
+    );
+    return res.result?.items ?? [];
+  } catch (error) {
+    return [];
+  }
 };
 
 export const getPaymentMethods = async () => {
-  const res = await fetcher<{ items: PaymentPackageRes[] }>(
-    '/api/v1/paymentMethods',
-    METHOD.GET,
-  );
-  return res.result?.items ?? [];
+  try {
+    const res = await fetcher<{ items: PaymentPackageRes[] }>(
+      '/api/v1/paymentMethods',
+      METHOD.GET,
+    );
+    return res.result?.items ?? [];
+  } catch (error) {
+    return [];
+  }
 };
 
 export const getBlogs = async () => {
