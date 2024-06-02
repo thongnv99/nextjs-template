@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - dev
+    paths:
+      - docker/dev/VESION
 jobs:
   build:
     runs-on: ubuntu-latest
