@@ -5,7 +5,7 @@ on:
     branches:
       - dev
     paths:
-      - 'docker/dev/VESION'
+      - 'docker/dev/VERSION'
 jobs:
   build:
     runs-on: ubuntu-latest
