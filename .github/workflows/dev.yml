@@ -10,10 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      VERSION: ${{ steps.set-output.outputs.VERSION }}
+      VERSION: ${{ steps.step1.outputs.VERSION }}
     steps:
-      - uses: actions/checkout@v3
       - name: Build and push docker image
+        uses: actions/checkout@v3
+      - id: step1
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -21,7 +22,7 @@ jobs:
           TAG: latest
         run: |
           export VERSION=$(cat docker/dev/VERSION)
-          echo "VERSION=$VERSION"
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           # docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           # docker build -t $IMAGE_NAME:$VERSION -f docker/dev/Dockerfile .
           # docker tag $IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
@@ -33,6 +34,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: SSH to VPS and deploy
+        env:
+          VERSION: ${{needs.build.outputs.VERSION}}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
