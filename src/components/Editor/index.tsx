@@ -5,6 +5,7 @@ import CustomEditor from 'ckeditor5-custom-build/build/ckeditor';
 import { ImageUploadAdapter } from './plugin';
 import { useSession } from 'next-auth/react';
 import './style.scss';
+import { useTranslation } from 'app/i18n/client';
 interface EditorProps {
   innerRef?: (instance: CustomEditor) => void;
   data?: string;
@@ -17,6 +18,7 @@ interface EditorProps {
 const Editor = (props: EditorProps) => {
   const editorRef = React.useRef<CustomEditor>();
   const { data } = useSession();
+  const { t } = useTranslation();
 
   return (
     <div className={`h-full editor`}>
@@ -70,7 +72,7 @@ const Editor = (props: EditorProps) => {
             ],
           },
           removePlugins: ['Title'],
-          placeholder: props.placeholder,
+          placeholder: t(props.placeholder) ?? '',
         }}
       />
     </div>

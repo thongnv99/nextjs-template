@@ -48,8 +48,6 @@ interface QuestionFormValues {
   isMultiChoice?: boolean;
 }
 
-
-
 interface QuestionFormProps {
   questionId?: string; // for edit or duplicate
   isEdit?: boolean;
@@ -71,7 +69,7 @@ const QuestionForm = (props: QuestionFormProps) => {
       value: QUESTION_TYPE.ESSAY,
     },
   ];
-  
+
   const LevelOptions = [
     {
       label: t('J_215'),
@@ -299,7 +297,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                 <div className="title">{t('J_223')}</div>
                 <div className="flex flex-col gap-2">
                   <TextInput
-                    label='J_119'
+                    label="J_119"
                     name="score"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -392,9 +390,7 @@ const QuestionForm = (props: QuestionFormProps) => {
                   </div>
                   {values.type === QUESTION_TYPE.FILL_IN_THE_BLANK && (
                     <>
-                      <div className="ck-content mt-4">
-                        {t('J_227')}
-                      </div>
+                      <div className="ck-content mt-4">{t('J_227')}</div>
                     </>
                   )}
                 </div>
@@ -489,12 +485,13 @@ const QuestionForm = (props: QuestionFormProps) => {
                         }}
                         className="btn"
                       >
-                        t{('J_229')}
+                        {t('J_229')}
                       </button>
                     </div>
-                    <div className="text-right">
-                      {t('J_230')}
-                    </div>
+                    <div
+                      className="text-right"
+                      dangerouslySetInnerHTML={{ __html: t('J_230') as string }}
+                    ></div>
                   </div>
                 )}
 

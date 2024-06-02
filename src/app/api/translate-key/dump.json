@@ -1,5 +1,65 @@
 [
   {
+    "Key": "1001",
+    "VI": "Không tìm thấy user",
+    "JA": "ユーザーが見つかりません"
+  },
+  {
+    "Key": "1002",
+    "VI": "Sai tên đăng nhập hoặc mật khẩu",
+    "JA": "メールアドレス、又はパスワードが正しくありません。ご確認をお願いいたします。"
+  },
+  {
+    "Key": "1003",
+    "VI": "Email đã được đăng ký",
+    "JA": "すでに登録済みのメールアドレス"
+  },
+  {
+    "Key": "1004",
+    "VI": "Số điện thoại đã được đăng ký",
+    "JA": "すでに登録済みの電話番号"
+  },
+  {
+    "Key": "1005",
+    "VI": "Tài khoản của bạn đang bị khóa",
+    "JA": "アカウントがロックされています"
+  },
+  {
+    "Key": "1006",
+    "VI": "Tài khoản của bạn đang bị khóa",
+    "JA": "アカウントがロックされています"
+  },
+  {
+    "Key": "1007",
+    "VI": "Không có quyền truy cập",
+    "JA": "アクセス権限がありません"
+  },
+  {
+    "Key": "1008",
+    "VI": "Phiên làm việc hết hạn",
+    "JA": "セッションの有効期限が切れました"
+  },
+  {
+    "Key": "1009",
+    "VI": "Feedback không tồn tại",
+    "JA": "フィードバックがありません"
+  },
+  {
+    "Key": "1010",
+    "VI": "Email đã được xác thực",
+    "JA": "メールが認証されました"
+  },
+  {
+    "Key": "1011",
+    "VI": "Email chưa được xác thực. Vui lòng kiểm tra email và làm theo hướng dẫn",
+    "JA": "メールが認証されていません。メールを確認し、メールアドレスの本人確認を完了させてください。"
+  },
+  {
+    "Key": "9014",
+    "VI": "Mật khẩu cuộc thi không đúng",
+    "JA": "パスワードが正しくありません。"
+  },
+  {
     "Key": "N_1",
     "VI": "{{field}} không được để trống",
     "JA": "{{field}} 必須"
@@ -37,7 +97,7 @@
   {
     "Key": "J_1",
     "VI": "Đề thi",
-    "JA": "過去問題集"
+    "JA": "問題集"
   },
   {
     "Key": "J_2",
@@ -51,8 +111,8 @@
   },
   {
     "Key": "J_4",
-    "VI": "Tạo câu hỏi",
-    "JA": "質問作成"
+    "VI": "Tạo  câu hỏi",
+    "JA": "質問を作成"
   },
   {
     "Key": "J_5",
@@ -72,7 +132,7 @@
   {
     "Key": "J_8",
     "VI": "Tạo blog",
-    "JA": "ブログ作成"
+    "JA": "ブログを作成"
   },
   {
     "Key": "J_9",
@@ -86,7 +146,7 @@
   },
   {
     "Key": "J_11",
-    "VI": "Trắc nghiệm",
+    "VI": "Trắc ngiệm",
     "JA": "選択肢問題"
   },
   {
@@ -227,12 +287,12 @@
   {
     "Key": "J_39",
     "VI": "Danh sách đề thi",
-    "JA": "試験問題一覧"
+    "JA": "問題集一覧"
   },
   {
     "Key": "J_40",
     "VI": "Thêm đề thi",
-    "JA": "試験問題を追加する"
+    "JA": "問題集を追加"
   },
   {
     "Key": "J_41",
@@ -241,7 +301,7 @@
   },
   {
     "Key": "J_42",
-    "VI": "Đã chọn",
+    "VI": "đã chọn",
     "JA": "選択された"
   },
   {
@@ -252,7 +312,7 @@
   {
     "Key": "J_44",
     "VI": "Cuộc thi đã tham gia",
-    "JA": "コンテストに参加しました"
+    "JA": "模擬試験に参加しました"
   },
   {
     "Key": "J_45",
@@ -272,17 +332,17 @@
   {
     "Key": "J_48",
     "VI": "Xóa đề thi",
-    "JA": "試験問題を削除する"
+    "JA": "問題集を削除する"
   },
   {
     "Key": "J_49",
     "VI": "Xóa đề thi thành công",
-    "JA": "試験問題が正常に削除されました"
+    "JA": "問題集が正常に削除されました"
   },
   {
     "Key": "J_50",
     "VI": "Đăng đề thi",
-    "JA": "試験作成"
+    "JA": "問題集を投稿"
   },
   {
     "Key": "J_51",
@@ -302,7 +362,7 @@
   {
     "Key": "J_54",
     "VI": "Thi",
-    "JA": "試験問題開始"
+    "JA": "開始"
   },
   {
     "Key": "J_55",
@@ -327,12 +387,12 @@
   {
     "Key": "J_59",
     "VI": "Đề thi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa câu hỏi này không?",
-    "JA": "試験問題は完全に削除されます。この試験問題を削除してもよろしいですか?"
+    "JA": "本当に問題集を削除しますか？削除した問題集は復元できません。"
   },
   {
     "Key": "J_60",
     "VI": "Sau khi đăng đề thi, người dùng khác có thể sử dụng đề thi",
-    "JA": "試験問題を投稿すると、他のユーザーがテストを使用できるようになります"
+    "JA": "問題集を投稿すると、他のユーザーが問題集を使用することができます。"
   },
   {
     "Key": "J_61",
@@ -347,27 +407,27 @@
   {
     "Key": "J_63",
     "VI": "Thêm đề thi",
-    "JA": "試験問題を追加する"
+    "JA": "問題集を追加"
   },
   {
     "Key": "J_64",
     "VI": "Thêm đề thi thành công.",
-    "JA": "試験問題が正常に追加されました。"
+    "JA": "問題集を追加済"
   },
   {
     "Key": "J_65",
     "VI": "Cập nhật đề thi",
-    "JA": "試験問題を更新する"
+    "JA": "問題集を更新"
   },
   {
     "Key": "J_66",
     "VI": "Cập nhật đề thi thành công.",
-    "JA": "試験問題が正常に更新されました。"
+    "JA": "問題集を更新完了"
   },
   {
     "Key": "J_67",
-    "VI": "Tên đề thi",
-    "JA": "試験タイトル"
+    "VI": "Tên đề thi...",
+    "JA": "問題集タイトル"
   },
   {
     "Key": "J_68",
@@ -377,7 +437,7 @@
   {
     "Key": "J_69",
     "VI": "Nhập tên và mô tả cho đề thi",
-    "JA": "試験問題の名前と説明を入力してください"
+    "JA": "問題集の名前と説明を入力してください"
   },
   {
     "Key": "J_70",
@@ -403,5 +463,830 @@
     "Key": "J_74",
     "VI": "Lịch sử",
     "JA": "歴史"
+  },
+  {
+    "Key": "J_75",
+    "VI": "Lưu bài viết",
+    "JA": "保存"
+  },
+  {
+    "Key": "J_76",
+    "VI": "Lưu bài viết thành công",
+    "JA": "記事を保存済"
+  },
+  {
+    "Key": "J_77",
+    "VI": "Cập nhật bài viết",
+    "JA": "更新"
+  },
+  {
+    "Key": "J_78",
+    "VI": "Cập nhật bài viết thành công",
+    "JA": "記事を更新済"
+  },
+  {
+    "Key": "J_79",
+    "VI": "Xem trước",
+    "JA": "プレビュー表示"
+  },
+  {
+    "Key": "J_80",
+    "VI": "Lưu blog",
+    "JA": "ブログ保存"
+  },
+  {
+    "Key": "J_81",
+    "VI": "Tiêu đề",
+    "JA": "タイトル"
+  },
+  {
+    "Key": "J_82",
+    "VI": "Tiêu đề của blog",
+    "JA": "ブログのタイトル"
+  },
+  {
+    "Key": "J_83",
+    "VI": "Nội dung",
+    "JA": "内容"
+  },
+  {
+    "Key": "J_84",
+    "VI": "Tạo bài viết",
+    "JA": "記事を作成する"
+  },
+  {
+    "Key": "J_85",
+    "VI": "Bài viết của bạn đã được lưu vào hệ thống.",
+    "JA": "記事が保存されました。"
+  },
+  {
+    "Key": "J_86",
+    "VI": "Tất cả",
+    "JA": "全て"
+  },
+  {
+    "Key": "J_87",
+    "VI": "Quản lý blog",
+    "JA": "ブログ管理"
+  },
+  {
+    "Key": "J_88",
+    "VI": "Xóa bài viết",
+    "JA": "記事削除"
+  },
+  {
+    "Key": "J_89",
+    "VI": "Xóa bài viết thành công",
+    "JA": "記事が削除されました"
+  },
+  {
+    "Key": "J_90",
+    "VI": "Tạo blog",
+    "JA": "ブログ作成"
+  },
+  {
+    "Key": "J_91",
+    "VI": "Bạn có chắc chắn muốn hủy bài viết này không?",
+    "JA": "編集を破棄する?"
+  },
+  {
+    "Key": "J_92",
+    "VI": "Đăng bài viết",
+    "JA": "投稿"
+  },
+  {
+    "Key": "J_93",
+    "VI": "Bạn có chắc chắn muốn đăng bài viết này không?",
+    "JA": "この記事を投稿する?"
+  },
+  {
+    "Key": "J_94",
+    "VI": "Thời gian bắt đầu",
+    "JA": "開始時間"
+  },
+  {
+    "Key": "J_95",
+    "VI": "Thời gian kết thúc",
+    "JA": "終了時間"
+  },
+  {
+    "Key": "J_96",
+    "VI": "Thời gian làm bài",
+    "JA": "制限時間"
+  },
+  {
+    "Key": "J_97",
+    "VI": "Phần thi",
+    "JA": "セクション"
+  },
+  {
+    "Key": "J_98",
+    "VI": "Quay lại",
+    "JA": "戻る"
+  },
+  {
+    "Key": "J_99",
+    "VI": "Bắt đầu",
+    "JA": "開始"
+  },
+  {
+    "Key": "J_100",
+    "VI": "Bắt đầu làm bài",
+    "JA": "問題を開始"
+  },
+  {
+    "Key": "J_101",
+    "VI": "Thời gian sẽ được tính khi chọn bắt đầu.",
+    "JA": "開始すると時間をカウントされます。"
+  },
+  {
+    "Key": "J_102",
+    "VI": "Thêm cuộc thi",
+    "JA": "模擬試験を追加"
+  },
+  {
+    "Key": "J_103",
+    "VI": "Thêm cuộc thi thành công.",
+    "JA": "模擬試験を追加済"
+  },
+  {
+    "Key": "J_104",
+    "VI": "Cập nhật đề thi",
+    "JA": "問題集を更新"
+  },
+  {
+    "Key": "J_105",
+    "VI": "Cập nhật đề thi thành công.",
+    "JA": "問題集が更新された"
+  },
+  {
+    "Key": "J_106",
+    "VI": "Nhập thông tin cho cuộc thi",
+    "JA": "模擬試験の情報を入力してください"
+  },
+  {
+    "Key": "J_107",
+    "VI": "Tên cuộc thi...",
+    "JA": "模擬試験タイトル"
+  },
+  {
+    "Key": "J_108",
+    "VI": "Thời gian bắt đầu",
+    "JA": "開始時間"
+  },
+  {
+    "Key": "J_109",
+    "VI": "Kết thúc",
+    "JA": "終了"
+  },
+  {
+    "Key": "J_110",
+    "VI": "Thời gian kết thúc",
+    "JA": "終了時間"
+  },
+  {
+    "Key": "J_111",
+    "VI": "Nhập mật khẩu",
+    "JA": "パスワードを入力"
+  },
+  {
+    "Key": "J_112",
+    "VI": "Mật khẩu",
+    "JA": "パスワード"
+  },
+  {
+    "Key": "J_113",
+    "VI": "Chấm điểm",
+    "JA": "採点"
+  },
+  {
+    "Key": "J_114",
+    "VI": "Chấm điểm thành công",
+    "JA": "採点済"
+  },
+  {
+    "Key": "J_115",
+    "VI": "Phần {{idx}}",
+    "JA": "セクション {{idx}}"
+  },
+  {
+    "Key": "J_116",
+    "VI": "Câu {{idx}}",
+    "JA": "門 {{idx}}"
+  },
+  {
+    "Key": "J_117",
+    "VI": "Bài làm:",
+    "JA": "解答："
+  },
+  {
+    "Key": "J_118",
+    "VI": "Chấm bài:",
+    "JA": "添削："
+  },
+  {
+    "Key": "J_119",
+    "VI": "Điểm",
+    "JA": "点数"
+  },
+  {
+    "Key": "J_120",
+    "VI": "Ghi chú",
+    "JA": "注記"
+  },
+  {
+    "Key": "J_121",
+    "VI": "Đáp án đúng:",
+    "JA": "正解："
+  },
+  {
+    "Key": "J_122",
+    "VI": "Điểm:",
+    "JA": "点数："
+  },
+  {
+    "Key": "J_123",
+    "VI": "Giải thích đáp án",
+    "JA": "解説"
+  },
+  {
+    "Key": "J_124",
+    "VI": "Cập nhật điểm",
+    "JA": "点数更新"
+  },
+  {
+    "Key": "J_125",
+    "VI": "Lịch sử cuộc thi",
+    "JA": "歴史"
+  },
+  {
+    "Key": "J_126",
+    "VI": "Trả lời đúng",
+    "JA": "正解"
+  },
+  {
+    "Key": "J_127",
+    "VI": "Trả lời sai",
+    "JA": "不正解"
+  },
+  {
+    "Key": "J_128",
+    "VI": "Không trả lời",
+    "JA": "未回答"
+  },
+  {
+    "Key": "J_129",
+    "VI": "Tổng",
+    "JA": "合計"
+  },
+  {
+    "Key": "J_130",
+    "VI": "Phút",
+    "JA": "分"
+  },
+  {
+    "Key": "J_131",
+    "VI": "Đang làm bài",
+    "JA": "未完了の問題"
+  },
+  {
+    "Key": "J_132",
+    "VI": "Xóa cuộc thi",
+    "JA": "模擬試験の削除"
+  },
+  {
+    "Key": "J_133",
+    "VI": "Xóa cuộc thi thành công",
+    "JA": "模擬試験が正常に削除されました"
+  },
+  {
+    "Key": "J_134",
+    "VI": "Đăng cuộc thi",
+    "JA": "模擬試験を投稿"
+  },
+  {
+    "Key": "J_135",
+    "VI": "Đăng cuộc thi thành công",
+    "JA": "模擬試験が投稿されました"
+  },
+  {
+    "Key": "J_136",
+    "VI": "Nháp",
+    "JA": "下書き"
+  },
+  {
+    "Key": "J_137",
+    "VI": "Đã đăng",
+    "JA": "投稿しました"
+  },
+  {
+    "Key": "J_138",
+    "VI": "Cuộc thi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa cuộc thi này không?",
+    "JA": "本当に模擬試験を削除しますか？削除した模擬試験は復元できません。"
+  },
+  {
+    "Key": "J_139",
+    "VI": "Bạn có chắc chắn muốn đăng cuộc thi này không?",
+    "JA": "模擬試験を投稿しますか?"
+  },
+  {
+    "Key": "J_140",
+    "VI": "Thêm cuộc thi",
+    "JA": "模擬試験を追加"
+  },
+  {
+    "Key": "J_141",
+    "VI": "Danh sách cuộc thi",
+    "JA": "模擬試験一覧"
+  },
+  {
+    "Key": "J_142",
+    "VI": "Đáp án:",
+    "JA": "正解："
+  },
+  {
+    "Key": "J_143",
+    "VI": "Kết quả",
+    "JA": "結果"
+  },
+  {
+    "Key": "J_144",
+    "VI": "Tên đề thi",
+    "JA": "試験名"
+  },
+  {
+    "Key": "J_145",
+    "VI": "Bài thi cần thời gian để xử lý!",
+    "JA": "採点には時間がかかります。"
+  },
+  {
+    "Key": "J_146",
+    "VI": "Đáp án đúng",
+    "JA": "正解"
+  },
+  {
+    "Key": "J_147",
+    "VI": "Lịch sử thi",
+    "JA": "履歴"
+  },
+  {
+    "Key": "J_148",
+    "VI": "Chi tiết",
+    "JA": "詳細"
+  },
+  {
+    "Key": "J_149",
+    "VI": "Nộp bài",
+    "JA": "提出する"
+  },
+  {
+    "Key": "J_150",
+    "VI": "Nộp bài thành công",
+    "JA": "提出されました"
+  },
+  {
+    "Key": "J_151",
+    "VI": "Thời gian còn lại",
+    "JA": "残り時間"
+  },
+  {
+    "Key": "J_152",
+    "VI": "Lưu phiên thi",
+    "JA": "一時中断"
+  },
+  {
+    "Key": "J_153",
+    "VI": "Hiển thị đáp án",
+    "JA": "解説を表示"
+  },
+  {
+    "Key": "J_154",
+    "VI": "Hết thời gian",
+    "JA": "タイムアップ"
+  },
+  {
+    "Key": "J_155",
+    "VI": "Thời gian làm bài đã hết",
+    "JA": "試験時間は終わりました"
+  },
+  {
+    "Key": "J_156",
+    "VI": "Lưu",
+    "JA": "保存"
+  },
+  {
+    "Key": "J_157",
+    "VI": "Lưu bài thi",
+    "JA": "一時中断"
+  },
+  {
+    "Key": "J_158",
+    "VI": "Hoàn thành bài thi",
+    "JA": "試験を終了"
+  },
+  {
+    "Key": "J_159",
+    "VI": "Phiện thi sẽ được hệ thống lưu lại, bạn có thể quay lại để tiếp tục luyện tập",
+    "JA": "問題を保存されますので、問題を続けることができます。"
+  },
+  {
+    "Key": "J_160",
+    "VI": "Vui lòng kiểm tra kĩ đáp án trước khi nộp bài",
+    "JA": "回答をよく確認してください"
+  },
+  {
+    "Key": "J_161",
+    "VI": "Không có dữ liệu",
+    "JA": "データなし"
+  },
+  {
+    "Key": "J_162",
+    "VI": "Xảy ra lỗi",
+    "JA": "エラーが発生しました"
+  },
+  {
+    "Key": "J_163",
+    "VI": "Chọn đề",
+    "JA": "問題集を選択"
+  },
+  {
+    "Key": "J_164",
+    "VI": "Đề thi",
+    "JA": "問題集"
+  },
+  {
+    "Key": "J_165",
+    "VI": "Chọn đề thi",
+    "JA": "問題集を選択"
+  },
+  {
+    "Key": "J_166",
+    "VI": "Cập nhật cuộc thi",
+    "JA": "模擬試験を更新"
+  },
+  {
+    "Key": "J_167",
+    "VI": "Cập nhật đề thi",
+    "JA": "問題集を更新"
+  },
+  {
+    "Key": "J_168",
+    "VI": "Cập nhật cuộc thi thành công.",
+    "JA": "模擬試験が正常に更新されました。"
+  },
+  {
+    "Key": "J_169",
+    "VI": "Cập nhật đề thi thành công.",
+    "JA": "問題集が正常に更新されました。"
+  },
+  {
+    "Key": "J_170",
+    "VI": "Danh sách câu hỏi",
+    "JA": "質問一覧"
+  },
+  {
+    "Key": "J_171",
+    "VI": "Thêm câu hỏi",
+    "JA": "質問を追加"
+  },
+  {
+    "Key": "J_172",
+    "VI": "Nhân bản",
+    "JA": "質問を複写"
+  },
+  {
+    "Key": "J_173",
+    "VI": "Thêm phần thi",
+    "JA": "セクションを追加"
+  },
+  {
+    "Key": "J_174",
+    "VI": "Ngày tạo",
+    "JA": "作成日"
+  },
+  {
+    "Key": "J_175",
+    "VI": "<strong>Hướng dẫn:</strong> Chọn <strong>Thi thử</strong> để tính thời gian làm bài. chọn <strong>Luyện tập</strong> để không bị giới hạn thời gian làm bài!",
+    "JA": "<strong>注意:</strong> <strong>本番</strong> を選択すると、本番形式で全ての問題を解答(時間制限有り)。 <strong>練習</strong> を選択すると、問題と解説が交互に表示できます(時間制限なし)。"
+  },
+  {
+    "Key": "J_176",
+    "VI": "Luyện tập",
+    "JA": "練習"
+  },
+  {
+    "Key": "J_177",
+    "VI": "Thi thử",
+    "JA": "本番"
+  },
+  {
+    "Key": "J_178",
+    "VI": "Bạn có chắc chắn muốn luyện tập",
+    "JA": "本当に練習しますか？"
+  },
+  {
+    "Key": "J_179",
+    "VI": "Thời gian làm bài sẽ được tính khi chọn Bắt đầu",
+    "JA": "開始すると時間をカウントされます。"
+  },
+  {
+    "Key": "J_180",
+    "VI": "Đề mẫu",
+    "JA": "デフォルト問題集"
+  },
+  {
+    "Key": "J_181",
+    "VI": "Mẫu",
+    "JA": "デフォルト"
+  },
+  {
+    "Key": "J_182",
+    "VI": "Tìm kiếm",
+    "JA": "検索"
+  },
+  {
+    "Key": "J_183",
+    "VI": "Nhập từ khóa tìm kiếm...",
+    "JA": "検索キーワードを入力してください..."
+  },
+  {
+    "Key": "J_184",
+    "VI": "Gửi feedback",
+    "JA": "フィードバックを送信"
+  },
+  {
+    "Key": "J_185",
+    "VI": "Gửi feedback thành công",
+    "JA": "フィードバックが送信されました"
+  },
+  {
+    "Key": "J_186",
+    "VI": "Feedback",
+    "JA": "フィードバック"
+  },
+  {
+    "Key": "J_187",
+    "VI": "Nhập nội dung cần phản hồi",
+    "JA": "フィードバック内容を入力してください"
+  },
+  {
+    "Key": "J_188",
+    "VI": "Thêm flash card",
+    "JA": "フラッシュカードを追加"
+  },
+  {
+    "Key": "J_189",
+    "VI": "Thêm flash card thành công.",
+    "JA": "フラッシュ カードが追加されました。"
+  },
+  {
+    "Key": "J_190",
+    "VI": "Cập nhật flash card",
+    "JA": "フラッシュカードを更新"
+  },
+  {
+    "Key": "J_191",
+    "VI": "Cập nhật flash card thành công.",
+    "JA": "フラッシュカードが更新されました。"
+  },
+  {
+    "Key": "J_192",
+    "VI": "Flash Card",
+    "JA": "フラッシュカード"
+  },
+  {
+    "Key": "J_193",
+    "VI": "Nhập nội dung câu hỏi và đáp án",
+    "JA": "用語と定義を入力して回答します"
+  },
+  {
+    "Key": "J_194",
+    "VI": "Đáp án",
+    "JA": "定義"
+  },
+  {
+    "Key": "J_195",
+    "VI": "Xóa flash card",
+    "JA": "フラッシュカードを削除"
+  },
+  {
+    "Key": "J_196",
+    "VI": "Xóa flash card thành công",
+    "JA": "フラッシュカードが消去されました"
+  },
+  {
+    "Key": "J_197",
+    "VI": "Xóa flash card",
+    "JA": "フラッシュカードを削除"
+  },
+  {
+    "Key": "J_198",
+    "VI": "Bạn có chắc chắn muốn xóa flash card này không?",
+    "JA": "本当にこのフラッシュ カードを削除しますか?"
+  },
+  {
+    "Key": "J_199",
+    "VI": "Flashcard",
+    "JA": "フラッシュカード"
+  },
+  {
+    "Key": "J_200",
+    "VI": "Chưa thuộc",
+    "JA": "まだ学習中"
+  },
+  {
+    "Key": "J_201",
+    "VI": "Đã thuộc",
+    "JA": "知っています"
+  },
+  {
+    "Key": "J_202",
+    "VI": "Không tìm thấy dữ liệu",
+    "JA": "データが見つかりませんでした"
+  },
+  {
+    "Key": "J_203",
+    "VI": "Bạn chưa có flash card nào , tạo mới ngay!",
+    "JA": "まだフラッシュ カードを持っていません。すぐ新しいカードを作成してください。"
+  },
+  {
+    "Key": "J_204",
+    "VI": "Thêm flashcard",
+    "JA": "フラッシュカードを追加"
+  },
+  {
+    "Key": "J_205",
+    "VI": "Click để lật flashcard",
+    "JA": "カードを捲るには、カードをクリックしてください"
+  },
+  {
+    "Key": "J_206",
+    "VI": "Đăng nhập",
+    "JA": "ログイン"
+  },
+  {
+    "Key": "J_207",
+    "VI": "Tiếng Việt",
+    "JA": "ベトナム語"
+  },
+  {
+    "Key": "J_208",
+    "VI": "Tiếng Nhật",
+    "JA": "日本語"
+  },
+  {
+    "Key": "J_209",
+    "VI": "Trắc nghiệm",
+    "JA": "選択肢問題"
+  },
+  {
+    "Key": "J_210",
+    "VI": "Loại",
+    "JA": "タイプ"
+  },
+  {
+    "Key": "J_211",
+    "VI": "Tags",
+    "JA": "タグ"
+  },
+  {
+    "Key": "J_212",
+    "VI": "Chi tiết phản hồi",
+    "JA": "フィードバック詳細"
+  },
+  {
+    "Key": "J_213",
+    "VI": "Chi tiết câu hỏi",
+    "JA": "質問詳細"
+  },
+  {
+    "Key": "J_214",
+    "VI": "Nhập đáp án",
+    "JA": "回答を入力してください"
+  },
+  {
+    "Key": "J_215",
+    "VI": "Dễ",
+    "JA": "簡単"
+  },
+  {
+    "Key": "J_216",
+    "VI": "Trung bình",
+    "JA": "普通"
+  },
+  {
+    "Key": "J_217",
+    "VI": "Khó",
+    "JA": "難しい"
+  },
+  {
+    "Key": "J_218",
+    "VI": "Cập nhật câu hỏi",
+    "JA": "質問を更新"
+  },
+  {
+    "Key": "J_219",
+    "VI": "Tạo mới câu hỏi",
+    "JA": "質問を作成"
+  },
+  {
+    "Key": "J_220",
+    "VI": "Cập nhật",
+    "JA": "更新"
+  },
+  {
+    "Key": "J_221",
+    "VI": "Tạo mới",
+    "JA": "新規作成"
+  },
+  {
+    "Key": "J_222",
+    "VI": "Hủy",
+    "JA": "キャンセル"
+  },
+  {
+    "Key": "J_223",
+    "VI": "Cài đặt",
+    "JA": "設定"
+  },
+  {
+    "Key": "J_224",
+    "VI": "Chưa có tags",
+    "JA": "まだタグがありません"
+  },
+  {
+    "Key": "J_225",
+    "VI": "Nhập nội dung để thêm tag",
+    "JA": "タグを追加するには内容を入力してください"
+  },
+  {
+    "Key": "J_226",
+    "VI": "Nhập nội dung câu hỏi",
+    "JA": "質問内容を入力してください"
+  },
+  {
+    "Key": "J_227",
+    "VI": "<strong>Hướng dẫn: </strong> Nhập nội dung câu hỏi, bôi đen phần muốn thay thế bằng chỗ trống và chọn biểu tượng{' '} <code>{`<>`}</code> trên toolbar{' '}",
+    "JA": "<strong>Tip: </strong> 質問の内容を入力し、空白に置き換えたい部分をハイライト表示して、ツールバーのアイコン{' '} <code>{`<>`}</code> を選択します。{' '}"
+  },
+  {
+    "Key": "J_228",
+    "VI": "Nhiều đáp án đúng",
+    "JA": "正解が一つ以上の問題"
+  },
+  {
+    "Key": "J_229",
+    "VI": "Thêm đáp án",
+    "JA": "回答を追加"
+  },
+  {
+    "Key": "J_230",
+    "VI": "<span>(*) Chọn <strong>đáp án đúng</strong> bằng cách Click vào ô vuông cạnh đáp án </span>",
+    "JA": "<span>(*) 答えの横にある四角形をクリックして<strong>正しい答え</strong>を選択してください </span>"
+  },
+  {
+    "Key": "J_231",
+    "VI": "Tạo câu hỏi",
+    "JA": "質問を作成"
+  },
+  {
+    "Key": "J_232",
+    "VI": "Tạo câu hỏi thành công",
+    "JA": "質問が作成されました"
+  },
+  {
+    "Key": "J_233",
+    "VI": "Cập nhật câu hỏi thành công",
+    "JA": "質問が更新されました"
+  },
+  {
+    "Key": "J_234",
+    "VI": "Xóa câu hỏi",
+    "JA": "質問を削除"
+  },
+  {
+    "Key": "J_235",
+    "VI": "Xóa câu hỏi thành công",
+    "JA": "質問が削除されました"
+  },
+  {
+    "Key": "J_236",
+    "VI": "Câu hỏi sẽ được xóa vĩnh viễn. Bạn có chắc chắn muốn xóa câu hỏi này không?",
+    "JA": "本当に問題集を削除しますか？削除した問題集は復元できません。"
+  },
+  {
+    "Key": "J_237",
+    "VI": "Loại câu hỏi",
+    "JA": "質問の種類"
+  },
+  {
+    "Key": "J_238",
+    "VI": "Câu hỏi mẫu",
+    "JA": "デフォルト質問"
+  },
+  {
+    "Key": "J_239",
+    "VI": "Phiên đăng nhập của bạn đã hết hạn. Vui lòng quay về trang login để đăng nhập lại",
+    "JA": "ログインセッションの有効期限が切れました。ログインページに戻って再度ログインしてください"
   }
 ]
