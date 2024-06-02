@@ -1,11 +1,10 @@
 name: Build DEV
-
 on:
   push:
     branches:
       - dev
-    # paths:
-    #   - 'docker/dev/VESION'
+    paths:
+      - 'docker/dev/VERSION'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,6 +22,10 @@ jobs:
         run: |
           export VERSION=$(cat docker/dev/VERSION)
           echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker build -t $IMAGE_NAME:$VERSION -f docker/dev/Dockerfile .
+          docker tag $IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -31,12 +34,13 @@ jobs:
         uses: actions/checkout@v2
       - name: SSH to VPS and deploy
         env:
-          VERSION: ${{needs.build.outputs.VERSION}}
+          NEW_VERSION: ${{needs.build.outputs.VERSION}}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          envs: VERSION
+          envs: NEW_VERSION
           script: |
-            echo "deploy job: VERSION=$VERSION"
+            cd ~/container/application/jcce/jcce-web
+            sh deploy.sh
