@@ -72,7 +72,7 @@ const Editor = (props: EditorProps) => {
             ],
           },
           removePlugins: ['Title'],
-          placeholder: t(props.placeholder) ?? '',
+          placeholder: (t(props.placeholder as string) as string) ?? '',
         }}
       />
     </div>
