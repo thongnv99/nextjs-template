@@ -18,10 +18,12 @@ jobs:
           IMAGE_NAME: th-japanese-exam-web
           TAG: latest
         run: |
+          export VERSION=$(cat docker/dev/VERSION)
+          echo "VERSION=$VERSION"
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $IMAGE_NAME:$TAG -f docker/dev/Dockerfile .
-          docker tag $IMAGE_NAME:$TAG $DOCKER_USERNAME/$IMAGE_NAME:$TAG
-          docker push $DOCKER_USERNAME/$IMAGE_NAME:$TAG
+          docker build -t $IMAGE_NAME:$VERSION -f docker/dev/Dockerfile .
+          docker tag $IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
   deploy:
     needs: build
     runs-on: ubuntu-latest
