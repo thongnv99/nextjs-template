@@ -4,19 +4,43 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'docker/prod/VERSION'
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.step1.outputs.VERSION }}
     steps:
-      - uses: actions/checkout@v3
       - name: Build and push docker image
+        uses: actions/checkout@v3
+      - id: step1
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           IMAGE_NAME: th-japanese-exam-web
-          TAG: prod
         run: |
+          export VERSION=$(cat docker/prod/VERSION)
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $IMAGE_NAME:$TAG -f docker/prod/Dockerfile .
-          docker tag $IMAGE_NAME:$TAG $DOCKER_USERNAME/$IMAGE_NAME:$TAG
-          docker push $DOCKER_USERNAME/$IMAGE_NAME:$TAG
+          docker build -t $IMAGE_NAME:$VERSION -f docker/prod/Dockerfile .
+          docker tag $IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: SSH to VPS and deploy
+        env:
+          NEW_VERSION: ${{needs.build.outputs.VERSION}}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          envs: NEW_VERSION
+          script: |
+            cd ~/container/application/jcce/jcce-web
+            sh deploy.sh
