@@ -142,7 +142,7 @@ const ContestMgmt = ({
           <div className="text-lg font-semibold">
             {t(compact ? 'J_2' : 'J_141')}
           </div>
-          {!compact && userInfo?.user.role === ROLES.ADMIN && (
+          {!compact && [ROLES.ADMIN, ROLES.STAFF].includes(userInfo?.user.role)  && (
             <button
               type="button"
               className="btn-primary btn-icon"

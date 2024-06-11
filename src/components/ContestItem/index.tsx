@@ -33,6 +33,7 @@ const ContestItem = (props: Props) => {
   const { t } = useTranslation();
   const [modalDelete, setModalDelete] = useState(false);
   const [modalPublish, setModalPublish] = useState(false);
+  const [modalUnPublish, setModalUnPublish] = useState(false);
   const { data: session } = useSession();
   const componentId = useRef(uuid());
   const { trigger: deleteContest } = useMutation('CONTEST_DELETE_CONTEST', {
@@ -66,6 +67,20 @@ const ContestItem = (props: Props) => {
       },
     },
   );
+  const { trigger: unPublish } = useMutation('/api/v1/contests/{contestId}', {
+    url: '/api/v1/contests/{contestId}',
+    method: METHOD.PUT,
+    componentId: componentId.current,
+    loading: true,
+    notification: {
+      title: 'J_242',
+      content: 'J_243',
+    },
+    onSuccess() {
+      handleClosePublish();
+      props.onRefresh();
+    },
+  });
 
   const handleEdit = (event: MouseEvent) => {
     event.stopPropagation();
@@ -113,11 +128,25 @@ const ContestItem = (props: Props) => {
   const handleClosePublish = () => {
     setModalPublish(false);
   };
+  const handleUnUpload = () => {
+    setModalUnPublish(true);
+  };
+
+  const handleCloseUnPublish = () => {
+    setModalUnPublish(false);
+  };
 
   const handleConfirmPublish = () => {
     updateContest({
       contestId: props.data.id,
       status: 'PUBLISH',
+    });
+  };
+
+  const handleConfirmUnPublish = () => {
+    unPublish({
+      contestId: props.data.id,
+      status: 'DRAFT',
     });
   };
 
@@ -198,6 +227,13 @@ const ContestItem = (props: Props) => {
                   props.data.status === 'PUBLISH',
               },
               {
+                label: 'J_242',
+                onClick: handleUnUpload as unknown as MouseEventHandler,
+                hide:
+                  ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role) ||
+                  props.data.status === 'STAFF',
+              },
+              {
                 label: 'J_57',
                 onClick: handleEdit as unknown as MouseEventHandler,
                 hide: ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role),
@@ -232,6 +268,17 @@ const ContestItem = (props: Props) => {
             content="J_139"
             onCancel={handleClosePublish}
             onConfirm={handleConfirmPublish}
+          />
+        </Loader>
+      </ModalProvider>
+      <ModalProvider show={modalUnPublish} onClose={handleCloseUnPublish}>
+        <Loader id={componentId.current}>
+          <ConfirmModal
+            type="success"
+            title="J_240"
+            content="J_241"
+            onCancel={handleCloseUnPublish}
+            onConfirm={handleConfirmUnPublish}
           />
         </Loader>
       </ModalProvider>
