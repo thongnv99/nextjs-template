@@ -231,7 +231,7 @@ const ContestItem = (props: Props) => {
                 onClick: handleUnUpload as unknown as MouseEventHandler,
                 hide:
                   ![ROLES.ADMIN, ROLES.STAFF].includes(session?.user.role) ||
-                  props.data.status === 'STAFF',
+                  props.data.status === 'DRAFT',
               },
               {
                 label: 'J_57',
