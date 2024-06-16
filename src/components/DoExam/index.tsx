@@ -45,7 +45,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     window.addEventListener('beforeunload', beforeUnload);
     return () => {
       window.removeEventListener('beforeunload', beforeUnload);
-      // formRef.current?.handleSubmit();
+      formRef.current?.handleSubmit();
     };
   }, []);
   const beforeUnload = (event: BeforeUnloadEvent) => {
