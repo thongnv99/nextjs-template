@@ -45,7 +45,7 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
     window.addEventListener('beforeunload', beforeUnload);
     return () => {
       window.removeEventListener('beforeunload', beforeUnload);
-      formRef.current?.handleSubmit();
+      // formRef.current?.handleSubmit();
     };
   }, []);
   const beforeUnload = (event: BeforeUnloadEvent) => {
@@ -293,21 +293,19 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                 {!hasSaveSession && (
                   <div className="w-full mb-2 md:mb-4 relative">
                     <div className="md:block hidden">{t('J_151')}</div>
-                    {expandTime && (
-                      <div className=" md:hidden  flex gap-2">
-                        <h1 className="text-center text-[1.4rem] md:text-[3rem]">
-                          {examData?.title}
-                        </h1>
-                        <div
-                          className="block md:hidden  p-2 border border-slate-100"
-                          onClick={() => {
-                            setExpandTime(!expandTime);
-                          }}
-                        >
-                          {!expandTime ? <ChevronDown /> : <ChevronUp />}
-                        </div>
+                    <div className=" md:hidden  flex gap-2 justify-between">
+                      <h1 className="text-center text-[1.4rem] md:text-[3rem]">
+                        {examData?.title}
+                      </h1>
+                      <div
+                        className="block md:hidden  p-2 border border-slate-100"
+                        onClick={() => {
+                          setExpandTime(!expandTime);
+                        }}
+                      >
+                        {!expandTime ? <ChevronDown /> : <ChevronUp />}
                       </div>
-                    )}
+                    </div>
 
                     <TimeViewer
                       initTime={(examData?.duration ?? 0) / 60}
@@ -319,8 +317,8 @@ const DoExam = (props: { examId: string; isContest?: boolean }) => {
                   </div>
                 )}
                 {hasSaveSession && (
-                  <div className="  md:hidden  flex gap-2">
-                    <h1 className="text-center text-[1.4rem] md:text-[3rem]">
+                  <div className="  md:hidden  flex gap-2 justify-between">
+                    <h1 className="text-center  text-[1.4rem] md:text-[3rem]">
                       {examData?.title}
                     </h1>
                     <div
