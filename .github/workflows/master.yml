@@ -26,21 +26,3 @@ jobs:
           docker build -t $IMAGE_NAME:$VERSION -f docker/prod/Dockerfile .
           docker tag $IMAGE_NAME:$VERSION $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
           docker push $DOCKER_USERNAME/$IMAGE_NAME:$VERSION
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: SSH to VPS and deploy
-        env:
-          NEW_VERSION: ${{needs.build.outputs.VERSION}}
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_PROD }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          envs: NEW_VERSION
-          script: |
-            cd ~/container/application/jcce/jcce-web
-            sh deploy.sh
