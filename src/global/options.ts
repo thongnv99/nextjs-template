@@ -1,35 +1,52 @@
-import { QUESTION_TYPE } from './common';
+import { QUESTION_LEVEL, QUESTION_TYPE } from './common';
 
 export const QuestionTypeOptions = [
   {
-    label: 'Tất cả',
+    label: 'J_86',
     value: '',
   },
   {
-    label: 'Trắc nghiệm',
+    label: 'J_209',
     value: QUESTION_TYPE.MULTIPLE_CHOICE,
   },
   {
-    label: 'Điền vào chỗ trống',
+    label: 'J_10',
     value: QUESTION_TYPE.FILL_IN_THE_BLANK,
   },
   {
-    label: 'Tự luận',
+    label: 'J_9',
     value: QUESTION_TYPE.ESSAY,
   },
 ];
-
-export const SampleOptions = [
+export const LevelTypeOptions = [
   {
-    label: 'Tất cả',
+    label: 'J_86',
     value: '',
   },
   {
-    label: 'Mẫu',
+    label: 'J_245',
+    value: QUESTION_LEVEL.EASY,
+  },
+  {
+    label: 'J_246',
+    value: QUESTION_LEVEL.MEDIUM,
+  },
+  {
+    label: 'J_247',
+    value: QUESTION_LEVEL.HARD,
+  },
+];
+export const SampleOptions = [
+  {
+    label: 'J_86',
+    value: '',
+  },
+  {
+    label: 'J_43',
     value: 'true',
   },
   {
-    label: 'Thường',
+    label: 'J_244',
     value: 'false',
   },
 ];

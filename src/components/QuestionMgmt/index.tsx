@@ -9,6 +9,7 @@ import { useMutation, useSWRWrapper } from 'hooks/swr';
 import { IExam, IQuestion, Pagination, QuestionRes } from 'interfaces';
 import { useParams, useRouter } from 'next/navigation';
 import {
+  LevelTypeOptions,
   QuestionTypeOptions,
   SampleOptions,
   YearOptions,
@@ -36,6 +37,7 @@ type Props = {
 interface QuestionFilter {
   type: string;
   sample: string;
+  level?: string;
   tags: string;
   exam?: IExam;
   searchKey: string;
@@ -90,7 +92,7 @@ const QuestionMgmt = (props: Props) => {
     const { page, totalPage } = pagination.current;
     if (page < totalPage) {
       loading.current = true;
-      const { sample, type, tags, exam, searchKey } = filter.current;
+      const { sample, type, tags, exam, searchKey, level } = filter.current;
       trigger({
         page: page + 1,
         limit: FETCH_COUNT,
@@ -105,6 +107,9 @@ const QuestionMgmt = (props: Props) => {
         }),
         ...(!isBlank(searchKey) && {
           searchKey,
+        }),
+        ...(!isBlank(level) && {
+          level,
         }),
         ...(exam && {
           source: 'EXAM',
@@ -221,6 +226,19 @@ const QuestionMgmt = (props: Props) => {
                   selected={values.type}
                   onChange={value => {
                     setFieldValue('type', value);
+                    handleSubmit();
+                  }}
+                />
+              </div>
+              <div className="md:max-w-lg flex-1">
+                <Dropdown
+                  label="J_248"
+                  placeholder="J_248"
+                  className="w-full"
+                  options={LevelTypeOptions}
+                  selected={values.level}
+                  onChange={value => {
+                    setFieldValue('level', value);
                     handleSubmit();
                   }}
                 />
