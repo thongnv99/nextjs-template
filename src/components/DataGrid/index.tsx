@@ -27,7 +27,7 @@ const DataGrid = forwardRef(
       | null,
   ) => {
     const { t } = useTranslation();
-    const { defaultColDef, onGridReady, ...rest } = props;
+    const { defaultColDef, defaultColGroupDef, onGridReady, ...rest } = props;
     const [gridInit, setGridInit] = useState<boolean>(false);
 
     const dataGridRef = useRef<{
@@ -57,6 +57,14 @@ const DataGrid = forwardRef(
             resizable: false,
             minWidth: 60,
             ...defaultColDef,
+            headerValueGetter: params => {
+              return params.colDef.headerName
+                ? t(params.colDef.headerName)
+                : '';
+            },
+          }}
+          defaultColGroupDef={{
+            ...defaultColGroupDef,
             headerValueGetter: params => {
               return params.colDef.headerName
                 ? t(params.colDef.headerName)

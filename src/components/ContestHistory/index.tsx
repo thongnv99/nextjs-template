@@ -148,13 +148,15 @@ const ContestHistory = (props: { contestId: string; compact?: boolean }) => {
           );
           return `${Math.abs(minutes)} ${t('J_130')}`;
         }
-        return 'J_131';
+        return t('J_131');
       },
     },
     {
       headerName: '',
       flex: 0.1,
       cellRenderer: ButtonCell,
+      pinned: 'left',
+      maxWidth: 80,
       cellRendererParams: {
         buttons: [
           {
