@@ -108,7 +108,7 @@ const ExamHistory = (props: { examId: string }) => {
             },
             onClick: (data: { id: string; examId: string }) => {
               router.push(
-                `/${lng}/exam/do-exam/${data.examId}?session=${data.id}`,
+                `/${lng}/exam/do-exam/${data.examId}?session=${data.id}&has-save-session=true`,
               );
             },
             hide: (data: { status: string }) => {
